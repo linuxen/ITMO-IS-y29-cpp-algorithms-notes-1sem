@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Представления графа, очередь BFS и стек DFS на одной схеме.">
+<meta name="theme-color" content="#1f1f28">
+<title>Графы, BFS и DFS · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/traversal.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Графы, BFS и DFS · C++ и алгоритмы">
+<meta property="og:description" content="Представления графа, очередь BFS и стек DFS на одной схеме.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/traversal.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo2">Алгоритмы · 2 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 2 семестр</summary><ul><li><a aria-current=page href="traversal.html">Графы, BFS и DFS</a></li><li><a  href="topo.html">Топологическая сортировка</a></li><li><a  href="components.html">Связность и конденсация</a></li><li><a  href="paths.html">Кратчайшие пути</a></li><li><a  href="mst.html">Минимальный остов и DSU</a></li><li><a  href="graph-structure.html">Циклы, диаметр, мосты</a></li><li><a  href="flow.html">Максимальный поток и паросочетания</a></li><li><a  href="strings.html">Поиск подстрок, КМП и бор</a></li><li><a  href="hashing.html">Хеш-таблицы и фильтр Блума</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header blue"><h1>Графы, BFS и DFS</h1><p>Представления графа, очередь BFS и стек DFS на одной схеме.</p></header>
+<div class="prose"><h2 id="section-1">Представления графа</h2>
+<p>Список смежности хранит соседей каждой вершины и занимает O(V + E). Матрица смежности занимает O(V²), зато проверяет наличие ребра за O(1). Список рёбер удобен, когда алгоритм несколько раз перебирает рёбра, например в Беллмане — Форде.</p>
+<h2 id="section-2">Два способа обхода</h2>
+<p><strong>BFS</strong> обрабатывает вершины в порядке удаления из очереди. Помечайте вершину при добавлении, чтобы она попала в очередь один раз. При единичной стоимости рёбер первый найденный путь имеет минимальное число рёбер. Храните <code>parent</code> для восстановления пути.</p>
+<p><strong>DFS</strong> идёт вдоль ветки, пока есть непосещённые соседи, затем возвращается. Стек рекурсии хранит текущий путь. Для глубокого графа можно вести явный стек кадров, каждый кадр хранит позицию следующего соседа. Оба обхода работают за O(V + E) со списком смежности.</p>
+<section id="interactive" class="lab" data-demo="traversal" aria-label="BFS и DFS">
+      <noscript>Включите JavaScript, чтобы управлять схемой.</noscript>
+    </section>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
+<span class="tok-directive">#include</span> &lt;<span class="tok-type">queue</span>&gt;
+<span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
+
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">Bfs</span>(<span class="tok-keyword">const</span> std::<span class="tok-type">vector</span>&lt;std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt;&gt;&amp; graph, <span class="tok-type">int</span> start) {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">distance</span>(graph.<span class="tok-function">size</span>(), -<span class="tok-number">1</span>);
+    std::<span class="tok-type">queue</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-type">queue</span>;
+    distance[start] = <span class="tok-number">0</span>;
+    <span class="tok-type">queue</span>.<span class="tok-function">push</span>(start);
+
+    <span class="tok-keyword">while</span> (!<span class="tok-type">queue</span>.<span class="tok-function">empty</span>()) {
+        <span class="tok-type">int</span> vertex = <span class="tok-type">queue</span>.<span class="tok-function">front</span>();
+        <span class="tok-type">queue</span>.<span class="tok-function">pop</span>();
+        <span class="tok-keyword">for</span> (<span class="tok-type">int</span> next : graph[vertex]) {
+            <span class="tok-keyword">if</span> (distance[next] == -<span class="tok-number">1</span>) {
+                distance[next] = distance[vertex] + <span class="tok-number">1</span>;
+                <span class="tok-type">queue</span>.<span class="tok-function">push</span>(next);
+            }
+        }
+    }
+    <span class="tok-keyword">return</span> distance;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-keyword">const</span> std::<span class="tok-type">vector</span>&lt;std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt;&gt; graph{{<span class="tok-number">1</span>, <span class="tok-number">2</span>}, {<span class="tok-number">3</span>}, {}, {}, {}};
+    <span class="tok-function">assert</span>((<span class="tok-function">Bfs</span>(graph, <span class="tok-number">0</span>) == std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt;{<span class="tok-number">0</span>, <span class="tok-number">1</span>, <span class="tok-number">1</span>, <span class="tok-number">2</span>, -<span class="tok-number">1</span>}));
+}</code></pre></div>
+<p><a href="https://www.cs.usfca.edu/~galles/visualization/BFS.html">Дополнительная анимация BFS</a> · <a href="https://www.cs.usfca.edu/~galles/visualization/DFS.html">Анимация DFS</a></p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="topo.html"><small>Дальше →</small>Топологическая сортировка</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Представления графа</a></li><li><a href="#section-2">Два способа обхода</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

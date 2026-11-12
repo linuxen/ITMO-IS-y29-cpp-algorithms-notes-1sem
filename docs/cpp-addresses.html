@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Адрес объекта, передача параметров и время жизни данных.">
+<meta name="theme-color" content="#1f1f28">
+<title>Указатели, ссылки, массивы и строки · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-addresses.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Указатели, ссылки, массивы и строки · C++ и алгоритмы">
+<meta property="og:description" content="Адрес объекта, передача параметров и время жизни данных.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-addresses.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения и управление</a></li><li><a aria-current=page href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-storage.html">Структуры, представление и память</a></li><li><a  href="cpp-build.html">Компиляция и пространства имён</a></li><li><a  href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Указатели, ссылки, массивы и строки</h1><p>Адрес объекта, передача параметров и время жизни данных.</p></header>
+<div class="prose"><h2 id="section-1">Адрес и псевдоним</h2>
+<p><code>&amp;value</code> получает адрес, <code>*ptr</code> обращается к объекту по адресу. Указатель можно переназначить и проверить на <code>nullptr</code>. Ссылка <code>T&amp;</code> привязывается при инициализации. <code>const T&amp;</code> полезна для доступа без копирования через этот параметр.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
+<span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">Increment</span>(<span class="tok-type">int</span>&amp; value) {
+    ++value;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; values{<span class="tok-number">2</span>, <span class="tok-number">4</span>, <span class="tok-number">6</span>};
+    <span class="tok-type">int</span>* first = &amp;values[<span class="tok-number">0</span>];
+    <span class="tok-function">Increment</span>(*first);
+    <span class="tok-function">assert</span>(values.<span class="tok-function">front</span>() == <span class="tok-number">3</span>);
+}</code></pre></div>
+<h2 id="section-2">Массивы и строки</h2>
+<p>У встроенного массива фиксированная длина, индексация начинается с нуля. В параметре <code>int a[]</code> тип корректируется до <code>int*</code>, поэтому длину передают отдельно. <code>std::array&lt;T, N&gt;</code> хранит размер в типе, <code>std::vector&lt;T&gt;</code> меняет длину, а <code>std::span&lt;T&gt;</code> (C++20) представляет непрерывный диапазон без владения им.</p>
+<p>Арифметика указателей допустима внутри одного массива и до позиции за его концом. Последнюю позицию нельзя разыменовывать. <code>sizeof(array)</code> в месте объявления даёт размер всего массива, а <code>sizeof(ptr)</code> — размер самого указателя.</p>
+<p>C-строка оканчивается <code>&#x27;\0&#x27;</code>. <code>std::string</code> владеет своей памятью и хранит длину. <code>std::string_view</code> ссылается на существующие символы. Проверяйте, что исходная строка переживает все обращения через view.</p>
+<h2 id="section-3">Массивы и функции</h2>
+<p>В двумерном массиве <code>int table[2][3]</code> хранится два массива по три числа. При передаче функции как <code>int table[][3]</code> размер строки нужен, чтобы правильно перейти к следующей строке. Указатель на функцию <code>int (*operation)(int)</code> можно вызвать как <code>operation(5)</code>, если он указывает на функцию с соответствующей сигнатурой.</p>
+<h2 id="section-4">Самопроверка</h2>
+<p>Можно ли использовать указатель на элемент <code>vector</code> после <code>push_back</code>? Если контейнер перевыделил буфер, старый адрес становится недействительным.</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-basics.html"><small>← Назад</small>Типы, выражения и управление</a><a href="cpp-storage.html"><small>Дальше →</small>Структуры, представление и память</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Адрес и псевдоним</a></li><li><a href="#section-2">Массивы и строки</a></li><li><a href="#section-3">Массивы и функции</a></li><li><a href="#section-4">Самопроверка</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

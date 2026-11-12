@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Функциональные объекты, захват данных и полиморфизм на этапе компиляции.">
+<meta name="theme-color" content="#1f1f28">
+<title>Приведения, CRTP и лямбды · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-callables.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Приведения, CRTP и лямбды · C++ и алгоритмы">
+<meta property="og:description" content="Функциональные объекты, захват данных и полиморфизм на этапе компиляции.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-callables.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a aria-current=page href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a  href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Приведения, CRTP и лямбды</h1><p>Функциональные объекты, захват данных и полиморфизм на этапе компиляции.</p></header>
+<div class="prose"><h2 id="section-1">Четыре явных приведения</h2>
+<ul><li><code>static_cast</code> выражает проверяемое по типам преобразование, например из <code>int</code> в <code>double</code>.</li><li><code>dynamic_cast</code> позволяет проверить тип полиморфного объекта при нисходящем приведении. Неудача для указателя даёт <code>nullptr</code>, для ссылки — <code>std::bad_cast</code>.</li><li><code>const_cast</code> меняет квалификаторы. Запись в объект, изначально созданный как <code>const</code>, остаётся неопределённым поведением.</li><li><code>reinterpret_cast</code> выражает низкоуровневое преобразование. После него остаются требования к выравниванию и допустимому доступу к объекту.</li></ul>
+<h2 id="section-2">Вызываемые объекты</h2>
+<p>Функтор определяет <code>operator()</code>. Лямбда создаёт объект замыкания. <code>[limit]</code> копирует значение, <code>[&amp;limit]</code> даёт доступ к исходной переменной по ссылке. Ссылочный захват требует, чтобы переменная жила дольше всех вызовов. <code>std::invoke</code> унифицирует вызов функций, функторов и указателей на члены.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;algorithm&gt;
+<span class="tok-directive">#include</span> &lt;cassert&gt;
+<span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-keyword">const</span> std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; values{<span class="tok-number">1</span>, <span class="tok-number">4</span>, <span class="tok-number">7</span>};
+    <span class="tok-type">int</span> limit = <span class="tok-number">4</span>;
+    <span class="tok-keyword">auto</span> it = std::<span class="tok-function">find_if</span>(values.<span class="tok-function">begin</span>(), values.<span class="tok-function">end</span>(),
+                           [limit](<span class="tok-type">int</span> value) { <span class="tok-keyword">return</span> value &gt; limit; });
+    <span class="tok-function">assert</span>(it != values.<span class="tok-function">end</span>() &amp;&amp; *it == <span class="tok-number">7</span>);
+}</code></pre></div>
+<h2 id="section-3">CRTP</h2>
+<p>В CRTP производный тип передаётся шаблонному базовому классу, например <code>struct Meter : Printable&lt;Meter&gt;</code>. Базовый класс может вызвать операцию производного через <code>static_cast&lt;Derived&amp;&gt;(*this)</code> при корректном инварианте наследования. Тип известен при компиляции, поэтому виртуальная диспетчеризация для такого вызова не требуется.</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-errors.html"><small>← Назад</small>Ошибки и исключения</a><a href="cpp-move.html"><small>Дальше →</small>Категории значений и перемещение</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Четыре явных приведения</a></li><li><a href="#section-2">Вызываемые объекты</a></li><li><a href="#section-3">CRTP</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

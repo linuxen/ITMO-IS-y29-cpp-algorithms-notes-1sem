@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Восстановление свойства кучи, линейное построение и heapsort.">
+<meta name="theme-color" content="#1f1f28">
+<title>Двоичная куча и очередь с приоритетом · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/heaps.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Двоичная куча и очередь с приоритетом · C++ и алгоритмы">
+<meta property="og:description" content="Восстановление свойства кучи, линейное построение и heapsort.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/heaps.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo1">Алгоритмы · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">Асимптотика и память</a></li><li><a  href="sorting.html">Сортировки</a></li><li><a  href="lists.html">Стек, очередь и списки</a></li><li><a aria-current=page href="heaps.html">Двоичная куча и очередь с приоритетом</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a  href="dp.html">Динамическое программирование</a></li><li><a  href="coding.html">Сжатие и коды</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header blue"><h1>Двоичная куча и очередь с приоритетом</h1><p>Восстановление свойства кучи, линейное построение и heapsort.</p></header>
+<div class="prose"><h2 id="section-1">Куча в массиве</h2>
+<p>Двоичная куча — полное двоичное дерево. В min-heap ключ родителя не больше ключей детей. Для индекса i при нумерации с нуля дети находятся в 2i+1 и 2i+2. Корень даёт минимум за O(1). Вставка добавляет элемент в конец и поднимает его. Извлечение корня переносит на его место последний элемент и опускает его. Обе операции стоят O(log n).</p>
+<section id="interactive" class="lab" data-demo="heap" aria-label="Двоичная куча">
+      <noscript>Включите JavaScript, чтобы управлять схемой.</noscript>
+    </section>
+<h2 id="section-2">Построение за O(n)</h2>
+<p>Запускайте просеивание вниз от последнего внутреннего узла к корню. Большинство узлов находятся близко к листьям, поэтому суммарная работа линейна. При heapsort на max-heap последовательно меняйте корень с концом активной части, уменьшайте кучу и восстанавливайте её свойство. Получается O(n log n) времени и O(1) дополнительной памяти при итеративном просеивании.</p>
+<h2 id="section-3">Приоритетная очередь</h2>
+<p><code>std::priority_queue&lt;int&gt;</code> по умолчанию отдаёт максимум. При изменении известного ключа подъём или спуск зависит от того, в какую сторону изменился приоритет. Для произвольного обновления эффективной куче нужна карта «элемент → индекс». В Дейкстре можно добавлять новую пару «расстояние, вершина» и отбрасывать устаревшие записи при извлечении.</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="lists.html"><small>← Назад</small>Стек, очередь и списки</a><a href="bst.html"><small>Дальше →</small>Двоичное дерево поиска</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Куча в массиве</a></li><li><a href="#section-2">Построение за O(n)</a></li><li><a href="#section-3">Приоритетная очередь</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

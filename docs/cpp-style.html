@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Соглашения учебного проекта и читаемые примеры на C++.">
+<meta name="theme-color" content="#1f1f28">
+<title>Стиль кода · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-style.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Стиль кода · C++ и алгоритмы">
+<meta property="og:description" content="Соглашения учебного проекта и читаемые примеры на C++.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-style.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#tools">Практика</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>Практика</summary><ul><li><a aria-current=page href="cpp-style.html">Стиль кода</a></li><li><a  href="cpp-cmake.html">Сборка с CMake</a></li><li><a  href="cpp-gtest.html">Тесты с GoogleTest</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header amber"><h1>Стиль кода</h1><p>Соглашения учебного проекта и читаемые примеры на C++.</p></header>
+<div class="prose"><h2 id="section-1">Имена и форматирование</h2>
+<p>В исходных материалах использован стиль с <code>snake_case</code> для переменных, <code>PascalCase</code> для типов и функций, <code>kPascalCase</code> для именованных констант. Например, <code>edge_count</code>, <code>FindPath()</code> и <code>kMaxVertices</code>. Для аббревиатур встречается запись <code>GetItmoYear()</code>. Если в задании есть свой гайд или конфигурация форматтера, следуйте им.</p>
+<p>Открывающая скобка идёт в той же строке. В этих соглашениях ориентир для длины строки — 80 символов. Используйте единообразные имена файлов, например <code>graph_search.cpp</code> и <code>graph_search.hpp</code>. Расширения заголовков выбирают по соглашению проекта.</p>
+<h2 id="section-2">Что делает код яснее</h2>
+<ul><li>Описывайте действие глаголом: <code>FindMaxIndex</code>, <code>PrintMessage</code>. Данные обычно обозначают существительным: <code>index</code>, <code>message</code>.</li><li>Пишите <code>std::vector</code> и <code>std::cout</code> явно, особенно в заголовках. Для средств из C-библиотеки в C++ обычно используют <code>&lt;cmath&gt;</code>, <code>&lt;cstdio&gt;</code> и <code>&lt;cstring&gt;</code>.</li><li>Выбирайте <code>enum class</code> для вариантов вроде <code>ParseError::kInvalidInput</code>. Применяйте уникальные include guards в заголовках, если этого требует гайд.</li></ul>
+<p><a href="https://github.com/is-itmo-c-25/cpp-coding-guidelines">Учебный гайд по стилю C++</a></p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-cmake.html"><small>Дальше →</small>Сборка с CMake</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Имена и форматирование</a></li><li><a href="#section-2">Что делает код яснее</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

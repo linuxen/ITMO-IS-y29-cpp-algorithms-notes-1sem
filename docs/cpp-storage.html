@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Как данные размещаются в объектах и когда их можно использовать.">
+<meta name="theme-color" content="#1f1f28">
+<title>Структуры, представление и память · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-storage.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Структуры, представление и память · C++ и алгоритмы">
+<meta property="og:description" content="Как данные размещаются в объектах и когда их можно использовать.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-storage.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения и управление</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a aria-current=page href="cpp-storage.html">Структуры, представление и память</a></li><li><a  href="cpp-build.html">Компиляция и пространства имён</a></li><li><a  href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Структуры, представление и память</h1><p>Как данные размещаются в объектах и когда их можно использовать.</p></header>
+<div class="prose"><h2 id="section-1">Структуры, объединения, перечисления</h2>
+<p><code>struct</code> объединяет несколько полей. Доступ через объект записывается как <code>point.x</code>, через указатель — <code>ptr-&gt;x</code>. Между полями возможны байты заполнения для выравнивания, поэтому <code>sizeof(Point)</code> может превышать сумму размеров полей.</p>
+<p>У <code>union</code> поля используют общую память. Учитывайте активный член и правила его времени жизни. Для безопасного выбора одного из нескольких типов подойдёт <code>std::variant</code>. <code>enum class</code> задаёт именованные варианты вроде <code>State::kReady</code>.</p>
+<h2 id="section-2">Время жизни</h2>
+<p>Локальные объекты обычно имеют автоматическое время хранения и уничтожаются при выходе из блока. Объекты со статическим временем хранения живут до завершения программы, <code>thread_local</code> — до завершения своего потока. Динамическое время жизни управляется через владельца ресурса.</p>
+<ul><li><code>new T</code> выделяет память и создаёт объект. Парные операции — <code>new</code> и <code>delete</code>, <code>new[]</code> и <code>delete[]</code>.</li><li><code>std::malloc</code> выделяет сырую память и не вызывает конструкторы, <code>std::calloc</code> дополнительно зануляет байты. Освобождение выполняет <code>std::free</code>.</li><li>Для прикладного кода выбирайте <code>std::vector</code>, <code>std::string</code> и умные указатели, которые освобождают ресурсы автоматически. Висячие ссылки, выход за границы и повторное освобождение приводят к неопределённому поведению. AddressSanitizer помогает найти многие такие ошибки.</li></ul>
+<h2 id="section-3">Стек вызовов и динамическая память</h2>
+<p>На типичной платформе стек вызовов хранит кадры активных функций. При вызове появляется новый кадр, при возврате снимается последний добавленный. Указатель стека участвует в управлении этим пространством. Конкретное направление роста и расположение данных зависят от платформы и компилятора. Частые вложенные вызовы, глубокая рекурсия и большие локальные массивы могут исчерпать доступный стек.</p>
+<p>Динамическая память позволяет создавать объекты, размер и время жизни которых определяются во время выполнения. Её объём ограничен доступными ресурсами процесса. Выделение через обычный <code>new</code> при нехватке памяти может бросить <code>std::bad_alloc</code>. Освобождение блока не перемещает остальные объекты автоматически, а свободные участки разных размеров могут приводить к фрагментации.</p>
+<p>У локального <code>std::vector&lt;int&gt; values(1000)</code> сам объект контейнера имеет автоматическое время хранения, а его элементы размещены в отдельно выделенном буфере. При росте vector может выделить новый буфер, перенести элементы и освободить старый. При уничтожении контейнера освобождается и его буфер. Сборщик мусора ищет объекты, которые больше недостижимы из программы. В обычном C++ ресурсами управляют через время жизни владельцев и RAII.</p>
+<h2 id="section-4">Представление чисел</h2>
+<p>У вещественного типа ограниченная точность. Десятичное <code>0.1</code> обычно округляется при хранении, поэтому результат вычислений может слегка отличаться от математического. При сравнении результатов используйте допуск, осмысленный для масштаба задачи.</p>
+<h2 id="section-5">Самопроверка</h2>
+<p>Почему функция не должна возвращать ссылку на собственную локальную переменную? В какой момент перестаёт существовать её объект?</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-addresses.html"><small>← Назад</small>Указатели, ссылки, массивы и строки</a><a href="cpp-build.html"><small>Дальше →</small>Компиляция и пространства имён</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Структуры, объединения, перечисления</a></li><li><a href="#section-2">Время жизни</a></li><li><a href="#section-3">Стек вызовов и динамическая память</a></li><li><a href="#section-4">Представление чисел</a></li><li><a href="#section-5">Самопроверка</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

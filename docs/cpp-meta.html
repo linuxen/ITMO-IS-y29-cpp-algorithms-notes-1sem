@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Пакеты параметров, проверка требований к типам и типобезопасные альтернативы.">
+<meta name="theme-color" content="#1f1f28">
+<title>Шаблоны, concepts и variant · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-meta.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Шаблоны, concepts и variant · C++ и алгоритмы">
+<meta property="og:description" content="Пакеты параметров, проверка требований к типам и типобезопасные альтернативы.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-meta.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a  href="cpp-move.html">Категории значений и перемещение</a></li><li><a aria-current=page href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Шаблоны, concepts и variant</h1><p>Пакеты параметров, проверка требований к типам и типобезопасные альтернативы.</p></header>
+<div class="prose"><h2 id="section-1">Пакеты и свёртки</h2>
+<p><code>typename... Args</code> объявляет пакет типов, <code>args...</code> раскрывает пакет. Fold expression сворачивает пакет по оператору. <code>(0 + ... + args)</code> даёт ноль для пустого пакета. <code>std::variant&lt;A, B&gt;</code> хранит одну из альтернатив, а <code>std::visit</code> вызывает подходящую ветку для текущего значения.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;concepts&gt;
+
+<span class="tok-keyword">template</span> &lt;std::integral... Args&gt;
+<span class="tok-keyword">constexpr</span> <span class="tok-keyword">auto</span> <span class="tok-function">Sum</span>(Args... args) {
+    <span class="tok-keyword">return</span> (<span class="tok-number">0</span> + ... + args);
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-keyword">static_assert</span>(<span class="tok-function">Sum</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">5</span>) == <span class="tok-number">10</span>);
+    <span class="tok-keyword">static_assert</span>(<span class="tok-function">Sum</span>() == <span class="tok-number">0</span>);
+}</code></pre></div>
+<h2 id="section-2">Метапрограммирование</h2>
+<p><code>constexpr</code> разрешает вычисление в константном контексте при подходящих аргументах. Специализация меняет реализацию шаблона для выбранных аргументов. <code>&lt;type_traits&gt;</code> содержит предикаты и преобразования типов, например <code>std::is_integral_v&lt;T&gt;</code> и <code>std::remove_cvref_t&lt;T&gt;</code>. При SFINAE некоторые ошибки подстановки исключают шаблон из кандидатов перегрузки.</p>
+<h2 id="section-3">Как читать requires</h2>
+<p>Concept (C++20) даёт имя ограничению. В <code>requires</code> простое требование проверяет корректность выражения, требование к типу — наличие типа, вложенное — истинность ограничения. Составное требование проверяет выражение, его тип и при необходимости <code>noexcept</code>.</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-move.html"><small>← Назад</small>Категории значений и перемещение</a><a href="cpp-threads.html"><small>Дальше →</small>Потоки и синхронизация</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Пакеты и свёртки</a></li><li><a href="#section-2">Метапрограммирование</a></li><li><a href="#section-3">Как читать requires</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

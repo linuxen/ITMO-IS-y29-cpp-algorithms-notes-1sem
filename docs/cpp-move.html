@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="lvalue, prvalue, xvalue, std::move и forwarding.">
+<meta name="theme-color" content="#1f1f28">
+<title>Категории значений и перемещение · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-move.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Категории значений и перемещение · C++ и алгоритмы">
+<meta property="og:description" content="lvalue, prvalue, xvalue, std::move и forwarding.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-move.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a aria-current=page href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Категории значений и перемещение</h1><p>lvalue, prvalue, xvalue, std::move и forwarding.</p></header>
+<div class="prose"><h2 id="section-1">Категории выражений</h2>
+<p><code>lvalue</code> обозначает объект с идентичностью, например именованную переменную. <code>prvalue</code> вычисляет значение, например <code>42</code> или <code>std::string{&quot;hi&quot;}</code>. <code>xvalue</code> обозначает объект, ресурсы которого можно повторно использовать, например <code>std::move(value)</code>. <code>glvalue</code> объединяет lvalue и xvalue, <code>rvalue</code> — prvalue и xvalue.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
+<span class="tok-directive">#include</span> &lt;<span class="tok-type">string</span>&gt;
+<span class="tok-directive">#include</span> &lt;utility&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">string</span> source = <span class="tok-string">&quot;notes&quot;</span>;
+    std::<span class="tok-type">string</span> destination = std::<span class="tok-function">move</span>(source);
+    <span class="tok-function">assert</span>(destination == <span class="tok-string">&quot;notes&quot;</span>);
+    source = <span class="tok-string">&quot;new value&quot;</span>;
+}</code></pre></div>
+<h2 id="section-2">Что делает std::move</h2>
+<p><code>std::move</code> приводит выражение к rvalue-ссылке. Решение о передаче ресурса принимает выбранный конструктор или оператор присваивания. Именованный параметр типа <code>T&amp;&amp;</code> внутри функции сам является lvalue. Стандартный объект после перемещения обычно находится в допустимом, но не уточнённом состоянии.</p>
+<p>Перемещающий конструктор часто помечают <code>noexcept</code>, если он действительно не бросает исключений. Это позволяет некоторым контейнерам перемещать элементы при росте. В идиоме copy-and-swap присваивание сначала подготавливает новый объект, затем обменивает состояния.</p>
+<h2 id="section-3">Forwarding</h2>
+<p>В контексте вывода типа параметр <code>T&amp;&amp;</code> может быть forwarding reference. <code>std::forward&lt;T&gt;(arg)</code> сохраняет исходную категорию аргумента. При свёртке ссылок сочетания с <code>&amp;</code> дают <code>&amp;</code>, а <code>&amp;&amp;</code> с <code>&amp;&amp;</code> дают <code>&amp;&amp;</code>.</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-callables.html"><small>← Назад</small>Приведения, CRTP и лямбды</a><a href="cpp-meta.html"><small>Дальше →</small>Шаблоны, concepts и variant</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Категории выражений</a></li><li><a href="#section-2">Что делает std::move</a></li><li><a href="#section-3">Forwarding</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

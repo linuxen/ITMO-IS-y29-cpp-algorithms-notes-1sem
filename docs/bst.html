@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Поиск, вставка, удаление и обходы BST.">
+<meta name="theme-color" content="#1f1f28">
+<title>Двоичное дерево поиска · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/bst.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Двоичное дерево поиска · C++ и алгоритмы">
+<meta property="og:description" content="Поиск, вставка, удаление и обходы BST.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/bst.html">
+<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
+<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
+<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo1">Алгоритмы · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">Асимптотика и память</a></li><li><a  href="sorting.html">Сортировки</a></li><li><a  href="lists.html">Стек, очередь и списки</a></li><li><a  href="heaps.html">Двоичная куча и очередь с приоритетом</a></li><li><a aria-current=page href="bst.html">Двоичное дерево поиска</a></li><li><a  href="dp.html">Динамическое программирование</a></li><li><a  href="coding.html">Сжатие и коды</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header blue"><h1>Двоичное дерево поиска</h1><p>Поиск, вставка, удаление и обходы BST.</p></header>
+<div class="prose"><h2 id="section-1">Порядок ключей</h2>
+<p>При уникальных ключах все ключи левого поддерева меньше ключа узла, а правого — больше. Поиск и вставка сравнивают ключ с текущим и спускаются в одну ветвь. Операции стоят O(h), где h — высота. Несбалансированное дерево может выродиться до h = n−1.</p>
+<h2 id="section-2">Удаление</h2>
+<ul><li>Лист можно отсоединить.</li><li>Узел с одним ребёнком заменяется ребёнком.</li><li>У узла с двумя детьми можно взять наименьший ключ правого поддерева, перенести его в удаляемый узел и удалить прежний узел этого ключа.</li></ul>
+<p>Обход inorder (лево, корень, право) выдаёт отсортированные ключи. Preorder посещает корень первым, postorder — последним. Preorder восстанавливает BST с уникальными ключами благодаря его инварианту. Для произвольного бинарного дерева нужны дополнительные данные, например отметки пустых детей.</p>
+<h2 id="section-3">Самопроверка</h2>
+<p>Вставьте 8, 3, 10, 1, 6, 14. Нарисуйте дерево, запишите inorder и удалите 8, используя его преемника.</p></div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="heaps.html"><small>← Назад</small>Двоичная куча и очередь с приоритетом</a><a href="dp.html"><small>Дальше →</small>Динамическое программирование</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Порядок ключей</a></li><li><a href="#section-2">Удаление</a></li><li><a href="#section-3">Самопроверка</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>
