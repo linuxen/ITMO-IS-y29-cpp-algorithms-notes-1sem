@@ -107,12 +107,10 @@ def topics():
                    'demos': re.findall(r'^!demo ([a-z0-9-]+)$', body, re.M)}
 
 
-def demo(kind, compact=False):
-    tag = 'section' if not compact else 'div'
-    anchor = '' if compact else ' id="interactive"'
-    return f'''<{tag}{anchor} class="lab{' compact' if compact else ''}" data-demo="{kind}" aria-label="{e(DEMOS[kind])}">
+def demo(kind):
+    return f'''<section id="interactive" class="lab" data-demo="{kind}" aria-label="{e(DEMOS[kind])}">
       <noscript>Включите JavaScript, чтобы управлять схемой.</noscript>
-    </{tag}>'''
+    </section>'''
 
 
 def render_fence(tokens, index, options, env):
@@ -264,7 +262,8 @@ def catalogue(by_group):
     <a class="button secondary" href="#semester-2">2 семестр <span aria-hidden="true">↓</span></a>
     <a class="button secondary" href="laboratory.html">Тренажёры <span aria-hidden="true">↗</span></a></div>
   </div>
-  {demo('traversal', compact=True)}
+  <img class="hero-image" src="assets/first-year-meme.png?v={ASSET_VERSION}" width="800" height="520"
+    alt="Майор Пэйн с поднятым кулаком. Надпись «Паровозик смог, и мы сможем»">
 </section>
 <section class="search-wrap" aria-label="Поиск по конспекту">
   <label class="searchbox"><span aria-hidden="true"></span><input type="search" id="search" autocomplete="off" placeholder="Поиск по темам…" aria-label="Поиск по темам" aria-controls="search-results"><kbd>/</kbd></label>

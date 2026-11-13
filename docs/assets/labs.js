@@ -623,7 +623,6 @@ function drawArray(stage, frame) {
 
 function mountLab(container) {
   const config = labs[container.dataset.demo];
-  const compact = container.classList.contains('compact');
   const header = element('div', 'lab-head');
   const title = element('strong', '', config.title);
   const modes = element('div', 'lab-modes');
@@ -677,13 +676,11 @@ function mountLab(container) {
       options[key] = Number(select.value);
       restart();
     });
-    if (!compact) modes.append(select);
+    modes.append(select);
   }
   header.append(title, modes);
   info.append(status, detail);
-  controls.append(previous, next, reset);
-  if (!compact) controls.append(autoplay);
-  controls.append(count);
+  controls.append(previous, next, reset, autoplay, count);
   container.replaceChildren(header, stage, info, controls);
 
   if (config.fields) {

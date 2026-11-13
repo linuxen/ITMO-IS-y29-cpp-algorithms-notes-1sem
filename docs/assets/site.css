@@ -46,6 +46,7 @@ button:disabled { cursor: default; opacity: .43; }
 .top-nav .repo:hover { border-color: var(--amber); color: var(--amber); }
 .repo-star { font-size: 18px; line-height: 1; }
 .hero { padding: 61px 0 39px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: 42px; align-items: center; }
+.hero-image { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 13px; }
 .overline { margin: 0 0 15px; display: flex; align-items: center; gap: 10px; color: var(--muted); font: 600 12px/1.5 var(--mono); letter-spacing: .09em; }
 .overline span { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px #98bb6c16; }
 .hero h1 { font-size: clamp(46px, 6.5vw, 90px); line-height: .97; letter-spacing: -.085em; margin: 0; font-weight: 800; }
@@ -139,7 +140,6 @@ tbody tr:last-child td { border-bottom: 0; }
 .lab-list small { display: block; color: var(--muted); margin-top: 2px; }
 .lab-list a > span:last-child { color: var(--blue); }
 .lab { min-width: 0; border: 1px solid #54546d; border-radius: 13px; background: #1f1f28; overflow: hidden; margin: 18px 0 22px; color: var(--ink); }
-.lab.compact { margin: 0; }
 .lab-head, .lab-controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding: 10px 13px; }
 .lab-head { border-bottom: 1px solid var(--line); }
 .lab-head strong { font-size: 13px; display: inline-flex; align-items: center; gap: 8px; }
@@ -151,7 +151,6 @@ tbody tr:last-child td { border-bottom: 0; }
 .lab button[data-next] { background: var(--green); border-color: var(--green); color: #16161d; font-weight: 750; }
 .lab-stage { position: relative; display: grid; align-content: center; min-height: 154px; padding: 12px; background-color: #181820; background-image: radial-gradient(#363646 1px, transparent 1px); background-size: 17px 17px; }
 .lab-stage canvas { display: block; width: 100%; max-height: 250px; aspect-ratio: 2.1; }
-.compact .lab-stage canvas { max-height: 229px; }
 .lab-info { padding: 10px 13px 8px; min-height: 62px; background: #1f1f28; border-top: 1px solid var(--line); }
 .lab .lab-status { color: var(--ink); font-size: 13px; line-height: 1.35; margin: 0; min-height: 18px; }
 .lab .lab-detail { color: var(--muted); font: 12px/1.4 var(--mono); margin: 4px 0 0; overflow-wrap: anywhere; }
