@@ -58,7 +58,13 @@
 
 - [Анимация поиска в глубину (DFS)](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=3)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 3](assets/media/graph-algorithms-03.webp)
+
+![Алгоритмы на графах, страница 4](assets/media/graph-algorithms-04.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=3)
 
 @@ traversal
 # 2. Поиск в ширину (BFS)
@@ -99,7 +105,15 @@
 - [Анимация поиска в ширину (BFS)](https://www.cs.usfca.edu/~galles/visualization/BFS.html)
 - [Анимация поиска в глубину (DFS)](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=5)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 5](assets/media/graph-algorithms-05.webp)
+
+![Алгоритмы на графах, страница 6](assets/media/graph-algorithms-06.webp)
+
+![Алгоритмы на графах, страница 7](assets/media/graph-algorithms-07.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=5)
 
 @@ topo
 # 3. Топологическая сортировка
@@ -141,7 +155,15 @@
 
 ![Схема к теме «3. Топологическая сортировка»](assets/media/algo2-topo.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=8)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 8](assets/media/graph-algorithms-08.webp)
+
+![Алгоритмы на графах, страница 9](assets/media/graph-algorithms-09.webp)
+
+![Алгоритмы на графах, страница 10](assets/media/graph-algorithms-10.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=8)
 
 @@ components
 # 4. Сильная и слабая связность. Конденсация
@@ -183,7 +205,15 @@
 
 ![Схема к теме «4. Сильная и слабая связность. Конденсация»](assets/media/algo2-components.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=11)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 11](assets/media/graph-algorithms-11.webp)
+
+![Алгоритмы на графах, страница 12](assets/media/graph-algorithms-12.webp)
+
+![Алгоритмы на графах, страница 13](assets/media/graph-algorithms-13.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=11)
 
 @@ cycles
 # 5. Поиск и восстановление циклов
@@ -208,7 +238,15 @@
 
 Обнаружение DFS занимает O(V + E), восстановление — O(k) для цикла длины k. Перечисление всех простых циклов может потребовать экспоненциального времени, так как самих циклов может быть экспоненциально много.
 
-[Полный разбор и реализации в PDF](assets/media/21ba70ec4183f98972.pdf#page=14)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 14](assets/media/graph-algorithms-14.webp)
+
+![Алгоритмы на графах, страница 15](assets/media/graph-algorithms-15.webp)
+
+![Алгоритмы на графах, страница 16](assets/media/graph-algorithms-16.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=14)
 
 @@ hamilton
 # 6. Гамильтонов цикл
@@ -242,7 +280,15 @@
 
 ![Схема к теме «6. Гамильтонов цикл»](assets/media/algo2-hamilton.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=17)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 17](assets/media/graph-algorithms-17.webp)
+
+![Алгоритмы на графах, страница 18](assets/media/graph-algorithms-18.webp)
+
+![Алгоритмы на графах, страница 19](assets/media/graph-algorithms-19.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=17)
 
 @@ euler
 # 7. Эйлеров цикл
@@ -274,7 +320,15 @@
 
 ![Схема к теме «7. Эйлеров цикл»](assets/media/algo2-euler.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=20)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 20](assets/media/graph-algorithms-20.webp)
+
+![Алгоритмы на графах, страница 21](assets/media/graph-algorithms-21.webp)
+
+![Алгоритмы на графах, страница 22](assets/media/graph-algorithms-22.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=20)
 
 @@ connected
 # 8. Компоненты связности
@@ -303,7 +357,15 @@
 
 ![Схема к теме «8. Компоненты связности»](assets/media/algo2-connected.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=23)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 23](assets/media/graph-algorithms-23.webp)
+
+![Алгоритмы на графах, страница 24](assets/media/graph-algorithms-24.webp)
+
+![Алгоритмы на графах, страница 25](assets/media/graph-algorithms-25.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=23)
 
 @@ mst
 # 9. Алгоритм Краскала и система непересекающихся множеств
@@ -386,7 +448,13 @@
 
 ![Схема к теме «9. Алгоритм Краскала и система непересекающихся множеств»](assets/media/algo2-mst.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=26)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 26](assets/media/graph-algorithms-26.webp)
+
+![Алгоритмы на графах, страница 27](assets/media/graph-algorithms-27.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=26)
 
 @@ prim
 # 10. Алгоритм Прима
@@ -440,7 +508,15 @@
 
 ![Схема к теме «10. Алгоритм Прима»](assets/media/algo2-prim.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=28)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 28](assets/media/graph-algorithms-28.webp)
+
+![Алгоритмы на графах, страница 29](assets/media/graph-algorithms-29.webp)
+
+![Алгоритмы на графах, страница 30](assets/media/graph-algorithms-30.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=28)
 
 @@ bellman-ford
 # 11. Алгоритм Беллмана — Форда
@@ -504,7 +580,15 @@
 
 ![Схема к теме «11. Алгоритм Беллмана — Форда»](assets/media/algo2-bellman-ford.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=31)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 31](assets/media/graph-algorithms-31.webp)
+
+![Алгоритмы на графах, страница 32](assets/media/graph-algorithms-32.webp)
+
+![Алгоритмы на графах, страница 33](assets/media/graph-algorithms-33.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=31)
 
 @@ dag-paths
 # 12. Кратчайшие и длиннейшие пути в DAG
@@ -523,7 +607,15 @@
 
 Положите d[s] = 0 и d[v] = −∞ для остальных вершин. При релаксации используйте максимум. Такой вариант помогает вычислять критический путь в задачах с зависимостями.
 
-[Полный разбор и реализации в PDF](assets/media/21ba70ec4183f98972.pdf#page=34)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 34](assets/media/graph-algorithms-34.webp)
+
+![Алгоритмы на графах, страница 35](assets/media/graph-algorithms-35.webp)
+
+![Алгоритмы на графах, страница 36](assets/media/graph-algorithms-36.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=34)
 
 @@ paths
 # 13. Алгоритм Дейкстры
@@ -604,7 +696,15 @@ new_distance = distance[current] + weight(edge)
 - [Анимация алгоритма Дейкстры](https://www.cs.usfca.edu/~galles/visualization/Dijkstra.html)
 - [Пошаговый разбор алгоритма Дейкстры](https://antontmoore.github.io/graph_algorithms/dijkstra_simple)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=37)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 37](assets/media/graph-algorithms-37.webp)
+
+![Алгоритмы на графах, страница 38](assets/media/graph-algorithms-38.webp)
+
+![Алгоритмы на графах, страница 39](assets/media/graph-algorithms-39.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=37)
 
 @@ floyd
 # 14. Алгоритм Флойда — Уоршелла
@@ -644,7 +744,15 @@ new_distance = distance[current] + weight(edge)
 
 ![Схема к теме «14. Алгоритм Флойда — Уоршелла»](assets/media/algo2-floyd.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=40)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 40](assets/media/graph-algorithms-40.webp)
+
+![Алгоритмы на графах, страница 41](assets/media/graph-algorithms-41.webp)
+
+![Алгоритмы на графах, страница 42](assets/media/graph-algorithms-42.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=40)
 
 @@ diameter
 # 15. Диаметр дерева
@@ -672,7 +780,15 @@ new_distance = distance[current] + weight(edge)
 
 ![Схема к теме «15. Диаметр дерева»](assets/media/algo2-diameter.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=43)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 43](assets/media/graph-algorithms-43.webp)
+
+![Алгоритмы на графах, страница 44](assets/media/graph-algorithms-44.webp)
+
+![Алгоритмы на графах, страница 45](assets/media/graph-algorithms-45.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=43)
 
 @@ kuhn
 # 16. Алгоритм Куна
@@ -745,7 +861,15 @@ new_distance = distance[current] + weight(edge)
 ![Схема к теме «16. Алгоритм Куна»](assets/media/algo2-kuhn.svg)
 
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=46)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 46](assets/media/graph-algorithms-46.webp)
+
+![Алгоритмы на графах, страница 47](assets/media/graph-algorithms-47.webp)
+
+![Алгоритмы на графах, страница 48](assets/media/graph-algorithms-48.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=46)
 
 @@ flow
 # 17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп
@@ -822,7 +946,17 @@ new_distance = distance[current] + weight(edge)
 ![Схема к теме «17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп»](assets/media/algo2-flow.svg)
 
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=49)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 49](assets/media/graph-algorithms-49.webp)
+
+![Алгоритмы на графах, страница 50](assets/media/graph-algorithms-50.webp)
+
+![Алгоритмы на графах, страница 51](assets/media/graph-algorithms-51.webp)
+
+![Алгоритмы на графах, страница 52](assets/media/graph-algorithms-52.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=49)
 
 @@ matching-flow
 # 18. Паросочетание через максимальный поток
@@ -846,7 +980,15 @@ new_distance = distance[current] + weight(edge)
 
 ![Схема к теме «18. Паросочетание через максимальный поток»](assets/media/algo2-matching-flow.svg)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=53)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 53](assets/media/graph-algorithms-53.webp)
+
+![Алгоритмы на графах, страница 54](assets/media/graph-algorithms-54.webp)
+
+![Алгоритмы на графах, страница 55](assets/media/graph-algorithms-55.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=53)
 
 @@ graph-structure
 # 19. Мосты и точки сочленения
@@ -868,23 +1010,25 @@ new_distance = distance[current] + weight(edge)
 
 Поиск слабых мест в графе при удалении которых граф становится несвязанным
 
-Дополнительное пояснение к схеме
-
 ![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/0c15f786ce3e2eb458.png)
-
-![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/1ab92eba27b8b0cbcc.png)
 
 ![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/61a60f0f841bf63623.png)
 
 ![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/d4809db7caf0d3a22b.png)
 
-![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/240d8d7de34f83e2c9.png)
-
 ## Схемы и рукописные примеры
 
 ![Схема к теме «19. Мосты и точки сочленения»](assets/media/algo2-graph-structure.svg)
 
-[Мосты и точки сочленения в PDF, страница 56](assets/media/21ba70ec4183f98972.pdf#page=56)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 56](assets/media/graph-algorithms-56.webp)
+
+![Алгоритмы на графах, страница 57](assets/media/graph-algorithms-57.webp)
+
+![Алгоритмы на графах, страница 58](assets/media/graph-algorithms-58.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=56)
 
 @@ graph-coloring
 # 20. Жадная раскраска графа
@@ -912,7 +1056,17 @@ new_distance = distance[current] + weight(edge)
 - DSatur выбирает вершину с максимальным числом разных цветов у окрашенных соседей. При равенстве можно предпочесть вершину большей степени.
 - Для точного ответа на небольшом графе применяют перебор.
 
-[Полный разбор и реализации в PDF](assets/media/21ba70ec4183f98972.pdf#page=59)
+## Страницы из PDF
+
+![Алгоритмы на графах, страница 59](assets/media/graph-algorithms-59.webp)
+
+![Алгоритмы на графах, страница 60](assets/media/graph-algorithms-60.webp)
+
+![Алгоритмы на графах, страница 61](assets/media/graph-algorithms-61.webp)
+
+![Алгоритмы на графах, страница 62](assets/media/graph-algorithms-62.webp)
+
+[Открыть оригинал PDF с этой темы](assets/media/21ba70ec4183f98972.pdf#page=59)
 
 @@ rabin-karp
 # 21. Полиномиальный хеш и алгоритм Рабина — Карпа

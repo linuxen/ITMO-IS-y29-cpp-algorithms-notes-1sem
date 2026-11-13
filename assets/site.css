@@ -219,7 +219,7 @@ tbody tr:last-child td { border-bottom: 0; }
 
 
 .note-figure { margin: 1.15rem 0; }
-.note-figure a { display: block; width: fit-content; max-width: 100%; }
+.note-figure a { display: block; width: fit-content; max-width: 100%; cursor: zoom-in; }
 .prose img {
   display: block;
   max-width: 100%;
@@ -230,6 +230,37 @@ tbody tr:last-child td { border-bottom: 0; }
 }
 .prose p img { margin-block: .65rem; }
 .note-figure a:hover img { border-color: var(--blue); }
+.image-viewer {
+  width: min(1480px, calc(100% - 20px));
+  height: calc(100dvh - 20px);
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.image-viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.image-viewer::backdrop { background: #16161de6; }
+body:has(.image-viewer[open]) { overflow: hidden; }
+.image-viewer-bar, .image-viewer-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.image-viewer-bar { justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.image-viewer-bar h2 { margin: 0; font-size: 14px; }
+.image-viewer-controls button, .image-viewer-controls a {
+  min-height: 36px;
+  min-width: 36px;
+  padding: 5px 9px;
+  background: var(--raised);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 13px;
+}
+.image-viewer-controls a { display: inline-grid; place-items: center; }
+.image-viewer-stage { display: flex; overflow: auto; padding: 16px; }
+.image-viewer-stage img { flex: none; display: block; height: auto; width: 100%; object-fit: contain; margin: auto; }
 .prose h3 { margin: 1.6rem 0 .6rem; }
 .prose h3 + ul { margin-top: 0; }
 .prose li::marker { color: var(--accent); }
