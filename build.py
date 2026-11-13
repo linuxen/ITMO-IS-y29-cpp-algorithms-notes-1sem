@@ -172,7 +172,12 @@ def render(body):
 
 
 def shell(title, description, body, filename=''):
-    github = f'<a class="repo" href="{e(REPO)}" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>' if REPO else ''
+    github = (
+        f'<a class="repo" href="{e(REPO)}" target="_blank" rel="noopener" '
+        'aria-label="Поставить звезду на GitHub" title="Поставить звезду на GitHub">'
+        '<span class="repo-star" aria-hidden="true">☆</span>'
+        '<span class="repo-label">Поставить звезду</span></a>'
+    ) if REPO else ''
     url = SITE_URL + filename
     chapter = '' if filename == 'laboratory.html' else filename.removesuffix('.html')
     return f'''<!doctype html>
@@ -202,7 +207,7 @@ def shell(title, description, body, filename=''):
 <header class="topbar"><div class="top-inner">
   <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
   <nav class="top-nav" aria-label="Навигация">
-    <a href="./#semester-1">Конспект</a>
+    <a class="nav-catalogue" href="./#semester-1">Конспект</a>
     <a href="laboratory.html">Тренажёры</a>
     {github}
   </nav>

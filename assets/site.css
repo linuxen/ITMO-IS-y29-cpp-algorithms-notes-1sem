@@ -33,8 +33,18 @@ button:disabled { cursor: default; opacity: .43; }
 .mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--green); color: #16161d; font: 700 14px var(--mono); letter-spacing: -.07em; }
 .top-nav { display: flex; align-items: center; gap: 25px; color: var(--muted); font-size: 14px; }
 .top-nav a:hover, .site-footer a:hover, .crumbs a:hover { color: var(--ink); }
-.top-nav .repo { border: 1px solid var(--line); padding: 6px 11px; border-radius: 8px; color: var(--ink); }
-.top-nav .repo span { margin-inline-start: 4px; color: var(--subtle); }
+.top-nav .repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #c0a36e66;
+  padding: 6px 11px;
+  border-radius: 8px;
+  color: var(--amber);
+  white-space: nowrap;
+}
+.top-nav .repo:hover { border-color: var(--amber); color: var(--amber); }
+.repo-star { font-size: 18px; line-height: 1; }
 .hero { padding: 61px 0 39px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: 42px; align-items: center; }
 .overline { margin: 0 0 15px; display: flex; align-items: center; gap: 10px; color: var(--muted); font: 600 12px/1.5 var(--mono); letter-spacing: .09em; }
 .overline span { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px #98bb6c16; }
@@ -178,14 +188,18 @@ tbody tr:last-child td { border-bottom: 0; }
   .hero h1 { font-size: clamp(48px, 12vw, 70px); }
   .hero-summary { margin-top: 16px; }
   .hero-actions { margin-top: 18px; }
-  .top-inner { min-height: 59px; }
-  .top-nav { gap: 11px; font-size: 12px; }
-  .top-nav a:first-child:not(:last-child) { display: none; }
+  .top-inner { min-height: 59px; gap: 12px; padding-block: 8px; }
+  .top-nav { gap: 6px 11px; justify-content: flex-end; flex-wrap: wrap; font-size: 12px; }
+  .top-nav .nav-catalogue { display: none; }
   .search-wrap { margin-bottom: 25px; }
   .chapter-sidebar { position: static; max-height: none; }
   .section-head { flex-wrap: wrap; }
   .course h3 { font-size: 21px; }
   .lab-controls { gap: 5px; }
+}
+@media (max-width: 480px) {
+  .top-nav .repo { min-height: 36px; min-width: 36px; justify-content: center; padding: 6px; }
+  .repo-label { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -58,7 +58,5 @@
 .ai-send button { background: var(--green); color: #16161d; font-weight: 700; }
 @media (max-width: 650px) {
   .top-nav .ai-open { display: inline-block; }
-  .top-nav .ai-open + a { display: none; }
-  .top-nav:has(.ai-open:not([hidden])) .repo { display: none; }
   .ai-head, .ai-tools, .ai-form, .ai-messages { padding-inline: 11px; }
 }

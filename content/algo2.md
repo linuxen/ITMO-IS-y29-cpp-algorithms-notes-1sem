@@ -50,8 +50,6 @@
 
 Если непосещенных соседей нет — переходим к шагу №5.
 
-[Открыть связанную визуализацию](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
-
 Возврат. Извлеките текущую вершину из стека и продолжите перебор соседей предыдущей вершины.
 
 Когда стек пуст, обход посетил все вершины, достижимые из старта. Для обхода всего графа запустите DFS из каждой оставшейся вершины.
@@ -61,6 +59,8 @@
 ## Схемы и рукописные примеры
 
 ![Схема к теме «1. Поиск в глубину (DFS)», часть 1](assets/media/algo2-dfs-1.webp)
+
+- [Анимация поиска в глубину (DFS)](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=3)
 
@@ -110,8 +110,6 @@ int main() {
 }
 ```
 
-[Дополнительная анимация BFS](https://www.cs.usfca.edu/~galles/visualization/BFS.html) · [Анимация DFS](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
-
 ## Материалы и примеры по пунктам
 
 ### Обход в ширину BFS
@@ -134,8 +132,6 @@ int main() {
 
 В социальной сети BFS находит людей, связанных со стартовой вершиной не более чем заданным числом знакомств. Такое расстояние также называют числом рукопожатий.
 
-[Открыть связанную визуализацию](https://www.cs.usfca.edu/~galles/visualization/BFS.html)
-
 ![Иллюстрация к теме «2. Поиск в ширину (BFS)»](assets/media/47f6d61e89a0e47367.png)
 
 ![Иллюстрация к теме «2. Поиск в ширину (BFS)»](assets/media/ce89145a08e157c0ed.png)
@@ -143,6 +139,9 @@ int main() {
 ## Схемы и рукописные примеры
 
 ![Схема к теме «2. Поиск в ширину (BFS)», часть 1](assets/media/algo2-traversal-1.webp)
+
+- [Анимация поиска в ширину (BFS)](https://www.cs.usfca.edu/~galles/visualization/BFS.html)
+- [Анимация поиска в глубину (DFS)](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=5)
 
@@ -657,15 +656,15 @@ int main() {
 
 ### Алгоритм Дейкстра с очередью/массивом
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/2fcd941f4888794ec4.png)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/2fcd941f4888794ec4.png)
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/15282c403bf7dc6d63.png)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/15282c403bf7dc6d63.png)
 
 для обоих
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/1691a158c919bb0634.png)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/1691a158c919bb0634.png)
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/e7bf90bd3ac61b8b45.png)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/e7bf90bd3ac61b8b45.png)
 
 очередь с приоритетом
 
@@ -693,7 +692,7 @@ int main() {
 
 Шаг 3. Берём вершину с минимальным расстоянием из очереди
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/7704c0895a92772730.png)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/7704c0895a92772730.png)
 
 ### Код
 
@@ -703,7 +702,7 @@ int main() {
 
 Шаг 5. Рассматриваем всех соседей вершины
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/e12d20e8fe4a2c86f7.png)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/e12d20e8fe4a2c86f7.png)
 
 3️⃣ Обновляем расстояния до соседей
 
@@ -715,17 +714,16 @@ new_distance = distance[current] + weight(edge)
 
 4️⃣ Помечаем вершину как посещённую
 
-[Открыть связанную визуализацию](https://antontmoore.github.io/graph_algorithms/dijkstra_simple)
-
 5️⃣ Повторяем
 
-![Иллюстрация к теме «5. Алгоритм Дейкстры»](assets/media/9d2cc809f87d7fd0f7.png)
-
-[Открыть связанную визуализацию](https://www.cs.usfca.edu/~galles/visualization/Dijkstra.html)
+![Иллюстрация к теме «13. Алгоритм Дейкстры»](assets/media/9d2cc809f87d7fd0f7.png)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «5. Алгоритм Дейкстры», часть 1](assets/media/algo2-paths-1.webp)
+![Схема к теме «13. Алгоритм Дейкстры», часть 1](assets/media/algo2-paths-1.webp)
+
+- [Анимация алгоритма Дейкстры](https://www.cs.usfca.edu/~galles/visualization/Dijkstra.html)
+- [Пошаговый разбор алгоритма Дейкстры](https://antontmoore.github.io/graph_algorithms/dijkstra_simple)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=37)
 
@@ -1031,8 +1029,6 @@ new_distance = distance[current] + weight(edge)
 
 ![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/0c15f786ce3e2eb458.png)
 
-[Дополнительный материал по алгоритмам на графах](assets/media/21ba70ec4183f98972.pdf)
-
 ![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/1ab92eba27b8b0cbcc.png)
 
 ![Иллюстрация к теме «19. Мосты и точки сочленения»](assets/media/61a60f0f841bf63623.png)
@@ -1045,7 +1041,7 @@ new_distance = distance[current] + weight(edge)
 
 ![Схема к теме «19. Мосты и точки сочленения», часть 1](assets/media/algo2-graph-structure-1.webp)
 
-[Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=56)
+[Мосты и точки сочленения в PDF, страница 56](assets/media/21ba70ec4183f98972.pdf#page=56)
 
 @@ graph-coloring
 # 20. Жадная раскраска графа
