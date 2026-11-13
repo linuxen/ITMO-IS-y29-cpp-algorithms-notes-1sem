@@ -262,8 +262,8 @@ def catalogue(by_group):
     <a class="button secondary" href="#semester-2">2 семестр <span aria-hidden="true">↓</span></a>
     <a class="button secondary" href="laboratory.html">Тренажёры <span aria-hidden="true">↗</span></a></div>
   </div>
-  <img class="hero-image" src="assets/first-year-meme.png?v={ASSET_VERSION}" width="800" height="520"
-    alt="Майор Пэйн с поднятым кулаком. Надпись «Паровозик смог, и мы сможем»">
+  <img class="hero-image" src="assets/first-year-meme.png?v={ASSET_VERSION}" width="1172" height="1244"
+    alt="Мужчина показывает средний палец. Надпись «FUCK YOU C++»">
 </section>
 <section class="search-wrap" aria-label="Поиск по конспекту">
   <label class="searchbox"><span aria-hidden="true"></span><input type="search" id="search" autocomplete="off" placeholder="Поиск по темам…" aria-label="Поиск по темам" aria-controls="search-results"><kbd>/</kbd></label>
