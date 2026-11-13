@@ -13,12 +13,12 @@
 <meta property="og:title" content="Указатели, ссылки, массивы и строки · C++ и алгоритмы">
 <meta property="og:description" content="Адрес объекта, передача параметров и время жизни данных.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-addresses.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-addresses"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-addresses"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -33,33 +33,10 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a aria-current=page href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a aria-current=page href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Указатели, ссылки, массивы и строки</h1><p>Адрес объекта, передача параметров и время жизни данных.</p></header>
-<div class="prose"><h2 id="section-1">Адрес и псевдоним</h2>
-<p><code>&amp;value</code> получает адрес, <code>*ptr</code> обращается к объекту по адресу. Указатель можно переназначить и проверить на <code>nullptr</code>. Ссылка <code>T&amp;</code> привязывается при инициализации. <code>const T&amp;</code> полезна для доступа без копирования через этот параметр.</p>
-<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
-<span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
-
-<span class="tok-type">void</span> <span class="tok-function">Increment</span>(<span class="tok-type">int</span>&amp; value) {
-    ++value;
-}
-
-<span class="tok-type">int</span> <span class="tok-function">main</span>() {
-    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; values{<span class="tok-number">2</span>, <span class="tok-number">4</span>, <span class="tok-number">6</span>};
-    <span class="tok-type">int</span>* first = &amp;values[<span class="tok-number">0</span>];
-    <span class="tok-function">Increment</span>(*first);
-    <span class="tok-function">assert</span>(values.<span class="tok-function">front</span>() == <span class="tok-number">3</span>);
-}</code></pre></div>
-<h2 id="section-2">Массивы и строки</h2>
-<p>У встроенного массива фиксированная длина, индексация начинается с нуля. В параметре <code>int a[]</code> тип корректируется до <code>int*</code>, поэтому длину передают отдельно. <code>std::array&lt;T, N&gt;</code> хранит размер в типе, <code>std::vector&lt;T&gt;</code> меняет длину, а <code>std::span&lt;T&gt;</code> (C++20) представляет непрерывный диапазон без владения им.</p>
-<p>Арифметика указателей допустима внутри одного массива и до позиции за его концом. Последнюю позицию нельзя разыменовывать. <code>sizeof(array)</code> в месте объявления даёт размер всего массива, а <code>sizeof(ptr)</code> — размер самого указателя.</p>
-<p>C-строка оканчивается <code>'\0'</code>. <code>std::string</code> владеет своей памятью и хранит длину. <code>std::string_view</code> ссылается на существующие символы. Проверяйте, что исходная строка переживает все обращения через view.</p>
-<h2 id="section-3">Массивы и функции</h2>
-<p>В двумерном массиве <code>int table[2][3]</code> хранится два массива по три числа. При передаче функции как <code>int table[][3]</code> размер строки нужен, чтобы правильно перейти к следующей строке. Указатель на функцию <code>int (*operation)(int)</code> можно вызвать как <code>operation(5)</code>, если он указывает на функцию с соответствующей сигнатурой.</p>
-<h2 id="section-4">Самопроверка</h2>
-<p>Можно ли использовать указатель на элемент <code>vector</code> после <code>push_back</code>? Если контейнер перевыделил буфер, старый адрес становится недействительным.</p>
-<h2 id="section-5">Указатели, массивы и строки</h2>
-<h2 id="section-6">Указатели</h2>
+<div class="prose"><h2 id="section-1">Указатели, массивы и строки</h2>
+<h2 id="section-2">Указатели</h2>
 <figure class="note-figure"><a href="assets/media/34e6d5798bd8decc48.png" target="_blank" rel="noopener"><img src="assets/media/34e6d5798bd8decc48.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
 
@@ -274,13 +251,13 @@
     <span class="tok-keyword">struct</span> ichbin *p1 = &amp;ADD;
     std::cout &lt;&lt; p1 -&gt; name; <span class="tok-comment">//доступ к элементу структуры через указатель</span>
 }</code></pre></div>
-<h2 id="section-7">Строка</h2>
+<h2 id="section-3">Строка</h2>
 <figure class="note-figure"><a href="assets/media/e83210c10ec884ab12.png" target="_blank" rel="noopener"><img src="assets/media/e83210c10ec884ab12.png" alt="Иллюстрация к теме «Строка»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-8">Массив</h2>
+<h2 id="section-4">Массив</h2>
 <p><img src="assets/media/d3e8826d79a5556d8b.png" alt="Иллюстрация к теме «Массив»" />
 Если элементов введено меньше чем кол-во элементов на которые задан массив пустые мечта заполняются нулями</p>
 <p>sizeof(arr) - выводит объем массива</p>
-<h2 id="section-9">static_cast, reinterpret_cast и приведение в стиле C</h2>
+<h2 id="section-5">static_cast, reinterpret_cast и приведение в стиле C</h2>
 <p>Это основное средство приведения типов, которое проверяется на этапе <strong>компиляции</strong>.</p>
 <ul>
 <li><strong>Что делает:</strong>
@@ -314,18 +291,18 @@
 <li><code>static_cast</code> + <code>const_cast</code>.</li>
 <li><code>reinterpret_cast</code> (интерпретация битов).</li>
 </ol>
-<h2 id="section-10">Ссылки</h2>
+<h2 id="section-6">Ссылки</h2>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>(){
     <span class="tok-type">int</span> a = <span class="tok-number">1</span>;
     <span class="tok-type">int</span> &amp;aref = a;
     std::cout &lt;&lt; aref;
 }</code></pre></div>
-<h2 id="section-11">Двумерный массив</h2>
+<h2 id="section-7">Двумерный массив</h2>
 <figure class="note-figure"><a href="assets/media/ddc17d172239a49b36.png" target="_blank" rel="noopener"><img src="assets/media/ddc17d172239a49b36.png" alt="Иллюстрация к теме «Двумерный массив»" loading="lazy" decoding="async"></a></figure>
 </div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-basics.html"><small>← Назад</small>Типы, выражения, условия, циклы и функции</a><a href="cpp-random.html"><small>Дальше →</small>Генерация случайных чисел</a></nav>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-basics.html"><small>← Назад</small>Типы, выражения, условия, циклы и функции</a><a href="cpp-structs.html"><small>Дальше →</small>Структуры, объединения и измерение производительности</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Адрес и псевдоним</a></li><li><a href="#section-2">Массивы и строки</a></li><li><a href="#section-3">Массивы и функции</a></li><li><a href="#section-4">Самопроверка</a></li><li><a href="#section-5">Указатели, массивы и строки</a></li><li><a href="#section-6">Указатели</a></li><li><a href="#section-7">Строка</a></li><li><a href="#section-8">Массив</a></li><li><a href="#section-9">static_cast, reinterpret_cast и приведение в стиле C</a></li><li><a href="#section-10">Ссылки</a></li><li><a href="#section-11">Двумерный массив</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Указатели, массивы и строки</a></li><li><a href="#section-2">Указатели</a></li><li><a href="#section-3">Строка</a></li><li><a href="#section-4">Массив</a></li><li><a href="#section-5">static_cast, reinterpret_cast и приведение в стиле C</a></li><li><a href="#section-6">Ссылки</a></li><li><a href="#section-7">Двумерный массив</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

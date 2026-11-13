@@ -13,12 +13,12 @@
 <meta property="og:title" content="5. Поиск и восстановление циклов · C++ и алгоритмы">
 <meta property="og:description" content="Цикл в ориентированном и неориентированном графе, восстановление пути и проверка через DSU.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cycles.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cycles"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cycles"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -44,16 +44,15 @@
 </ol>
 <p>Если ребро v → u ведёт в активного предка u, пройдите от v по указателям предков до u, разверните полученный список и добавьте u в конец. Так получается последовательность вершин в направлении рёбер цикла.</p>
 <h2 id="section-2">Неориентированный граф</h2>
-<p>У каждой пары направлений одного ребра должен быть общий идентификатор. В DFS пропускайте только ребро, по которому вошли в текущую вершину. Ребро в активного предка образует цикл. При кратных рёбрах второе ребро между двумя вершинами может замкнуть цикл длины 2. Петля образует цикл длины 1.</p>
-<p>Для проверки существования цикла можно последовательно добавлять рёбра в DSU. Если концы очередного ребра уже находятся в одной компоненте, ребро замыкает цикл. Для восстановления пути отдельно храните принятые рёбра леса.</p>
-<h2 id="section-3">Сложность и самопроверка</h2>
+<p>В DFS ребро к посещённой вершине, отличной от родителя текущей вершины, указывает на цикл.</p>
+<p>Для проверки существования цикла можно последовательно добавлять рёбра в DSU. Если концы очередного ребра уже находятся в одной компоненте, ребро замыкает цикл.</p>
+<h2 id="section-3">Сложность</h2>
 <p>Обнаружение DFS занимает O(V + E), восстановление — O(k) для цикла длины k. Перечисление всех простых циклов может потребовать экспоненциального времени, так как самих циклов может быть экспоненциально много.</p>
-<p>Проверьте граф с рёбрами A → B, B → C, C → A и A → D. В каком порядке меняются цвета и какие предки образуют цикл?</p>
 <p><a href="assets/media/21ba70ec4183f98972.pdf#page=14">Полный разбор и реализации в PDF</a></p>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="components.html"><small>← Назад</small>4. Сильная и слабая связность. Конденсация</a><a href="hamilton.html"><small>Дальше →</small>6. Гамильтонов цикл</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Ориентированный граф</a></li><li><a href="#section-2">Неориентированный граф</a></li><li><a href="#section-3">Сложность и самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Ориентированный граф</a></li><li><a href="#section-2">Неориентированный граф</a></li><li><a href="#section-3">Сложность</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

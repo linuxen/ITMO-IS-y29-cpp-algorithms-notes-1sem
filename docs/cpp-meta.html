@@ -13,12 +13,12 @@
 <meta property="og:title" content="Метапрограммирование и концепты · C++ и алгоритмы">
 <meta property="og:description" content="Пакеты параметров, проверка требований к типам и типобезопасные альтернативы.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-meta.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-meta"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-meta"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,47 +35,30 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a aria-current=page href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Метапрограммирование и концепты</h1><p>Пакеты параметров, проверка требований к типам и типобезопасные альтернативы.</p></header>
-<div class="prose"><h2 id="section-1">Пакеты и свёртки</h2>
-<p><code>typename... Args</code> объявляет пакет типов, <code>args...</code> раскрывает пакет. Fold expression сворачивает пакет по оператору. <code>(0 + ... + args)</code> даёт ноль для пустого пакета. <code>std::variant&lt;A, B&gt;</code> хранит одну из альтернатив, а <code>std::visit</code> вызывает подходящую ветку для текущего значения.</p>
-<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;concepts&gt;
-
-<span class="tok-keyword">template</span> &lt;std::integral... Args&gt;
-<span class="tok-keyword">constexpr</span> <span class="tok-keyword">auto</span> <span class="tok-function">Sum</span>(Args... args) {
-    <span class="tok-keyword">return</span> (<span class="tok-number">0</span> + ... + args);
-}
-
-<span class="tok-type">int</span> <span class="tok-function">main</span>() {
-    <span class="tok-keyword">static_assert</span>(<span class="tok-function">Sum</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">5</span>) == <span class="tok-number">10</span>);
-    <span class="tok-keyword">static_assert</span>(<span class="tok-function">Sum</span>() == <span class="tok-number">0</span>);
-}</code></pre></div>
-<h2 id="section-2">Метапрограммирование</h2>
-<p><code>constexpr</code> разрешает вычисление в константном контексте при подходящих аргументах. Специализация меняет реализацию шаблона для выбранных аргументов. <code>&lt;type_traits&gt;</code> содержит предикаты и преобразования типов, например <code>std::is_integral_v&lt;T&gt;</code> и <code>std::remove_cvref_t&lt;T&gt;</code>. При SFINAE некоторые ошибки подстановки исключают шаблон из кандидатов перегрузки.</p>
-<h2 id="section-3">Как читать requires</h2>
-<p>Concept (C++20) даёт имя ограничению. В <code>requires</code> простое требование проверяет корректность выражения, требование к типу — наличие типа, вложенное — истинность ограничения. Составное требование проверяет выражение, его тип и при необходимости <code>noexcept</code>.</p>
-<h2 id="section-4">Template Metaprogramming</h2>
-<h2 id="section-5">constexpr</h2>
+<div class="prose"><h2 id="section-1">Template Metaprogramming</h2>
+<h2 id="section-2">constexpr</h2>
 <figure class="note-figure"><a href="assets/media/023ebb74f1e23b32d6.png" target="_blank" rel="noopener"><img src="assets/media/023ebb74f1e23b32d6.png" alt="Иллюстрация к теме «constexpr»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/2974fdaaf06e5c7add.png" target="_blank" rel="noopener"><img src="assets/media/2974fdaaf06e5c7add.png" alt="Иллюстрация к теме «constexpr»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-6">Template Specialization</h2>
+<h2 id="section-3">Template Specialization</h2>
 <figure class="note-figure"><a href="assets/media/4c8d93304913575198.png" target="_blank" rel="noopener"><img src="assets/media/4c8d93304913575198.png" alt="Иллюстрация к теме «Template Specialization»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-7">Metaprogramming С++</h2>
+<h2 id="section-4">Metaprogramming С++</h2>
 <p><strong>Метапрограммирование в C++</strong> — это написание программного кода, который выполняется во время компиляции, а не во время работы программы (runtime).</p>
 <figure class="note-figure"><a href="assets/media/4f13fa696d35273e03.png" target="_blank" rel="noopener"><img src="assets/media/4f13fa696d35273e03.png" alt="Иллюстрация к теме «Metaprogramming С++»" loading="lazy" decoding="async"></a></figure>
 <blockquote>
 <p>пример: тот же факториал</p>
 </blockquote>
-<h2 id="section-8">type_traits</h2>
+<h2 id="section-5">type_traits</h2>
 <figure class="note-figure"><a href="assets/media/02609693ab3441c2c7.png" target="_blank" rel="noopener"><img src="assets/media/02609693ab3441c2c7.png" alt="Иллюстрация к теме «type_traits»" loading="lazy" decoding="async"></a></figure>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>(<span class="tok-type">int</span> argc, <span class="tok-type">char</span>** argv) {
     <span class="tok-type">int</span> b = <span class="tok-number">10</span>;
     <span class="tok-type">int</span>* a = &amp;b;
     <span class="tok-function">assert</span>(std::is_pointer&lt;<span class="tok-function">decltype</span>(b)&gt;::value);
 }</code></pre></div>
-<h2 id="section-9">SFINAE</h2>
+<h2 id="section-6">SFINAE</h2>
 <p><strong>SFINAE</strong> (Substitution Failure Is Not An Error) — это правило компиляции в C++, которое означает: <strong>«Неудачная подстановка типа в шаблон не является ошибкой компиляции»</strong>.</p>
 <figure class="note-figure"><a href="assets/media/cd9cd6f34fc3b72e73.png" target="_blank" rel="noopener"><img src="assets/media/cd9cd6f34fc3b72e73.png" alt="Иллюстрация к теме «SFINAE»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/de9f1aa62b1a1c6109.png" target="_blank" rel="noopener"><img src="assets/media/de9f1aa62b1a1c6109.png" alt="Иллюстрация к теме «SFINAE»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-10">Concepts (C++ 20)</h2>
+<h2 id="section-7">Concepts (C++ 20)</h2>
 <p>Концепты позволяют задавать ограничения шаблонов явно. Для многих проверок типов они заменяют громоздкие приёмы на основе SFINAE.
 В выражении <code>requires</code> можно проверить наличие вложенного типа, допустимость операции или соответствие другому концепту.</p>
 <p>Concept нативный</p>
@@ -99,7 +82,7 @@
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-variadic.html"><small>← Назад</small>Вариативные шаблоны, variant и visit</a><a href="cpp-threads.html"><small>Дальше →</small>Асинхронность и многопоточность</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Пакеты и свёртки</a></li><li><a href="#section-2">Метапрограммирование</a></li><li><a href="#section-3">Как читать requires</a></li><li><a href="#section-4">Template Metaprogramming</a></li><li><a href="#section-5">constexpr</a></li><li><a href="#section-6">Template Specialization</a></li><li><a href="#section-7">Metaprogramming С++</a></li><li><a href="#section-8">type_traits</a></li><li><a href="#section-9">SFINAE</a></li><li><a href="#section-10">Concepts (C++ 20)</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Template Metaprogramming</a></li><li><a href="#section-2">constexpr</a></li><li><a href="#section-3">Template Specialization</a></li><li><a href="#section-4">Metaprogramming С++</a></li><li><a href="#section-5">type_traits</a></li><li><a href="#section-6">SFINAE</a></li><li><a href="#section-7">Concepts (C++ 20)</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

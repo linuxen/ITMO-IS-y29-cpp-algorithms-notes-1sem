@@ -13,12 +13,12 @@
 <meta property="og:title" content="Умные указатели · C++ и алгоритмы">
 <meta property="og:description" content="Единственный владелец, совместное владение и наблюдение за объектом.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-ownership.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-ownership"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-ownership"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,33 +35,11 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a aria-current=page href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Умные указатели</h1><p>Единственный владелец, совместное владение и наблюдение за объектом.</p></header>
-<div class="prose"><h2 id="section-1">Модели владения</h2>
-<ul>
-<li><code>std::unique_ptr&lt;T&gt;</code> обозначает единственного владельца. Его можно переместить, копирование запрещено. Создавайте объект через <code>std::make_unique&lt;T&gt;(...)</code>.</li>
-<li><code>std::shared_ptr&lt;T&gt;</code> разделяет владение через управляющий блок. Объект уничтожается, когда исчезает последний сильный владелец. Потокобезопасность счётчика сама по себе не защищает поля объекта.</li>
-<li><code>std::weak_ptr&lt;T&gt;</code> наблюдает за объектом с совместным владением. <code>lock()</code> возвращает сильную ссылку, если объект ещё жив, либо пустой <code>shared_ptr</code>.</li>
-</ul>
-<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
-<span class="tok-directive">#include</span> &lt;memory&gt;
-
-<span class="tok-type">int</span> <span class="tok-function">main</span>() {
-    <span class="tok-keyword">auto</span> owner = std::make_shared&lt;<span class="tok-type">int</span>&gt;(<span class="tok-number">42</span>);
-    std::<span class="tok-type">weak_ptr</span>&lt;<span class="tok-type">int</span>&gt; observer = owner;
-    {
-        <span class="tok-keyword">auto</span> guard = observer.<span class="tok-function">lock</span>();
-        <span class="tok-function">assert</span>(guard &amp;&amp; *guard == <span class="tok-number">42</span>);
-    }
-    owner.<span class="tok-function">reset</span>();
-    <span class="tok-function">assert</span>(observer.<span class="tok-function">expired</span>());
-}</code></pre></div>
-<h2 id="section-2">Циклы и доступ к себе</h2>
-<p>Если два объекта удерживают друг друга через <code>shared_ptr</code>, их счётчики могут остаться положительными после исчезновения внешних владельцев. Для обратной связи вроде «ребёнок → родитель» подходит <code>weak_ptr</code>, если родителем владеют в другом месте.</p>
-<p>Наследование от <code>std::enable_shared_from_this&lt;T&gt;</code> даёт <code>shared_from_this()</code> после подключения объекта к существующему управляющему блоку. Конструкция <code>std::shared_ptr&lt;T&gt;(this)</code> может создать второй независимый блок для того же объекта.</p>
-<h2 id="section-3">Умные указатели</h2>
+<div class="prose"><h2 id="section-1">Умные указатели</h2>
 <p><a href="https://habr.com/ru/companies/piter/articles/706866/">https://habr.com/ru/companies/piter/articles/706866/</a></p>
 <p>Умные указатели были созданы для устранения утечек памяти. По сути, они обеспечивают автоматическое управление памятью: когда умный указатель больше не используется, то есть выходит из области видимости, память, на которую он указывает, автоматически высвобождается. Традиционные указатели теперь также называют «обычными» указателями.</p>
 <p>На самом деле это просто классы, которые оборачивают обычный указатель в свои недра и перегружают операторы -&gt; и *. Благодаря этому трюку умный указатель имеет тот же синтаксис, что и обычный указатель. Когда умный указатель выходит из области видимости, срабатывает его деструктор и происходит очистка памяти. Эта техника называется Resource Acquisition Is Initialization (RAII): класс оборачивает динамический ресурс (файл, сокет, подключение к базе данных, выделенная память, ...), который должным образом удаляется/закрывается в своем деструкторе. Таким образом, вы гарантированно избежите утечки ресурсов.</p>
-<h2 id="section-4">Типы умных указателей в современном C++</h2>
+<h2 id="section-2">Типы умных указателей в современном C++</h2>
 <ul>
 <li>std::unique_ptr — умный указатель, владеющий динамически выделенным ресурсом;</li>
 <li>std::shared_ptr — умный указатель, владеющий разделяемым динамически выделенным ресурсом. Несколько std::shared_ptr могут владеть одним и тем же ресурсом, и внутренний счетчик ведет их учет;</li>
@@ -180,7 +158,7 @@ called distr</code></pre></div>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-stl.html"><small>Дальше →</small>STL, итераторы и алгоритмы</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Модели владения</a></li><li><a href="#section-2">Циклы и доступ к себе</a></li><li><a href="#section-3">Умные указатели</a></li><li><a href="#section-4">Типы умных указателей в современном C++</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Умные указатели</a></li><li><a href="#section-2">Типы умных указателей в современном C++</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

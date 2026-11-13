@@ -13,12 +13,12 @@
 <meta property="og:title" content="24. Алгоритм Кнута — Морриса — Пратта · C++ и алгоритмы">
 <meta property="og:description" content="Полиномиальный хеш, префикс-функция, Z-функция и строковый автомат.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/strings.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="strings"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="strings"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,18 +35,9 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>Алгоритмы · 2 семестр</summary><ul><li><a  href="dfs.html">1. Поиск в глубину (DFS)</a></li><li><a  href="traversal.html">2. Поиск в ширину (BFS)</a></li><li><a  href="topo.html">3. Топологическая сортировка</a></li><li><a  href="components.html">4. Сильная и слабая связность. Конденсация</a></li><li><a  href="cycles.html">5. Поиск и восстановление циклов</a></li><li><a  href="hamilton.html">6. Гамильтонов цикл</a></li><li><a  href="euler.html">7. Эйлеров цикл</a></li><li><a  href="connected.html">8. Компоненты связности</a></li><li><a  href="mst.html">9. Алгоритм Краскала и система непересекающихся множеств</a></li><li><a  href="prim.html">10. Алгоритм Прима</a></li><li><a  href="bellman-ford.html">11. Алгоритм Беллмана — Форда</a></li><li><a  href="dag-paths.html">12. Кратчайшие и длиннейшие пути в DAG</a></li><li><a  href="paths.html">13. Алгоритм Дейкстры</a></li><li><a  href="floyd.html">14. Алгоритм Флойда — Уоршелла</a></li><li><a  href="diameter.html">15. Диаметр дерева</a></li><li><a  href="kuhn.html">16. Алгоритм Куна</a></li><li><a  href="flow.html">17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп</a></li><li><a  href="matching-flow.html">18. Паросочетание через максимальный поток</a></li><li><a  href="graph-structure.html">19. Мосты и точки сочленения</a></li><li><a  href="graph-coloring.html">20. Жадная раскраска графа</a></li><li><a  href="rabin-karp.html">21. Полиномиальный хеш и алгоритм Рабина — Карпа</a></li><li><a  href="prefix-function.html">22. Префикс-функция</a></li><li><a  href="z-function.html">23. Z-функция</a></li><li><a aria-current=page href="strings.html">24. Алгоритм Кнута — Морриса — Пратта</a></li><li><a  href="string-automaton.html">25. Автомат поиска подстроки</a></li><li><a  href="trie.html">26. Бор</a></li><li><a  href="hashing.html">27. Хеш-функция, хеш-таблица и коллизии</a></li><li><a  href="hash-addressing.html">28. Открытая адресация и цепочки</a></li><li><a  href="cuckoo-hash.html">29. Хеширование кукушки</a></li><li><a  href="bloom.html">30. Фильтр Блума</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header blue"><h1>24. Алгоритм Кнута — Морриса — Пратта</h1><p>Полиномиальный хеш, префикс-функция, Z-функция и строковый автомат.</p></header>
-<div class="prose"><h2 id="section-1">Как не сравнивать всё заново</h2>
-<p>Префикс-функция π[i] — длина наибольшего собственного префикса строки s[0…i], который одновременно является её суффиксом. В КМП при несовпадении переходите от текущей длины j к π[j−1]. Так сохраняется полезная часть уже совпавших символов. После полного совпадения примените тот же переход для поиска перекрывающихся вхождений. Время O(n + m), память O(m) для шаблона.</p>
-<section id="interactive" class="lab" data-demo="kmp" aria-label="Поиск КМП">
+<div class="prose"><section id="interactive" class="lab" data-demo="kmp" aria-label="Поиск КМП">
       <noscript>Включите JavaScript, чтобы управлять схемой.</noscript>
-    </section><h2 id="section-2">Другие методы</h2>
-<ul>
-<li>Z[i] — длина совпадения префикса строки с подстрокой, начинающейся в i. Z-алгоритм хранит самый правый известный отрезок совпадения и использует его для линейного вычисления. Для поиска можно взять <code>pattern + separator + text</code>.</li>
-<li>Рабин — Карп сравнивает полиномиальные хеши шаблона и окон текста. Хеш окна можно получать за O(1) по префиксным хешам. Совпадение хешей требует проверки символов для точного ответа. Из-за проверок худшее время может составить O(nm).</li>
-<li>Строковый автомат хранит длину совпавшего префикса как состояние, а переходы по буквам можно вычислить заранее через π. Для алфавита размера σ таблица занимает O(mσ), поиск по готовой таблице — O(n).</li>
-<li>Бор хранит общие префиксы строк в общих узлах. Терминальная отметка отличает добавленное слово от его префикса. Поиск стоит O(L) при O(1) доступе к переходу, где L — длина слова.</li>
-</ul>
-<h2 id="section-3">Материалы и примеры по пунктам</h2>
+    </section><h2 id="section-1">Материалы и примеры по пунктам</h2>
 <h3>Алгоритм Кнута-Морриса-Пратта</h3>
 <figure class="note-figure"><a href="assets/media/15282c403bf7dc6d63.png" target="_blank" rel="noopener"><img src="assets/media/15282c403bf7dc6d63.png" alt="Иллюстрация к теме «24. Алгоритм Кнута — Морриса — Пратта»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/f6f1f70f9c54bf83dd.png" target="_blank" rel="noopener"><img src="assets/media/f6f1f70f9c54bf83dd.png" alt="Иллюстрация к теме «24. Алгоритм Кнута — Морриса — Пратта»" loading="lazy" decoding="async"></a></figure>
@@ -59,12 +50,12 @@
 <h3>a b a b a b c a</h3>
 <h3>π =  0 0 1 2 3 4 0 1</h3>
 <figure class="note-figure"><a href="assets/media/ecf2e7d0c1c65d38ac.png" target="_blank" rel="noopener"><img src="assets/media/ecf2e7d0c1c65d38ac.png" alt="Иллюстрация к теме «24. Алгоритм Кнута — Морриса — Пратта»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-4">Схемы и рукописные примеры</h2>
+<h2 id="section-2">Схемы и рукописные примеры</h2>
 <figure class="note-figure"><a href="assets/media/algo2-strings-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo2-strings-1.webp" alt="Схема к теме «24. Алгоритм Кнута — Морриса — Пратта», часть 1" loading="lazy" decoding="async"></a></figure>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="z-function.html"><small>← Назад</small>23. Z-функция</a><a href="string-automaton.html"><small>Дальше →</small>25. Автомат поиска подстроки</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Как не сравнивать всё заново</a></li><li><a href="#section-2">Другие методы</a></li><li><a href="#section-3">Материалы и примеры по пунктам</a></li><li><a href="#section-4">Схемы и рукописные примеры</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Материалы и примеры по пунктам</a></li><li><a href="#section-2">Схемы и рукописные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

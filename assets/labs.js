@@ -349,25 +349,39 @@ function heap(mode, { numbers }) {
   return frames;
 }
 
-function dynamic(mode, { target }) {
-  const coins = mode === '1, 3, 4' ? [1, 3, 4] : [2, 5, 7];
-  const dp = Array(target + 1).fill(Infinity);
+function knapsack(mode) {
+  const first = mode === 'Таблица 1';
+  const capacity = first ? 15 : 13;
+  const items = first ? [[6, 5], [4, 3], [3, 1], [2, 3], [5, 6]] :
+    [[3, 1], [4, 6], [5, 4], [8, 7], [9, 6]];
+  const columns = Array.from({ length: capacity + 1 }, (_, index) => index);
+  const table = [columns.map(() => 0)];
   const frames = [];
-  dp[0] = 0;
-  const save = (message, filled, active, from = []) => frames.push({
-    message, detail: 'dp[' + active + '] = ' + finite(dp[active]) + '   |   Монеты ' + print(coins),
-    rows: [{ values: dp.map((value, i) => i > filled ? '·' : finite(value)),
-      labels: dp.map((_, i) => i), active: [active], seen: from }],
-  });
-  save('База: для суммы 0 нужно 0 монет.', 0, 0);
-  for (let sum = 1; sum <= target; sum++) {
-    const from = coins.filter((coin) => coin <= sum && Number.isFinite(dp[sum - coin])).map((coin) => sum - coin);
-    dp[sum] = Math.min(...from.map((i) => dp[i] + 1));
-    save(from.length ? 'Выбираем минимум по достижимым предыдущим суммам.' :
-      'Сумма ' + sum + ' недостижима этими монетами.', sum, sum, from);
+  const save = (message, detail, active = [], from = []) => {
+    const current = table.at(-1);
+    const previous = table.at(-2);
+    const rows = [{ values: columns.map((column) => current[column] ?? '·'), labels: columns, active }];
+    if (previous) rows.unshift({ values: [...previous], labels: columns, seen: from });
+    frames.push({ message, detail, rows });
+  };
+  save('Без предметов стоимость равна 0 при любой вместимости.', 'Строка A[0, s]');
+  for (const [weight, price] of items) {
+    const k = table.length;
+    const previous = table[k - 1];
+    const current = [];
+    table.push(current);
+    for (const s of columns) {
+      const skip = previous[s];
+      const fits = weight <= s;
+      const take = fits ? price + previous[s - weight] : 0;
+      current.push(Math.max(skip, take));
+      const detail = 'Предмет ' + k + ' · вес ' + weight + ' · цена ' + price +
+        '   |   A[' + k + ', ' + s + '] = ' + current[s];
+      save(fits ? 'Сравниваем: пропустить — ' + skip + ', взять — ' + take + '.' :
+        'Предмет не помещается при вместимости ' + s + '.', detail, [s], fits ? [s, s - weight] : [s]);
+    }
   }
-  save(Number.isFinite(dp[target]) ? 'Минимум для суммы ' + target + ': ' + dp[target] + '.' :
-    'Целевая сумма недостижима.', target, target);
+  save('Максимальная стоимость — ' + table.at(-1)[capacity] + '.', 'Вместимость ' + capacity, [capacity]);
   return frames;
 }
 
@@ -475,13 +489,7 @@ const labs = {
     fields: [numberField('3, 5, 8', 1, 8)] },
   heap: { title: 'Двоичная куча', run: heap, modes: ['Построение', 'Извлечь минимум'],
     fields: [numberField('8, 4, 6, 3, 5, 2, 7', 2, 7)] },
-  dp: { title: 'Размен монет', run: dynamic, modes: ['1, 3, 4', '2, 5, 7'],
-    fields: [{ key: 'target', label: 'Целевая сумма', value: '6',
-      parse(text) {
-        const value = Number(text);
-        if (!/^\d{1,2}$/.test(text) || value > 18) throw new Error('Введите целую сумму от 0 до 18.');
-        return value;
-      } }] },
+  dp: { title: 'Задача о рюкзаке', run: knapsack, modes: ['Таблица 1', 'Таблица 2'] },
   kmp: { title: 'Поиск КМП', run: kmp,
     fields: [shortText('text', 'Текст', 'ABABABACABA', 22), shortText('pattern', 'Шаблон', 'ABA', 11)] },
   hash: { title: 'Хеш-таблица', run: hashTable, modes: ['Цепочки', 'Пробирование'],

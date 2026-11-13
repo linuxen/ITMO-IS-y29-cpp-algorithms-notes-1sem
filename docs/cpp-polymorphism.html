@@ -13,12 +13,12 @@
 <meta property="og:title" content="Наследование и полиморфизм · C++ и алгоритмы">
 <meta property="og:description" content="Виртуальные методы, интерфейсы и безопасное удаление объектов.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-polymorphism.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-polymorphism"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-polymorphism"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -33,39 +33,16 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a aria-current=page href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a aria-current=page href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Наследование и полиморфизм</h1><p>Виртуальные методы, интерфейсы и безопасное удаление объектов.</p></header>
-<div class="prose"><h2 id="section-1">Вызов через базовый тип</h2>
-<p>Открытое наследование моделирует отношение «является разновидностью». Виртуальная функция выбирается по динамическому типу объекта при вызове через указатель или ссылку. <code>override</code> просит компилятор проверить, что сигнатура действительно переопределяет базовый метод. Чистая виртуальная функция обозначается <code>= 0</code>.</p>
-<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
-
-<span class="tok-keyword">struct</span> Shape {
-    <span class="tok-keyword">virtual</span> ~<span class="tok-function">Shape</span>() = default;
-    <span class="tok-keyword">virtual</span> <span class="tok-type">int</span> <span class="tok-function">Area</span>() <span class="tok-keyword">const</span> = <span class="tok-number">0</span>;
-};
-
-<span class="tok-keyword">struct</span> Square <span class="tok-keyword">final</span> : Shape {
-    <span class="tok-keyword">explicit</span> <span class="tok-function">Square</span>(<span class="tok-type">int</span> side) : <span class="tok-function">side</span>(side) {}
-    <span class="tok-type">int</span> <span class="tok-function">Area</span>() <span class="tok-keyword">const</span> <span class="tok-keyword">override</span> { <span class="tok-keyword">return</span> side * side; }
-    <span class="tok-type">int</span> side;
-};
-
-<span class="tok-type">int</span> <span class="tok-function">main</span>() {
-    Square square{<span class="tok-number">4</span>};
-    <span class="tok-keyword">const</span> Shape&amp; shape = square;
-    <span class="tok-function">assert</span>(shape.<span class="tok-function">Area</span>() == <span class="tok-number">16</span>);
-}</code></pre></div>
-<h2 id="section-2">Интерфейс и реализация</h2>
-<p>Если объект удаляется через указатель на базовый класс, базовый деструктор обычно должен быть виртуальным. Передача производного объекта по значению в параметр базового типа может привести к срезке. <code>final</code> ограничивает дальнейшее наследование класса или переопределение метода.</p>
-<p><code>friend</code> даёт конкретной функции или классу доступ к закрытым членам. Композиция описывает отношение «содержит» и часто подходит для повторного использования реализации. Абстракция задаёт интерфейс, инкапсуляция защищает состояние, наследование выражает отношение типов, а полиморфизм позволяет работать с разными реализациями через общий интерфейс.</p>
-<h2 id="section-3">ООП: Наследование</h2>
-<h2 id="section-4">friend function</h2>
+<div class="prose"><h2 id="section-1">ООП: Наследование</h2>
+<h2 id="section-2">friend function</h2>
 <p>Позволяет описать новый класс на основе уже существующих</p>
 <p>Обеспечивает повторное использование кода</p>
 <p>class CStudent : public CPerson
 Дочерний Базовый</p>
 <figure class="note-figure"><a href="assets/media/53a6ce860ba55c8466.png" target="_blank" rel="noopener"><img src="assets/media/53a6ce860ba55c8466.png" alt="Иллюстрация к теме «friend function»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-5">friend class</h2>
+<h2 id="section-3">friend class</h2>
 <p>Позволяет описать новый класс на основе уже существующих</p>
 <p>Обеспечивает повторное использование кода</p>
 <p>class CStudent : public CPerson
@@ -79,7 +56,7 @@
 Деструктор от дочерних к базовым (в обратном порядке)</p>
 <p>protected - можно использовать поля в дочерних, но нельзя, как в public использовать в main</p>
 <p>Конструктор Базового класса будет вызываться каждый раз, когда будет вызываться дочерний</p>
-<h2 id="section-6">Final</h2>
+<h2 id="section-4">Final</h2>
 <p>Спецификатор <code>final</code> запрещает наследоваться от помеченного класса или переопределять помеченный виртуальный метод.
 class MyClass final</p>
 <figure class="note-figure"><a href="assets/media/30d62177f5dd9c9445.png" target="_blank" rel="noopener"><img src="assets/media/30d62177f5dd9c9445.png" alt="Иллюстрация к теме «Final»" loading="lazy" decoding="async"></a></figure>
@@ -87,7 +64,7 @@ class MyClass final</p>
 <p>Посмотри как задавать конструктор и деструктор</p>
 <p>Ромбовидное наследование -
 Почитай</p>
-<h2 id="section-7">Полиморфизм virtual override</h2>
+<h2 id="section-5">Полиморфизм virtual override</h2>
 <p>Полиморфизм — это возможность использовать классы – потомки в контексте, который был предназначен для класса – предка.</p>
 <p>Интерфейс - совокупность методов класса</p>
 <p>Статическая память - известна на этапе компиляции</p>
@@ -157,7 +134,7 @@ Virtual - какой-то метод является виртуальной и 
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-raii.html"><small>← Назад</small>RAII и реализация учебного класса строки</a><a href="cpp-oop-principles.html"><small>Дальше →</small>Четыре принципа ООП</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Вызов через базовый тип</a></li><li><a href="#section-2">Интерфейс и реализация</a></li><li><a href="#section-3">ООП: Наследование</a></li><li><a href="#section-4">friend function</a></li><li><a href="#section-5">friend class</a></li><li><a href="#section-6">Final</a></li><li><a href="#section-7">Полиморфизм virtual override</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">ООП: Наследование</a></li><li><a href="#section-2">friend function</a></li><li><a href="#section-3">friend class</a></li><li><a href="#section-4">Final</a></li><li><a href="#section-5">Полиморфизм virtual override</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

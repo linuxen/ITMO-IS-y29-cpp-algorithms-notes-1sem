@@ -13,12 +13,12 @@
 <meta property="og:title" content="8. Стек · C++ и алгоритмы">
 <meta property="og:description" content="LIFO, FIFO, доступ по индексу и операции с узлами.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/lists.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="lists"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="lists"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,45 +35,9 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">1–2. Оценка сложности по времени и памяти</a></li><li><a  href="sorting.html">3. Сортировка вставками</a></li><li><a  href="merge-sort.html">4. Сортировка слиянием</a></li><li><a  href="quick-sort.html">5. Быстрая сортировка</a></li><li><a  href="counting-sort.html">6. Сортировка подсчётом</a></li><li><a  href="radix-sort.html">7. Поразрядная сортировка</a></li><li><a aria-current=page href="lists.html">8. Стек</a></li><li><a  href="queues.html">9. Очередь</a></li><li><a  href="singly-linked.html">10. Односвязный список</a></li><li><a  href="doubly-linked.html">11. Двусвязный список</a></li><li><a  href="circular-linked.html">12. Циклический список</a></li><li><a  href="linked-stack.html">13. Стек на списке</a></li><li><a  href="linked-queue.html">14. Очередь на списке</a></li><li><a  href="heaps.html">15. Двоичная куча и восстановление её свойств</a></li><li><a  href="heap-build.html">16. Построение кучи за O(n)</a></li><li><a  href="heap-sort.html">17. Пирамидальная сортировка</a></li><li><a  href="heap-remove.html">18. Удаление элемента из кучи</a></li><li><a  href="priority-queue.html">19. Очередь с приоритетом</a></li><li><a  href="dp.html">20. Динамическое программирование</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a  href="coding.html">Сжатие данных и арифметическое кодирование</a></li><li><a  href="huffman.html">Кодирование Хаффмана</a></li><li><a  href="hamming.html">Код Хэмминга</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header blue"><h1>8. Стек</h1><p>LIFO, FIFO, доступ по индексу и операции с узлами.</p></header>
-<div class="prose"><h2 id="section-1">Абстрактные типы данных</h2>
-<p>Стек извлекает последний добавленный элемент (LIFO). Очередь извлекает самый ранний оставшийся элемент (FIFO). Стек подходит для проверки скобок, очередь — для BFS. Перед <code>top()</code>, <code>front()</code> или <code>pop()</code> проверяйте непустоту контейнера.</p>
-<section id="interactive" class="lab" data-demo="linear" aria-label="Стек и очередь">
+<div class="prose"><section id="interactive" class="lab" data-demo="linear" aria-label="Стек и очередь">
       <noscript>Включите JavaScript, чтобы управлять схемой.</noscript>
-    </section><h2 id="section-2">Реализации</h2>
-<table>
-<thead>
-<tr>
-<th>Структура</th>
-<th>Операции</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Односвязный список</td>
-<td>У узла есть next. Вставка после известного узла и удаление его следующего — O(1)</td>
-</tr>
-<tr>
-<td>Двусвязный список</td>
-<td>У узла есть prev и next. Удаление известного узла — O(1), поиск по индексу — O(n)</td>
-</tr>
-<tr>
-<td>Циклический список</td>
-<td>Хвост связан с началом. Для обхода хранят стартовый узел или число шагов</td>
-</tr>
-<tr>
-<td>Стек на списке</td>
-<td>Вставка и снятие головы — O(1)</td>
-</tr>
-<tr>
-<td>Очередь на списке</td>
-<td>Вставка в хвост, снятие головы — O(1) при хранении обоих концов</td>
-</tr>
-</tbody>
-</table>
-<p>Кольцевой буфер реализует очередь на массиве: индекс следующей позиции считается по модулю ёмкости. Счётчик размера позволяет различать пустое и заполненное состояния. Связный список хранит указатели на узлы и обычно хуже использует кеш, а массив даёт O(1) доступ по индексу.</p>
-<h2 id="section-3">Самопроверка</h2>
-<p>После операций push(3), push(5), pop() что останется в стеке и что в очереди? Что нужно обновить в списочной очереди после удаления единственного узла?</p>
-<h2 id="section-4">Материалы и примеры по пунктам</h2>
+    </section><h2 id="section-1">Материалы и примеры по пунктам</h2>
 <h3>Стек</h3>
 <p>Стек (от англ. stack — стопка) — структура данных, представляющая из себя упорядоченный набор элементов где реализуется стратегия LIFO</p>
 <figure class="note-figure"><a href="assets/media/43dfe55c39ff1efe04.png" target="_blank" rel="noopener"><img src="assets/media/43dfe55c39ff1efe04.png" alt="Иллюстрация к теме «8. Стек»" loading="lazy" decoding="async"></a></figure>
@@ -81,12 +45,12 @@
 <figure class="note-figure"><a href="assets/media/bdb69ebcc83f165375.png" target="_blank" rel="noopener"><img src="assets/media/bdb69ebcc83f165375.png" alt="Иллюстрация к теме «8. Стек»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/05a81ca42320fd418f.png" target="_blank" rel="noopener"><img src="assets/media/05a81ca42320fd418f.png" alt="Иллюстрация к теме «8. Стек»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/d49244deb15c6eb6b3.png" target="_blank" rel="noopener"><img src="assets/media/d49244deb15c6eb6b3.png" alt="Иллюстрация к теме «8. Стек»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-5">Схемы и рукописные примеры</h2>
+<h2 id="section-2">Схемы и рукописные примеры</h2>
 <figure class="note-figure"><a href="assets/media/algo1-lists-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-lists-1.webp" alt="Схема к теме «8. Стек», часть 1" loading="lazy" decoding="async"></a></figure>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="radix-sort.html"><small>← Назад</small>7. Поразрядная сортировка</a><a href="queues.html"><small>Дальше →</small>9. Очередь</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Абстрактные типы данных</a></li><li><a href="#section-2">Реализации</a></li><li><a href="#section-3">Самопроверка</a></li><li><a href="#section-4">Материалы и примеры по пунктам</a></li><li><a href="#section-5">Схемы и рукописные примеры</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Материалы и примеры по пунктам</a></li><li><a href="#section-2">Схемы и рукописные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

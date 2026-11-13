@@ -13,12 +13,12 @@
 <meta property="og:title" content="3. Топологическая сортировка · C++ и алгоритмы">
 <meta property="og:description" content="Порядок выполнения зависимостей и обнаружение ориентированного цикла.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/topo.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="topo"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="topo"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,14 +35,9 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>Алгоритмы · 2 семестр</summary><ul><li><a  href="dfs.html">1. Поиск в глубину (DFS)</a></li><li><a  href="traversal.html">2. Поиск в ширину (BFS)</a></li><li><a aria-current=page href="topo.html">3. Топологическая сортировка</a></li><li><a  href="components.html">4. Сильная и слабая связность. Конденсация</a></li><li><a  href="cycles.html">5. Поиск и восстановление циклов</a></li><li><a  href="hamilton.html">6. Гамильтонов цикл</a></li><li><a  href="euler.html">7. Эйлеров цикл</a></li><li><a  href="connected.html">8. Компоненты связности</a></li><li><a  href="mst.html">9. Алгоритм Краскала и система непересекающихся множеств</a></li><li><a  href="prim.html">10. Алгоритм Прима</a></li><li><a  href="bellman-ford.html">11. Алгоритм Беллмана — Форда</a></li><li><a  href="dag-paths.html">12. Кратчайшие и длиннейшие пути в DAG</a></li><li><a  href="paths.html">13. Алгоритм Дейкстры</a></li><li><a  href="floyd.html">14. Алгоритм Флойда — Уоршелла</a></li><li><a  href="diameter.html">15. Диаметр дерева</a></li><li><a  href="kuhn.html">16. Алгоритм Куна</a></li><li><a  href="flow.html">17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп</a></li><li><a  href="matching-flow.html">18. Паросочетание через максимальный поток</a></li><li><a  href="graph-structure.html">19. Мосты и точки сочленения</a></li><li><a  href="graph-coloring.html">20. Жадная раскраска графа</a></li><li><a  href="rabin-karp.html">21. Полиномиальный хеш и алгоритм Рабина — Карпа</a></li><li><a  href="prefix-function.html">22. Префикс-функция</a></li><li><a  href="z-function.html">23. Z-функция</a></li><li><a  href="strings.html">24. Алгоритм Кнута — Морриса — Пратта</a></li><li><a  href="string-automaton.html">25. Автомат поиска подстроки</a></li><li><a  href="trie.html">26. Бор</a></li><li><a  href="hashing.html">27. Хеш-функция, хеш-таблица и коллизии</a></li><li><a  href="hash-addressing.html">28. Открытая адресация и цепочки</a></li><li><a  href="cuckoo-hash.html">29. Хеширование кукушки</a></li><li><a  href="bloom.html">30. Фильтр Блума</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header blue"><h1>3. Топологическая сортировка</h1><p>Порядок выполнения зависимостей и обнаружение ориентированного цикла.</p></header>
-<div class="prose"><h2 id="section-1">Входящие степени</h2>
-<p>В топологическом порядке для каждого ребра u → v вершина u стоит раньше v. Вычислите входящие степени. Добавьте в очередь вершины с нулевой степенью. Снимая u, уменьшайте степени соседей. Как только степень стала нулевой, вершина готова к обработке. Если обработано меньше V вершин, граф содержит цикл.</p>
-<p>В алгоритме Демукрона можно обрабатывать целыми слоями: все вершины, готовые к началу слоя, независимы внутри него. Другой способ получить порядок DAG — запустить DFS и развернуть список выходов из вершин. При этом цикл можно заметить по ребру в активную вершину. Время обоих способов O(V + E).</p>
-<section id="interactive" class="lab" data-demo="topo" aria-label="Топологическая сортировка">
+<div class="prose"><section id="interactive" class="lab" data-demo="topo" aria-label="Топологическая сортировка">
       <noscript>Включите JavaScript, чтобы управлять схемой.</noscript>
-    </section><h2 id="section-2">Самопроверка</h2>
-<p>Могут ли у одного графа быть два корректных топологических порядка? Постройте пример с двумя независимыми предпосылками.</p>
-<h2 id="section-3">Материалы и примеры по пунктам</h2>
+    </section><h2 id="section-1">Материалы и примеры по пунктам</h2>
 <h3>Топологическая сортировка</h3>
 <figure class="note-figure"><a href="assets/media/fa0716382d630f32ad.png" target="_blank" rel="noopener"><img src="assets/media/fa0716382d630f32ad.png" alt="Иллюстрация к теме «3. Топологическая сортировка»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/db2f60e5d9f4b4af37.png" target="_blank" rel="noopener"><img src="assets/media/db2f60e5d9f4b4af37.png" alt="Иллюстрация к теме «3. Топологическая сортировка»" loading="lazy" decoding="async"></a></figure>
@@ -57,13 +52,13 @@
 <p>граф должен быть направленным ациклическим (DAG)</p>
 <p>Асимптотика в алгоритме топологической сортировки берется из того, что он основан на поиске в глубину (DFS)</p>
 <p>Цикл: Шаги 2 и 3 повторяются для оставшихся вершин, пока все они не будут распределены по уровням.</p>
-<h2 id="section-4">Схемы и рукописные примеры</h2>
+<h2 id="section-2">Схемы и рукописные примеры</h2>
 <figure class="note-figure"><a href="assets/media/algo2-topo-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo2-topo-1.webp" alt="Схема к теме «3. Топологическая сортировка», часть 1" loading="lazy" decoding="async"></a></figure>
 <p><a href="assets/media/21ba70ec4183f98972.pdf#page=8">Теория и реализации на C++ в PDF</a></p>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="traversal.html"><small>← Назад</small>2. Поиск в ширину (BFS)</a><a href="components.html"><small>Дальше →</small>4. Сильная и слабая связность. Конденсация</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Входящие степени</a></li><li><a href="#section-2">Самопроверка</a></li><li><a href="#section-3">Материалы и примеры по пунктам</a></li><li><a href="#section-4">Схемы и рукописные примеры</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Материалы и примеры по пунктам</a></li><li><a href="#section-2">Схемы и рукописные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

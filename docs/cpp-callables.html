@@ -13,12 +13,12 @@
 <meta property="og:title" content="Приведения типов и CRTP · C++ и алгоритмы">
 <meta property="og:description" content="Функциональные объекты, захват данных и полиморфизм на этапе компиляции.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-callables.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-callables"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-callables"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,29 +35,7 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a aria-current=page href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Приведения типов и CRTP</h1><p>Функциональные объекты, захват данных и полиморфизм на этапе компиляции.</p></header>
-<div class="prose"><h2 id="section-1">Четыре явных приведения</h2>
-<ul>
-<li><code>static_cast</code> выражает проверяемое по типам преобразование, например из <code>int</code> в <code>double</code>.</li>
-<li><code>dynamic_cast</code> позволяет проверить тип полиморфного объекта при нисходящем приведении. Неудача для указателя даёт <code>nullptr</code>, для ссылки — <code>std::bad_cast</code>.</li>
-<li><code>const_cast</code> меняет квалификаторы. Запись в объект, изначально созданный как <code>const</code>, остаётся неопределённым поведением.</li>
-<li><code>reinterpret_cast</code> выражает низкоуровневое преобразование. После него остаются требования к выравниванию и допустимому доступу к объекту.</li>
-</ul>
-<h2 id="section-2">Вызываемые объекты</h2>
-<p>Функтор определяет <code>operator()</code>. Лямбда создаёт объект замыкания. <code>[limit]</code> копирует значение, <code>[&amp;limit]</code> даёт доступ к исходной переменной по ссылке. Ссылочный захват требует, чтобы переменная жила дольше всех вызовов. <code>std::invoke</code> унифицирует вызов функций, функторов и указателей на члены.</p>
-<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;algorithm&gt;
-<span class="tok-directive">#include</span> &lt;cassert&gt;
-<span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
-
-<span class="tok-type">int</span> <span class="tok-function">main</span>() {
-    <span class="tok-keyword">const</span> std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; values{<span class="tok-number">1</span>, <span class="tok-number">4</span>, <span class="tok-number">7</span>};
-    <span class="tok-type">int</span> limit = <span class="tok-number">4</span>;
-    <span class="tok-keyword">auto</span> it = std::<span class="tok-function">find_if</span>(values.<span class="tok-function">begin</span>(), values.<span class="tok-function">end</span>(),
-                           [limit](<span class="tok-type">int</span> value) { <span class="tok-keyword">return</span> value &gt; limit; });
-    <span class="tok-function">assert</span>(it != values.<span class="tok-function">end</span>() &amp;&amp; *it == <span class="tok-number">7</span>);
-}</code></pre></div>
-<h2 id="section-3">CRTP</h2>
-<p>В CRTP производный тип передаётся шаблонному базовому классу, например <code>struct Meter : Printable&lt;Meter&gt;</code>. Базовый класс может вызвать операцию производного через <code>static_cast&lt;Derived&amp;&gt;(*this)</code> при корректном инварианте наследования. Тип известен при компиляции, поэтому виртуальная диспетчеризация для такого вызова не требуется.</p>
-<h2 id="section-4">Cast, CRTP</h2>
+<div class="prose"><h2 id="section-1">Cast, CRTP</h2>
 <figure class="note-figure"><a href="assets/media/f5b8ad1b51f2f0e631.png" target="_blank" rel="noopener"><img src="assets/media/f5b8ad1b51f2f0e631.png" alt="Иллюстрация к теме «Cast, CRTP»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/1781fa0dcaf4fbd2df.png" target="_blank" rel="noopener"><img src="assets/media/1781fa0dcaf4fbd2df.png" alt="Иллюстрация к теме «Cast, CRTP»" loading="lazy" decoding="async"></a></figure>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
@@ -76,7 +54,7 @@ std::cout &lt;&lt; a;
 <p>Когда у тебя есть <strong>базовый указатель</strong>, но нужно понять <strong>какой конкретный наследник внутри</strong>.</p>
 <figure class="note-figure"><a href="assets/media/14e1fb3a62ee505c7d.png" target="_blank" rel="noopener"><img src="assets/media/14e1fb3a62ee505c7d.png" alt="Иллюстрация к теме «Cast, CRTP»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/3ecada4211907fe0dd.png" target="_blank" rel="noopener"><img src="assets/media/3ecada4211907fe0dd.png" alt="Иллюстрация к теме «Cast, CRTP»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-5">CRTP</h2>
+<h2 id="section-2">CRTP</h2>
 <p>CRTP (Curiously Recurring Template Pattern) — это идиома шаблонов в C++, при которой <strong>класс передаёт сам себя как параметр шаблона своему базовому классу</strong>.</p>
 <p>То есть базовый класс становится шаблоном, а производный класс передаёт себя в этот шаблон.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-keyword">template</span> &lt;<span class="tok-keyword">typename</span> Derived&gt;
@@ -96,7 +74,7 @@ std::cout &lt;&lt; a;
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-errors.html"><small>← Назад</small>Обработка ошибок и исключения</a><a href="cpp-lambdas.html"><small>Дальше →</small>Функторы и лямбда-выражения</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Четыре явных приведения</a></li><li><a href="#section-2">Вызываемые объекты</a></li><li><a href="#section-3">CRTP</a></li><li><a href="#section-4">Cast, CRTP</a></li><li><a href="#section-5">CRTP</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Cast, CRTP</a></li><li><a href="#section-2">CRTP</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

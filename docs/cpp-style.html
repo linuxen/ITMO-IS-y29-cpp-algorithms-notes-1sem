@@ -13,12 +13,12 @@
 <meta property="og:title" content="Стиль кода C++ · C++ и алгоритмы">
 <meta property="og:description" content="Соглашения учебного проекта и читаемые примеры на C++.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-style.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-style"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-style"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -35,18 +35,7 @@
 <div class="chapter-grid">
 <aside class="chapter-sidebar"><details open><summary>Практика</summary><ul><li><a aria-current=page href="cpp-style.html">Стиль кода C++</a></li><li><a  href="cpp-cmake.html">Сборка с CMake</a></li><li><a  href="cpp-gtest.html">Тесты с GoogleTest</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header amber"><h1>Стиль кода C++</h1><p>Соглашения учебного проекта и читаемые примеры на C++.</p></header>
-<div class="prose"><h2 id="section-1">Имена и форматирование</h2>
-<p>В исходных материалах использован стиль с <code>snake_case</code> для переменных, <code>PascalCase</code> для типов и функций, <code>kPascalCase</code> для именованных констант. Например, <code>edge_count</code>, <code>FindPath()</code> и <code>kMaxVertices</code>. Для аббревиатур встречается запись <code>GetItmoYear()</code>. Если в задании есть свой гайд или конфигурация форматтера, следуйте им.</p>
-<p>Открывающая скобка идёт в той же строке. В этих соглашениях ориентир для длины строки — 80 символов. Используйте единообразные имена файлов, например <code>graph_search.cpp</code> и <code>graph_search.hpp</code>. Расширения заголовков выбирают по соглашению проекта.</p>
-<h2 id="section-2">Что делает код яснее</h2>
-<ul>
-<li>Описывайте действие глаголом: <code>FindMaxIndex</code>, <code>PrintMessage</code>. Данные обычно обозначают существительным: <code>index</code>, <code>message</code>.</li>
-<li>Пишите <code>std::vector</code> и <code>std::cout</code> явно, особенно в заголовках. Для средств из C-библиотеки в C++ обычно используют <code>&lt;cmath&gt;</code>, <code>&lt;cstdio&gt;</code> и <code>&lt;cstring&gt;</code>.</li>
-<li>Выбирайте <code>enum class</code> для вариантов вроде <code>ParseError::kInvalidInput</code>. Применяйте уникальные include guards в заголовках, если этого требует гайд.</li>
-</ul>
-<p><a href="https://github.com/is-itmo-c-25/cpp-coding-guidelines">Учебный гайд по стилю C++</a></p>
-<h2 id="section-3">Дополнительные примеры</h2>
-<h5>Имена всех переменных должны быть в snake_case:</h5>
+<div class="prose"><h5>Имена всех переменных должны быть в snake_case:</h5>
 <p><code>int edges_cnt = 5;</code></p>
 <p><strong>Почему это важно.</strong> Единообразие в именовании переменных делает ваш код предсказуемым и легко читаемым. Когда все переменные названы в одном стиле (snake_case), ваш мозг автоматически понимает, что это переменная, а не функция или класс. Это особенно важно при работе в команде — коллеги смогут быстро понять ваш код, а вы сами легче вспомните его логику через несколько месяцев. Непоследовательное именование (как в примерах &quot;badVariable&quot; или &quot;vAriAbleE_nAmE&quot;) создает когнитивную нагрузку и может привести к ошибкам при поиске и использовании переменных. Однако обратите внимание на то, что</p>
 <h5>имена константных переменных должны быть названы с k:</h5>
@@ -75,19 +64,19 @@ enum <span class="tok-keyword">class</span> UrlTableError;</code></pre></div>
 <span class="tok-type">char</span> <span class="tok-function">GetCharacterFromTable</span>(Table&amp; table, <span class="tok-type">size_t</span> idx); <span class="tok-comment">// Перевод: &quot;Получить символ из таблицы&quot;</span></code></pre></div>
 <p><strong>Почему это важно.</strong> Функция представляет действие, поэтому её название должно ясно указывать, что она делает. Глагол в начале (<code>Find</code>, <code>Print</code>, <code>Get</code>) сразу даёт понять читателю кода, какое действие выполняется. Это особенно важно при отладке — видя <code>FindMaxIndex()</code> в стеке вызовов, вы сразу понимаете, что происходит поиск индекса. Названия без глаголов (как <code>MaxIndex()</code>) заставляют читателя задуматься — возвращает ли функция индекс, устанавливает его, или делает что-то ещё? Чёткие названия экономят время и снижают вероятность ошибок.</p>
 <p>Аналогично просто переменные лучше называть существительными, а не глаголами. Переменная хранит данные (состояние), поэтому её название должно отражать, что именно хранится, а не какое действие выполняется. Это создаёт логическую согласованность: переменные отвечают на вопрос &quot;что?&quot;, а функции — на вопрос &quot;что делать?&quot;. Такое разделение делает код интуитивно понятным и помогает быстро различать данные и операции над ними.</p>
-<h2 id="section-4">Как расставлять скобки?</h2>
+<h2 id="section-1">Как расставлять скобки?</h2>
 <p>Открывающая скобка должна быть на одной строке со statement'ом:</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
 }</code></pre></div>
 <p><strong>Почему это важно.</strong> Размещение открывающей скобки на той же строке экономит вертикальное пространство и позволяет видеть больше кода на экране одновременно. Это особенно важно при работе с функциями, классами и условными блоками — вы можете охватить взглядом больше логики сразу. Кроме того, такой стиль соответствует Google C++ Style Guide, что обеспечивает совместимость с большим количеством open-source проектов. Единообразие в расстановке скобок также снижает когнитивную нагрузку — вам не нужно тратить умственные ресурсы на анализ различных стилей форматирования.</p>
-<h2 id="section-5">using namespace std;</h2>
+<h2 id="section-2">using namespace std;</h2>
 <p><code>std::cout &lt;&lt; 1;</code></p>
 <p><strong>Почему это важно.</strong> Явное указание <code>std::</code> предотвращает конфликты имён и делает код более предсказуемым. Когда вы используете <code>using namespace std;</code>, все имена из стандартной библиотеки попадают в глобальную область видимости, что может привести к неожиданным коллизиям. Например, если у вас есть собственная функция <code>max()</code>, компилятор может запутаться между вашей функцией и <code>std::max()</code>. Явное указание префикса также делает код более читаемым — сразу видно, что <code>std::vector</code> — это стандартный контейнер, а <code>vector</code> без префикса — возможно, ваш собственный класс. Это особенно важно в больших проектах, где используется много различных библиотек.</p>
-<h2 id="section-6">Максимальная длина строки</h2>
+<h2 id="section-3">Максимальная длина строки</h2>
 <p>Максимальная длина строки кода — не более 80 символов.</p>
 <p><strong>Почему это важно.</strong> Ограничение длины строки в 80 символов имеет несколько важных преимуществ. Во-первых, это позволяет комфортно работать с кодом на любом экране, включая ноутбуки и мобильные устройства. Во-вторых, при превышении этого лимита строки часто содержат слишком много логики и их стоит разбить для улучшения читаемости. В-третьих, это позволяет открывать несколько файлов рядом в IDE без необходимости горизонтального скролла. Когда код помещается в стандартную ширину, его легче читать, рецензировать и печатать. Кроме того, многие команды разработчиков привыкли к этому ограничению, поэтому соблюдение этого правила облегчает совместную работу.</p>
-<h2 id="section-7">Как называть файлы?</h2>
+<h2 id="section-4">Как называть файлы?</h2>
 <p>Имена файлов должны быть написаны строчными буквами и могут содержать подчеркивания (_) или тире (-). Самое главное соблюдать постоянство внутри одного проекта: не должно быть такого, что часть файлов используют подчеркивания, а часть - тире. Выберите что-то одно:</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-comment">// Всё ниже - это корректные названия для ваших файлов.</span>
 my_useful_program.cpp
@@ -95,10 +84,10 @@ my-useful-program.cpp
 myusefulprogram.cpp</code></pre></div>
 <p><strong>Почему это важно.</strong> Единообразное именование файлов критически важно для поддерживаемости проекта. Когда все файлы названы по одному принципу, их легче найти, сортировать и организовать. Строчные буквы обеспечивают совместимость с различными файловыми системами (некоторые из них чувствительны к регистру, другие — нет). Последовательность в использовании разделителей (либо подчеркивания, либо тире) предотвращает путаницу и упрощает навигацию по проекту. Представьте, как сложно было бы найти нужный файл в проекте, где одни файлы названы <code>DataProcessor.cpp</code>, другие <code>data_processor.cpp</code>, а третьи <code>data-processor.cpp</code>!</p>
 <p>Ещё ОЧЕНЬ ВАЖНО не использовать пробелы в название файла. &quot;My program.cpp&quot;</p>
-<h2 id="section-8">.h vs .hpp</h2>
+<h2 id="section-5">.h vs .hpp</h2>
 <p>Для хедеров, в которых описан код только на C++, следует использовать расширение .hpp, а для хедеров, содержащих чистый код C или код C++, который должен быть совместим с C, — расширение .h. Таким образом использование расширения .hpp помогает отличать код, написанный на C++ от кода C.</p>
 <p>То есть: .cpp и .hpp — C++, .c и .h — C.</p>
-<h2 id="section-9">enum vs enum class.</h2>
+<h2 id="section-6">enum vs enum class.</h2>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-comment">// Хорошо.</span>
 enum <span class="tok-keyword">class</span> UrlTableError {
     kZero = <span class="tok-number">0</span>,
@@ -113,7 +102,7 @@ enum UrlTableError {
     kTwo,
 };</code></pre></div>
 <p><strong>Почему это важно.</strong> enum class<code>(scoped enumerations) решает несколько серьезных проблем обычных </code>enum<code>. Во-первых, обычные </code>enum<code>загрязняют пространство имен — их значения доступны без префикса, что может привести к конфликтам имен. Например, если у вас есть</code>enum Status { OK, ERROR }<code>и</code>enum Result { OK, FAILED }<code>, то </code>OK<code>будет неоднозначным.</code>enum class<code>требует явного указания области видимости:</code>Status::OK<code>vs</code>Result::OK<code>. Во-вторых, </code>enum class<code>не неявно преобразуется к целочисленным типам, что предотвращает случайные ошибки типа</code>if (status  0)<code>вместо</code>if (status  Status::OK)`. Это делает код более типобезопасным и менее подверженным ошибкам.</p>
-<h2 id="section-10">pragma once и define guard'ы</h2>
+<h2 id="section-7">pragma once и define guard'ы</h2>
 <p><strong>Почему это важно.</strong> Define guard'ы обеспечивают максимальную портируемость и предсказуемость. В отличие от <code>#pragma once</code>, который зависит от компилятора и может работать нестабильно с символическими ссылками или сетевыми файловыми системами, define guard'ы работают одинаково во всех средах. Структурированное именование guard'ов (с указанием проекта и пути) гарантирует уникальность макросов и предотвращает конфликты между различными библиотеками. Кроме того, такой подход более явный — любой разработчик сразу понимает, что делают эти макросы, в то время как поведение <code>#pragma once</code> может быть неочевидным для новичков. Define guard'ы также облегчают отладку проблем с включением файлов, поскольку вы можете легко проверить, определен ли нужный макрос.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-comment">// Вместо #pragma once следует использовать define guard&#x27;ы.</span>
 <span class="tok-directive">#ifndef</span> PARSER_SRC_BAR_BAZ_HPP_
@@ -122,7 +111,7 @@ enum UrlTableError {
 <span class="tok-comment">// код</span>
 
 <span class="tok-directive">#endif</span></code></pre></div>
-<h2 id="section-11">Библиотеки языка Си</h2>
+<h2 id="section-8">Библиотеки языка Си</h2>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;math.h&gt;   <span class="tok-comment">// плохо</span>
 <span class="tok-directive">#include</span> &lt;stdio.h&gt;  <span class="tok-comment">// плохо</span>
 <span class="tok-directive">#include</span> &lt;<span class="tok-type">string</span>.h&gt; <span class="tok-comment">// плохо</span>
@@ -134,7 +123,7 @@ enum UrlTableError {
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-cmake.html"><small>Дальше →</small>Сборка с CMake</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Имена и форматирование</a></li><li><a href="#section-2">Что делает код яснее</a></li><li><a href="#section-3">Дополнительные примеры</a></li><li><a href="#section-4">Как расставлять скобки?</a></li><li><a href="#section-5">using namespace std;</a></li><li><a href="#section-6">Максимальная длина строки</a></li><li><a href="#section-7">Как называть файлы?</a></li><li><a href="#section-8">.h vs .hpp</a></li><li><a href="#section-9">enum vs enum class.</a></li><li><a href="#section-10">pragma once и define guard&#x27;ы</a></li><li><a href="#section-11">Библиотеки языка Си</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Как расставлять скобки?</a></li><li><a href="#section-2">using namespace std;</a></li><li><a href="#section-3">Максимальная длина строки</a></li><li><a href="#section-4">Как называть файлы?</a></li><li><a href="#section-5">.h vs .hpp</a></li><li><a href="#section-6">enum vs enum class.</a></li><li><a href="#section-7">pragma once и define guard&#x27;ы</a></li><li><a href="#section-8">Библиотеки языка Си</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

@@ -13,12 +13,12 @@
 <meta property="og:title" content="20. Жадная раскраска графа · C++ и алгоритмы">
 <meta property="og:description" content="Назначение цветов, границы хроматического числа и выбор порядка вершин.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/graph-coloring.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="graph-coloring"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="graph-coloring"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -44,15 +44,15 @@
 <li>Назначьте наименьший цвет, которого нет среди отмеченных.</li>
 <li>Повторите шаги для всех вершин.</li>
 </ol>
-<p>Если максимальная степень графа равна Δ, на каждом шаге занято не больше Δ цветов. Поэтому алгоритм использует не более Δ + 1 цветов. Результат зависит от порядка. Для линейного времени отмечайте цвета в массиве с номером текущей итерации. Поиск первого свободного цвета занимает O(deg(v) + 1). Суммарно получается O(V + E).</p>
+<p>Если максимальная степень графа равна Δ, на каждом шаге занято не больше Δ цветов. Поэтому алгоритм использует не более Δ + 1 цветов. Результат зависит от порядка.</p>
 <h2 id="section-3">Оценки и эвристики</h2>
 <ul>
 <li>Клика размера ω требует ω разных цветов, поэтому χ(G) ≥ ω.</li>
-<li>Двудольный граф с хотя бы одним ребром требует два цвета. Граф из изолированных вершин допускает один цвет, если он непуст.</li>
+<li>Для двудольного графа достаточно двух цветов.</li>
 <li>Теорема Брукса даёт χ(G) ≤ Δ для связного простого графа, если он не полный и не нечётный цикл.</li>
-<li>В методе Уэлша — Пауэлла вершины сортируют по убыванию степени. Сортировка добавляет O(V log V) времени.</li>
+<li>В методе Уэлша — Пауэлла вершины сортируют по убыванию степени. Время работы O(V log V + E).</li>
 <li>DSatur выбирает вершину с максимальным числом разных цветов у окрашенных соседей. При равенстве можно предпочесть вершину большей степени.</li>
-<li>Для точного ответа на небольшом графе применяют перебор или динамику по подмножествам. Проверка существования раскраски в k цветов NP-полна для фиксированного k ≥ 3.</li>
+<li>Для точного ответа на небольшом графе применяют перебор.</li>
 </ul>
 <p><a href="assets/media/21ba70ec4183f98972.pdf#page=59">Полный разбор и реализации в PDF</a></p>
 </div>

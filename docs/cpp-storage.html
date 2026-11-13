@@ -13,12 +13,12 @@
 <meta property="og:title" content="Представление чисел и работа с памятью · C++ и алгоритмы">
 <meta property="og:description" content="Как данные размещаются в объектах и когда их можно использовать.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-storage.html">
-<link rel="icon" href="assets/favicon.svg?v=edc0fe9bb76a" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=edc0fe9bb76a">
-<script defer src="assets/site.js?v=edc0fe9bb76a" data-search-version="edc0fe9bb76a"></script>
-<script defer src="assets/labs.js?v=edc0fe9bb76a"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=edc0fe9bb76a">
-<script defer src="assets/assistant.js?v=edc0fe9bb76a" data-api-url="" data-chapter="cpp-storage"></script>
+<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
+<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
+<script defer src="assets/labs.js?v=4551047f4886"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
+<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-storage"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -33,30 +33,12 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a aria-current=page href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a aria-current=page href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Представление чисел и работа с памятью</h1><p>Как данные размещаются в объектах и когда их можно использовать.</p></header>
-<div class="prose"><h2 id="section-1">Структуры, объединения, перечисления</h2>
-<p><code>struct</code> объединяет несколько полей. Доступ через объект записывается как <code>point.x</code>, через указатель — <code>ptr-&gt;x</code>. Между полями возможны байты заполнения для выравнивания, поэтому <code>sizeof(Point)</code> может превышать сумму размеров полей.</p>
-<p>У <code>union</code> поля используют общую память. Учитывайте активный член и правила его времени жизни. Для безопасного выбора одного из нескольких типов подойдёт <code>std::variant</code>. <code>enum class</code> задаёт именованные варианты вроде <code>State::kReady</code>.</p>
-<h2 id="section-2">Время жизни</h2>
-<p>Локальные объекты обычно имеют автоматическое время хранения и уничтожаются при выходе из блока. Объекты со статическим временем хранения живут до завершения программы, <code>thread_local</code> — до завершения своего потока. Динамическое время жизни управляется через владельца ресурса.</p>
-<ul>
-<li><code>new T</code> выделяет память и создаёт объект. Парные операции — <code>new</code> и <code>delete</code>, <code>new[]</code> и <code>delete[]</code>.</li>
-<li><code>std::malloc</code> выделяет сырую память и не вызывает конструкторы, <code>std::calloc</code> дополнительно зануляет байты. Освобождение выполняет <code>std::free</code>.</li>
-<li>Для прикладного кода выбирайте <code>std::vector</code>, <code>std::string</code> и умные указатели, которые освобождают ресурсы автоматически. Висячие ссылки, выход за границы и повторное освобождение приводят к неопределённому поведению. AddressSanitizer помогает найти многие такие ошибки.</li>
-</ul>
-<h2 id="section-3">Стек вызовов и динамическая память</h2>
-<p>На типичной платформе стек вызовов хранит кадры активных функций. При вызове появляется новый кадр, при возврате снимается последний добавленный. Указатель стека участвует в управлении этим пространством. Конкретное направление роста и расположение данных зависят от платформы и компилятора. Частые вложенные вызовы, глубокая рекурсия и большие локальные массивы могут исчерпать доступный стек.</p>
-<p>Динамическая память позволяет создавать объекты, размер и время жизни которых определяются во время выполнения. Её объём ограничен доступными ресурсами процесса. Выделение через обычный <code>new</code> при нехватке памяти может бросить <code>std::bad_alloc</code>. Освобождение блока не перемещает остальные объекты автоматически, а свободные участки разных размеров могут приводить к фрагментации.</p>
-<p>У локального <code>std::vector&lt;int&gt; values(1000)</code> сам объект контейнера имеет автоматическое время хранения, а его элементы размещены в отдельно выделенном буфере. При росте vector может выделить новый буфер, перенести элементы и освободить старый. При уничтожении контейнера освобождается и его буфер. Сборщик мусора ищет объекты, которые больше недостижимы из программы. В обычном C++ ресурсами управляют через время жизни владельцев и RAII.</p>
-<h2 id="section-4">Представление чисел</h2>
-<p>У вещественного типа ограниченная точность. Десятичное <code>0.1</code> обычно округляется при хранении, поэтому результат вычислений может слегка отличаться от математического. При сравнении результатов используйте допуск, осмысленный для масштаба задачи.</p>
-<h2 id="section-5">Самопроверка</h2>
-<p>Почему функция не должна возвращать ссылку на собственную локальную переменную? В какой момент перестаёт существовать её объект?</p>
-<h2 id="section-6">Числа в памяти PC</h2>
+<div class="prose"><h2 id="section-1">Числа в памяти PC</h2>
 <p>LW1 :  Цифры хранятся в памяти компьютера в виде двоичного кода, представляющего собой последовательности нулей и единиц
 Отрицательные числа хранятся в памяти компьютера с помощью дополнительного кода, который позволяет заменить вычитание на сложение. Для этого сначала получают прямой код положительного числа, затем инвертируют все биты (получая обратный код) и прибавляют к нему единицу. Старший бит в таком представлении становится знаковым: 0 — для положительных, 1 — для отрицательных чисел.</p>
-<h2 id="section-7">Работа с памятью</h2>
+<h2 id="section-2">Работа с памятью</h2>
 <p>На одном ядре операционная система переключает выполнение между задачами, например редактором и музыкальным проигрывателем. Планировщик может использовать аппаратные прерывания таймера. Длина кванта зависит от ОС и политики планирования.</p>
 <p>Процесс - программа и ее ресурсы запущенные в операционной системе</p>
 <p>У процесса есть независимое адресное пространство</p>
@@ -81,7 +63,7 @@ Heap - динамическая память или куча</p>
 <figure class="note-figure"><a href="assets/media/59105df4eba4da8870.png" target="_blank" rel="noopener"><img src="assets/media/59105df4eba4da8870.png" alt="Иллюстрация к теме «Работа с памятью»" loading="lazy" decoding="async"></a></figure>
 <p>Стек вызова</p>
 <figure class="note-figure"><a href="assets/media/ec6518b4373bfa6c1e.png" target="_blank" rel="noopener"><img src="assets/media/ec6518b4373bfa6c1e.png" alt="Иллюстрация к теме «Работа с памятью»" loading="lazy" decoding="async"></a></figure>
-<h2 id="section-8">Функции работы с памятью StdLib.h</h2>
+<h2 id="section-3">Функции работы с памятью StdLib.h</h2>
 <h3>malloc</h3>
 <p>Если выделена память, она должна быть освобождена</p>
 <p>Если программа потребляет память линейно, значит она не правильная</p>
@@ -155,7 +137,7 @@ Heap - динамическая память или куча</p>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-structs.html"><small>← Назад</small>Структуры, объединения и измерение производительности</a><a href="cpp-functions.html"><small>Дальше →</small>Ссылки, инициализация, перегрузка и пространства имён</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Структуры, объединения, перечисления</a></li><li><a href="#section-2">Время жизни</a></li><li><a href="#section-3">Стек вызовов и динамическая память</a></li><li><a href="#section-4">Представление чисел</a></li><li><a href="#section-5">Самопроверка</a></li><li><a href="#section-6">Числа в памяти PC</a></li><li><a href="#section-7">Работа с памятью</a></li><li><a href="#section-8">Функции работы с памятью StdLib.h</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Числа в памяти PC</a></li><li><a href="#section-2">Работа с памятью</a></li><li><a href="#section-3">Функции работы с памятью StdLib.h</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>
