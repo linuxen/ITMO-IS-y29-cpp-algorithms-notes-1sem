@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="Дейкстра, Беллман — Форд, Флойд — Уоршелл и выбор по типу графа.">
 <meta name="theme-color" content="#1f1f28">
 <title>13. Алгоритм Дейкстры · C++ и алгоритмы</title>
@@ -13,12 +14,13 @@
 <meta property="og:title" content="13. Алгоритм Дейкстры · C++ и алгоритмы">
 <meta property="og:description" content="Дейкстра, Беллман — Форд, Флойд — Уоршелл и выбор по типу графа.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/paths.html">
-<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
-<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
-<script defer src="assets/labs.js?v=4551047f4886"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
-<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="paths"></script>
+<link rel="icon" href="assets/favicon.svg?v=bf439c3fc7a3" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=bf439c3fc7a3">
+<script defer src="assets/site.js?v=bf439c3fc7a3" data-search-version="bf439c3fc7a3"></script>
+<script defer src="assets/labs.js?v=bf439c3fc7a3"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=bf439c3fc7a3">
+<script defer src="assets/openrouter.js?v=bf439c3fc7a3"></script>
+<script defer src="assets/assistant.js?v=bf439c3fc7a3" data-api-url="" data-chapter="paths"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -71,7 +73,7 @@
 <p>5️⃣ Повторяем</p>
 <figure class="note-figure"><a href="assets/media/9d2cc809f87d7fd0f7.png" target="_blank" rel="noopener"><img src="assets/media/9d2cc809f87d7fd0f7.png" alt="Иллюстрация к теме «13. Алгоритм Дейкстры»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-2">Схемы и рукописные примеры</h2>
-<figure class="note-figure"><a href="assets/media/algo2-paths-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo2-paths-1.webp" alt="Схема к теме «13. Алгоритм Дейкстры», часть 1" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo2-paths.svg" target="_blank" rel="noopener"><img src="assets/media/algo2-paths.svg" alt="Схема к теме «13. Алгоритм Дейкстры»" loading="lazy" decoding="async"></a></figure>
 <ul>
 <li><a href="https://www.cs.usfca.edu/~galles/visualization/Dijkstra.html">Анимация алгоритма Дейкстры</a></li>
 <li><a href="https://antontmoore.github.io/graph_algorithms/dijkstra_simple">Пошаговый разбор алгоритма Дейкстры</a></li>

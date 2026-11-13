@@ -4,7 +4,7 @@
   const script = document.currentScript;
   const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
   const base = local ? '' : script.dataset.apiUrl;
-  if (!local && !base) return;
+  const useOpenRouter = !local && !base;
 
   const chapter = script.dataset.chapter;
   const chapterTitle = document.querySelector('.reading h1')?.textContent;
@@ -31,6 +31,7 @@
         </select>
       </label>
       <button type="button" class="ai-reset">Очистить чат</button>
+      <button type="button" class="ai-signout" hidden>Отключить OpenRouter</button>
     </div>
     <div class="ai-messages" role="log" aria-label="Диалог" tabindex="0">
       <div class="ai-suggestions">
@@ -39,16 +40,23 @@
       </div>
     </div>
     <form class="ai-form">
+      <div class="ai-connect" hidden>
+        <p>Войдите в OpenRouter, чтобы задавать вопросы по главам. Чат использует бесплатную модель Nemotron 3 Ultra.</p>
+        <button type="button" class="ai-signin">Войти через OpenRouter</button>
+        <p class="ai-connect-status" role="status"></p>
+      </div>
+      <div class="ai-compose">
       <label class="ai-access" hidden>Код доступа
         <input type="password" maxlength="200" autocomplete="off">
       </label>
       <label for="ai-question">Вопрос</label>
-      <p class="ai-privacy">Вопрос и контекст диалога передаются языковой модели.</p>
+      <p class="ai-privacy">Вопрос и фрагменты конспекта передаются языковой модели. Вводите только учебные данные.</p>
       <textarea id="ai-question" maxlength="3600" rows="2" required
         placeholder="Например, почему BFS находит кратчайший путь?"></textarea>
       <div class="ai-send">
         <p role="status" class="ai-status"></p>
         <button type="submit">Отправить</button>
+      </div>
       </div>
     </form>
   `;
@@ -65,6 +73,11 @@
   const access = find('.ai-access');
   const token = access.querySelector('input');
   const reset = find('.ai-reset');
+  const connect = find('.ai-connect');
+  const compose = find('.ai-compose');
+  const signOut = find('.ai-signout');
+  const connectStatus = find('.ai-connect-status');
+  const signIn = find('.ai-signin');
   let history = [];
   let pending = false;
 
@@ -82,16 +95,58 @@
     token.required = Boolean(result.requires_token);
   }
 
-  open.hidden = !base;
-  if (!base) {
+  function showConnection() {
+    const connected = notesOpenRouter.connected();
+    connect.hidden = connected;
+    compose.hidden = !connected;
+    signOut.hidden = !connected;
+    mode.disabled = !connected;
+    reset.disabled = !connected;
+    suggestions.hidden = !connected;
+  }
+
+  if (useOpenRouter) {
+    showConnection();
+    notesOpenRouter.finishSignIn().then((signedIn) => {
+      if (!signedIn) return;
+      showConnection();
+      if (!panel.open) panel.showModal();
+      question.focus();
+    }).catch((error) => {
+      connectStatus.textContent = error.message || 'Повторите вход через OpenRouter.';
+      if (!panel.open) panel.showModal();
+    });
+    signIn.addEventListener('click', async () => {
+      signIn.disabled = true;
+      try {
+        await notesOpenRouter.signIn();
+      } catch {
+        connectStatus.textContent = 'Не удалось открыть вход через OpenRouter.';
+        signIn.disabled = false;
+      }
+    });
+    signOut.addEventListener('click', () => {
+      notesOpenRouter.signOut();
+      reset.click();
+      showConnection();
+      signIn.focus();
+    });
+  } else if (local) {
+    open.hidden = true;
     checkStatus().then(() => { open.hidden = false; }).catch(() => {});
   }
   open.addEventListener('click', () => {
     panel.showModal();
+    if (useOpenRouter && !notesOpenRouter.connected()) {
+      signIn.focus();
+      return;
+    }
     question.focus();
-    checkStatus().catch(() => {
-      status.textContent = 'Сервис помощника сейчас недоступен.';
-    });
+    if (!useOpenRouter) {
+      checkStatus().catch(() => {
+        status.textContent = 'Сервис помощника сейчас недоступен.';
+      });
+    }
   });
   find('.ai-close').addEventListener('click', () => panel.close());
   reset.addEventListener('click', () => {
@@ -175,22 +230,26 @@
     if (!text || pending) return;
     pending = true;
     send.disabled = true;
+    signOut.disabled = true;
     reset.disabled = true;
     mode.disabled = true;
     status.textContent = 'Ищу материал и готовлю ответ…';
     suggestions.remove();
     const userMessage = addMessage('user', text);
     try {
-      const headers = {'Content-Type': 'application/json'};
-      if (!access.hidden && token.value.trim()) headers.Authorization = 'Bearer ' + token.value.trim();
-      const response = await fetch(base + '/api/ai/ask', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({question: text, chapter, mode: mode.value, history}),
-        signal: AbortSignal.timeout(180000),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Не удалось получить ответ.');
+      const payload = {question: text, chapter, mode: mode.value, history};
+      let result;
+      if (useOpenRouter) {
+        result = await notesOpenRouter.ask(payload);
+      } else {
+        const headers = {'Content-Type': 'application/json'};
+        if (!access.hidden && token.value.trim()) headers.Authorization = 'Bearer ' + token.value.trim();
+        const response = await fetch(base + '/api/ai/ask', {
+          method: 'POST', headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(180000),
+        });
+        result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Не удалось получить ответ.');
+      }
       if (typeof result.answer !== 'string' || !Array.isArray(result.sources)) throw new Error();
       addMessage('assistant', result.answer, result.sources);
       history.push({role: 'user', content: text}, {role: 'assistant', content: result.answer.slice(0, 2800)});
@@ -208,8 +267,13 @@
     } finally {
       pending = false;
       send.disabled = false;
+      signOut.disabled = false;
       reset.disabled = false;
       mode.disabled = false;
+      if (useOpenRouter) {
+        showConnection();
+        if (compose.hidden) connectStatus.textContent = status.textContent;
+      }
     }
   });
 })();

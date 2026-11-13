@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="От первой программы до функций, областей видимости и ввода данных.">
 <meta name="theme-color" content="#1f1f28">
 <title>Типы, выражения, условия, циклы и функции · C++ и алгоритмы</title>
@@ -13,12 +14,13 @@
 <meta property="og:title" content="Типы, выражения, условия, циклы и функции · C++ и алгоритмы">
 <meta property="og:description" content="От первой программы до функций, областей видимости и ввода данных.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-basics.html">
-<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
-<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
-<script defer src="assets/labs.js?v=4551047f4886"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
-<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-basics"></script>
+<link rel="icon" href="assets/favicon.svg?v=bf439c3fc7a3" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=bf439c3fc7a3">
+<script defer src="assets/site.js?v=bf439c3fc7a3" data-search-version="bf439c3fc7a3"></script>
+<script defer src="assets/labs.js?v=bf439c3fc7a3"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=bf439c3fc7a3">
+<script defer src="assets/openrouter.js?v=bf439c3fc7a3"></script>
+<script defer src="assets/assistant.js?v=bf439c3fc7a3" data-api-url="" data-chapter="cpp-basics"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -111,17 +113,16 @@ std::cout &lt;&lt; helloPC::ГРЕЮСЬ;
 <h2 id="section-11">Объявления и определения функций</h2>
 <figure class="note-figure"><a href="assets/media/083ca7595e8eafe134.png" target="_blank" rel="noopener"><img src="assets/media/083ca7595e8eafe134.png" alt="Иллюстрация к теме «Функции. declarations &amp; deﬁnitions»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-12">Преобразования типов</h2>
-<p>Неявные преобразования
-▫ Если какой-либо из операндов принадлежит типу long double, то и другой
-приводится к long double.
-▫ В противном случае, если какой-либо из операндов принадлежит типу
-double, то и другой приводится к double.
-▫ В противном случае, если какой-либо из операндов принадлежит типу float,
-то и другой приводится к float.
-▫ В противном случае операнды типов char и short приводятся к int.
-▫ И наконец, если один из операндов типа long, то и другой приводится к long.
-• Явное преобразование
-(c-style cast) (тип) переменная</p>
+<h3>Неявные преобразования</h3>
+<ul>
+<li>Если один из операндов имеет тип <code>long double</code>, другой приводится к <code>long double</code>.</li>
+<li>Иначе, если один из операндов имеет тип <code>double</code>, другой приводится к <code>double</code>.</li>
+<li>Иначе, если один из операндов имеет тип <code>float</code>, другой приводится к <code>float</code>.</li>
+<li>Иначе операнды типов <code>char</code> и <code>short</code> приводятся к <code>int</code>.</li>
+<li>В оставшемся случае, если один из операндов имеет тип <code>long</code>, другой приводится к <code>long</code>.</li>
+</ul>
+<h3>Явное преобразование</h3>
+<p>Приведение в стиле C записывается как <code>(тип) переменная</code>.</p>
 <h2 id="section-13">sizeof</h2>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
 
@@ -131,8 +132,8 @@ std::cout &lt;&lt; <span class="tok-function">sizeof</span>(<span class="tok-typ
 
 <span class="tok-comment">// output 4</span></code></pre></div>
 <h2 id="section-14">Символы в с++ и что они значат</h2>
-<p><img src="assets/media/117f692dd3347ca61f.png" alt="Иллюстрация к теме «Символы в с++ и что они значат»" />
-<img src="assets/media/0c8eb75d10fc28c357.png" alt="Иллюстрация к теме «Символы в с++ и что они значат»" /></p>
+<figure class="note-figure"><a href="assets/media/117f692dd3347ca61f.png" target="_blank" rel="noopener"><img src="assets/media/117f692dd3347ca61f.png" alt="Иллюстрация к теме «Символы в с++ и что они значат»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/0c8eb75d10fc28c357.png" target="_blank" rel="noopener"><img src="assets/media/0c8eb75d10fc28c357.png" alt="Иллюстрация к теме «Символы в с++ и что они значат»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-15">Функции</h2>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
 

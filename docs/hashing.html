@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="Коллизии, адресация, перехеширование и вероятностная проверка.">
 <meta name="theme-color" content="#1f1f28">
 <title>27. Хеш-функция, хеш-таблица и коллизии · C++ и алгоритмы</title>
@@ -13,12 +14,13 @@
 <meta property="og:title" content="27. Хеш-функция, хеш-таблица и коллизии · C++ и алгоритмы">
 <meta property="og:description" content="Коллизии, адресация, перехеширование и вероятностная проверка.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/hashing.html">
-<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
-<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
-<script defer src="assets/labs.js?v=4551047f4886"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
-<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="hashing"></script>
+<link rel="icon" href="assets/favicon.svg?v=bf439c3fc7a3" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=bf439c3fc7a3">
+<script defer src="assets/site.js?v=bf439c3fc7a3" data-search-version="bf439c3fc7a3"></script>
+<script defer src="assets/labs.js?v=bf439c3fc7a3"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=bf439c3fc7a3">
+<script defer src="assets/openrouter.js?v=bf439c3fc7a3"></script>
+<script defer src="assets/assistant.js?v=bf439c3fc7a3" data-api-url="" data-chapter="hashing"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -57,8 +59,7 @@
 <figure class="note-figure"><a href="assets/media/5736e4b84261d3c359.png" target="_blank" rel="noopener"><img src="assets/media/5736e4b84261d3c359.png" alt="Иллюстрация к теме «27. Хеш-функция, хеш-таблица и коллизии»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/20902818a44a550675.png" target="_blank" rel="noopener"><img src="assets/media/20902818a44a550675.png" alt="Иллюстрация к теме «27. Хеш-функция, хеш-таблица и коллизии»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-2">Схемы и рукописные примеры</h2>
-<figure class="note-figure"><a href="assets/media/algo2-hashing-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo2-hashing-1.webp" alt="Схема к теме «27. Хеш-функция, хеш-таблица и коллизии», часть 1" loading="lazy" decoding="async"></a></figure>
-<figure class="note-figure"><a href="assets/media/algo2-hashing-2.webp" target="_blank" rel="noopener"><img src="assets/media/algo2-hashing-2.webp" alt="Схема к теме «27. Хеш-функция, хеш-таблица и коллизии», часть 2" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo2-hashing.svg" target="_blank" rel="noopener"><img src="assets/media/algo2-hashing.svg" alt="Схема к теме «27. Хеш-функция, хеш-таблица и коллизии»" loading="lazy" decoding="async"></a></figure>
 </div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="trie.html"><small>← Назад</small>26. Бор</a><a href="hash-addressing.html"><small>Дальше →</small>28. Открытая адресация и цепочки</a></nav>
 </article>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="Коды возврата, optional, expected и гарантии безопасности.">
 <meta name="theme-color" content="#1f1f28">
 <title>Обработка ошибок и исключения · C++ и алгоритмы</title>
@@ -13,12 +14,13 @@
 <meta property="og:title" content="Обработка ошибок и исключения · C++ и алгоритмы">
 <meta property="og:description" content="Коды возврата, optional, expected и гарантии безопасности.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-errors.html">
-<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
-<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
-<script defer src="assets/labs.js?v=4551047f4886"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
-<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-errors"></script>
+<link rel="icon" href="assets/favicon.svg?v=bf439c3fc7a3" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=bf439c3fc7a3">
+<script defer src="assets/site.js?v=bf439c3fc7a3" data-search-version="bf439c3fc7a3"></script>
+<script defer src="assets/labs.js?v=bf439c3fc7a3"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=bf439c3fc7a3">
+<script defer src="assets/openrouter.js?v=bf439c3fc7a3"></script>
+<script defer src="assets/assistant.js?v=bf439c3fc7a3" data-api-url="" data-chapter="cpp-errors"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -78,9 +80,9 @@
 <li>начинается <strong>поиск обработчика</strong></li>
 <li>программа начинает <strong>разматывать стек (stack unwinding)</strong></li>
 </ul>
-<p><img src="assets/media/fefa86952d4f6bd4f3.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" />
-<img src="assets/media/2017fb52e29d4785cf.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" />
-<img src="assets/media/a95a8bde7cd3e4ae98.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" /></p>
+<figure class="note-figure"><a href="assets/media/fefa86952d4f6bd4f3.png" target="_blank" rel="noopener"><img src="assets/media/fefa86952d4f6bd4f3.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/2017fb52e29d4785cf.png" target="_blank" rel="noopener"><img src="assets/media/2017fb52e29d4785cf.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/a95a8bde7cd3e4ae98.png" target="_blank" rel="noopener"><img src="assets/media/a95a8bde7cd3e4ae98.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-5">noexcept</h2>
 <p>это ключевое слово для компилятора, оно сообщает, что функция не бросает исключений
 noexcept{false} - значит бросает</p>

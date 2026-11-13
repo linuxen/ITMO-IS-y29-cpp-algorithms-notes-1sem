@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="lvalue, prvalue, xvalue, std::move и forwarding.">
 <meta name="theme-color" content="#1f1f28">
 <title>Категории значений и семантика перемещения · C++ и алгоритмы</title>
@@ -13,12 +14,13 @@
 <meta property="og:title" content="Категории значений и семантика перемещения · C++ и алгоритмы">
 <meta property="og:description" content="lvalue, prvalue, xvalue, std::move и forwarding.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-move.html">
-<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
-<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
-<script defer src="assets/labs.js?v=4551047f4886"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
-<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-move"></script>
+<link rel="icon" href="assets/favicon.svg?v=bf439c3fc7a3" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=bf439c3fc7a3">
+<script defer src="assets/site.js?v=bf439c3fc7a3" data-search-version="bf439c3fc7a3"></script>
+<script defer src="assets/labs.js?v=bf439c3fc7a3"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=bf439c3fc7a3">
+<script defer src="assets/openrouter.js?v=bf439c3fc7a3"></script>
+<script defer src="assets/assistant.js?v=bf439c3fc7a3" data-api-url="" data-chapter="cpp-move"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -44,9 +46,9 @@
 <figure class="note-figure"><a href="assets/media/ba55ea492ccbc3f54b.png" target="_blank" rel="noopener"><img src="assets/media/ba55ea492ccbc3f54b.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
 <figure class="note-figure"><a href="assets/media/a211d0bd9fff9fd520.png" target="_blank" rel="noopener"><img src="assets/media/a211d0bd9fff9fd520.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
 <p>expression - выражения *  -  /</p>
-<p><img src="assets/media/f04011e7994ad079ba.png" alt="Иллюстрация к теме «Value categories»" />
-<img src="assets/media/6b5c70d2b3f6ebc55c.png" alt="Иллюстрация к теме «Value categories»" />
-<img src="assets/media/3d31b24dd798bc9648.png" alt="Иллюстрация к теме «Value categories»" /></p>
+<figure class="note-figure"><a href="assets/media/f04011e7994ad079ba.png" target="_blank" rel="noopener"><img src="assets/media/f04011e7994ad079ba.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/6b5c70d2b3f6ebc55c.png" target="_blank" rel="noopener"><img src="assets/media/6b5c70d2b3f6ebc55c.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/3d31b24dd798bc9648.png" target="_blank" rel="noopener"><img src="assets/media/3d31b24dd798bc9648.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
 <p><img src="assets/media/1b48898af764f8d934.png" alt="Иллюстрация к теме «Value categories»" />
 <img src="assets/media/182b2b329cf29ce5a8.png" alt="Иллюстрация к теме «Value categories»" />
 это объект у которого есть место в пяти но нет в нем какой-то переменной</p>
@@ -76,8 +78,8 @@ A&amp; operator=(A&amp;&amp; other)
 <figure class="note-figure"><a href="assets/media/2510549788287b6b32.png" target="_blank" rel="noopener"><img src="assets/media/2510549788287b6b32.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
 <h3>Copy-And-Swap Idiom</h3>
 <p>В идиоме copy-and-swap оператор присваивания обменивает состояние с подготовленной копией. Для реализации обмена часто используют перемещение.</p>
-<p><img src="assets/media/00467406b990d15f9f.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" />
-<img src="assets/media/4d58410d41e15474bc.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" /></p>
+<figure class="note-figure"><a href="assets/media/00467406b990d15f9f.png" target="_blank" rel="noopener"><img src="assets/media/00467406b990d15f9f.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/4d58410d41e15474bc.png" target="_blank" rel="noopener"><img src="assets/media/4d58410d41e15474bc.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
 <h3>Reference collapsing</h3>
 <figure class="note-figure"><a href="assets/media/6327bf68922c21d597.png" target="_blank" rel="noopener"><img src="assets/media/6327bf68922c21d597.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
 <p><code>std::forward</code> — это инструмент для <strong>идеальной передачи</strong> (perfect forwarding) аргументов в шаблонах. Она позволяет передать аргумент в другую функцию, сохранив его «природу»: был ли он временным объектом (rvalue) или именованной переменной (lvalue)</p>

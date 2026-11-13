@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="Контейнеры, полуоткрытые диапазоны и выбор операций.">
 <meta name="theme-color" content="#1f1f28">
 <title>STL, итераторы и алгоритмы · C++ и алгоритмы</title>
@@ -13,12 +14,13 @@
 <meta property="og:title" content="STL, итераторы и алгоритмы · C++ и алгоритмы">
 <meta property="og:description" content="Контейнеры, полуоткрытые диапазоны и выбор операций.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-stl.html">
-<link rel="icon" href="assets/favicon.svg?v=4551047f4886" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=4551047f4886">
-<script defer src="assets/site.js?v=4551047f4886" data-search-version="4551047f4886"></script>
-<script defer src="assets/labs.js?v=4551047f4886"></script>
-<link rel="stylesheet" href="assets/assistant.css?v=4551047f4886">
-<script defer src="assets/assistant.js?v=4551047f4886" data-api-url="" data-chapter="cpp-stl"></script>
+<link rel="icon" href="assets/favicon.svg?v=bf439c3fc7a3" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=bf439c3fc7a3">
+<script defer src="assets/site.js?v=bf439c3fc7a3" data-search-version="bf439c3fc7a3"></script>
+<script defer src="assets/labs.js?v=bf439c3fc7a3"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=bf439c3fc7a3">
+<script defer src="assets/openrouter.js?v=bf439c3fc7a3"></script>
+<script defer src="assets/assistant.js?v=bf439c3fc7a3" data-api-url="" data-chapter="cpp-stl"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -78,10 +80,10 @@
     }
 }</code></pre></div>
 <figure class="note-figure"><a href="assets/media/11a40c037c324d6a7e.png" target="_blank" rel="noopener"><img src="assets/media/11a40c037c324d6a7e.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
-<p><img src="assets/media/3ac8605b520ea04cd4.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" />
-<img src="assets/media/3fffd1aa0c508a5276.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" /></p>
-<p><img src="assets/media/b8a443962f2b248685.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" />
-<img src="assets/media/5c419d4bcc94dd84a6.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" /></p>
+<figure class="note-figure"><a href="assets/media/3ac8605b520ea04cd4.png" target="_blank" rel="noopener"><img src="assets/media/3ac8605b520ea04cd4.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/3fffd1aa0c508a5276.png" target="_blank" rel="noopener"><img src="assets/media/3fffd1aa0c508a5276.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/b8a443962f2b248685.png" target="_blank" rel="noopener"><img src="assets/media/b8a443962f2b248685.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/5c419d4bcc94dd84a6.png" target="_blank" rel="noopener"><img src="assets/media/5c419d4bcc94dd84a6.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-2">Итераторы с произвольным доступом</h2>
 <p>Итератор с произвольным доступом поддерживает смещение на заданное число позиций за O(1).</p>
 <figure class="note-figure"><a href="assets/media/a7543a88a872f6fbea.png" target="_blank" rel="noopener"><img src="assets/media/a7543a88a872f6fbea.png" alt="Иллюстрация к теме «Итераторы с произвольным доступом»" loading="lazy" decoding="async"></a></figure>
@@ -93,10 +95,10 @@
 <h2 id="section-4">iterator / const_iterator</h2>
 <p>cbegin cend</p>
 <h2 id="section-5">Итератор</h2>
-<p><img src="assets/media/f6e57c592d7c1e0a89.png" alt="Иллюстрация к теме «Итератор»" />
-<img src="assets/media/ae8c11d77ff6f94a57.png" alt="Иллюстрация к теме «Итератор»" />
-<img src="assets/media/e878ec661f0d5f6070.png" alt="Иллюстрация к теме «Итератор»" />
-<img src="assets/media/164ec2acc381bd0d6d.png" alt="Иллюстрация к теме «Итератор»" /></p>
+<figure class="note-figure"><a href="assets/media/f6e57c592d7c1e0a89.png" target="_blank" rel="noopener"><img src="assets/media/f6e57c592d7c1e0a89.png" alt="Иллюстрация к теме «Итератор»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/ae8c11d77ff6f94a57.png" target="_blank" rel="noopener"><img src="assets/media/ae8c11d77ff6f94a57.png" alt="Иллюстрация к теме «Итератор»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/e878ec661f0d5f6070.png" target="_blank" rel="noopener"><img src="assets/media/e878ec661f0d5f6070.png" alt="Иллюстрация к теме «Итератор»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/164ec2acc381bd0d6d.png" target="_blank" rel="noopener"><img src="assets/media/164ec2acc381bd0d6d.png" alt="Иллюстрация к теме «Итератор»" loading="lazy" decoding="async"></a></figure>
 <h2 id="section-6">NB</h2>
 <p>std::find
 std::greater&lt;&gt;</p>

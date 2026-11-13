@@ -54,7 +54,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «1. Поиск в глубину (DFS)», часть 1](assets/media/algo2-dfs-1.webp)
+![Схема к теме «1. Поиск в глубину (DFS)»](assets/media/algo2-dfs.svg)
 
 - [Анимация поиска в глубину (DFS)](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
 
@@ -94,7 +94,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «2. Поиск в ширину (BFS)», часть 1](assets/media/algo2-traversal-1.webp)
+![Схема к теме «2. Поиск в ширину (BFS)»](assets/media/algo2-traversal.svg)
 
 - [Анимация поиска в ширину (BFS)](https://www.cs.usfca.edu/~galles/visualization/BFS.html)
 - [Анимация поиска в глубину (DFS)](https://www.cs.usfca.edu/~galles/visualization/DFS.html)
@@ -139,7 +139,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «3. Топологическая сортировка», часть 1](assets/media/algo2-topo-1.webp)
+![Схема к теме «3. Топологическая сортировка»](assets/media/algo2-topo.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=8)
 
@@ -181,7 +181,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «4. Сильная и слабая связность. Конденсация», часть 1](assets/media/algo2-components-1.webp)
+![Схема к теме «4. Сильная и слабая связность. Конденсация»](assets/media/algo2-components.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=11)
 
@@ -240,7 +240,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «6. Гамильтонов цикл», часть 1](assets/media/algo2-hamilton-1.webp)
+![Схема к теме «6. Гамильтонов цикл»](assets/media/algo2-hamilton.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=17)
 
@@ -272,7 +272,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «7. Эйлеров цикл», часть 1](assets/media/algo2-euler-1.webp)
+![Схема к теме «7. Эйлеров цикл»](assets/media/algo2-euler.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=20)
 
@@ -301,7 +301,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «8. Компоненты связности», часть 1](assets/media/algo2-connected-1.webp)
+![Схема к теме «8. Компоненты связности»](assets/media/algo2-connected.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=23)
 
@@ -384,7 +384,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «9. Алгоритм Краскала и система непересекающихся множеств», часть 1](assets/media/algo2-mst-1.webp)
+![Схема к теме «9. Алгоритм Краскала и система непересекающихся множеств»](assets/media/algo2-mst.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=26)
 
@@ -438,7 +438,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «10. Алгоритм Прима», часть 1](assets/media/algo2-prim-1.webp)
+![Схема к теме «10. Алгоритм Прима»](assets/media/algo2-prim.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=28)
 
@@ -502,7 +502,7 @@
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «11. Алгоритм Беллмана — Форда», часть 1](assets/media/algo2-bellman-ford-1.webp)
+![Схема к теме «11. Алгоритм Беллмана — Форда»](assets/media/algo2-bellman-ford.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=31)
 
@@ -599,7 +599,7 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «13. Алгоритм Дейкстры», часть 1](assets/media/algo2-paths-1.webp)
+![Схема к теме «13. Алгоритм Дейкстры»](assets/media/algo2-paths.svg)
 
 - [Анимация алгоритма Дейкстры](https://www.cs.usfca.edu/~galles/visualization/Dijkstra.html)
 - [Пошаговый разбор алгоритма Дейкстры](https://antontmoore.github.io/graph_algorithms/dijkstra_simple)
@@ -642,7 +642,7 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «14. Алгоритм Флойда — Уоршелла», часть 1](assets/media/algo2-floyd-1.webp)
+![Схема к теме «14. Алгоритм Флойда — Уоршелла»](assets/media/algo2-floyd.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=40)
 
@@ -670,7 +670,7 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «15. Диаметр дерева», часть 1](assets/media/algo2-diameter-1.webp)
+![Схема к теме «15. Диаметр дерева»](assets/media/algo2-diameter.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=43)
 
@@ -742,9 +742,8 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «16. Алгоритм Куна», часть 1](assets/media/algo2-kuhn-1.webp)
+![Схема к теме «16. Алгоритм Куна»](assets/media/algo2-kuhn.svg)
 
-![Схема к теме «16. Алгоритм Куна», часть 2](assets/media/algo2-kuhn-2.webp)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=46)
 
@@ -820,9 +819,8 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп», часть 1](assets/media/algo2-flow-1.webp)
+![Схема к теме «17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп»](assets/media/algo2-flow.svg)
 
-![Схема к теме «17. Максимальный поток. Форд — Фалкерсон и Эдмондс — Карп», часть 2](assets/media/algo2-flow-2.webp)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=49)
 
@@ -846,7 +844,7 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «18. Паросочетание через максимальный поток», часть 1](assets/media/algo2-matching-flow-1.webp)
+![Схема к теме «18. Паросочетание через максимальный поток»](assets/media/algo2-matching-flow.svg)
 
 [Теория и реализации на C++ в PDF](assets/media/21ba70ec4183f98972.pdf#page=53)
 
@@ -884,7 +882,7 @@ new_distance = distance[current] + weight(edge)
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «19. Мосты и точки сочленения», часть 1](assets/media/algo2-graph-structure-1.webp)
+![Схема к теме «19. Мосты и точки сочленения»](assets/media/algo2-graph-structure.svg)
 
 [Мосты и точки сочленения в PDF, страница 56](assets/media/21ba70ec4183f98972.pdf#page=56)
 
@@ -994,9 +992,8 @@ dab
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «21. Полиномиальный хеш и алгоритм Рабина — Карпа», часть 1](assets/media/algo2-rabin-karp-1.webp)
+![Схема к теме «21. Полиномиальный хеш и алгоритм Рабина — Карпа»](assets/media/algo2-rabin-karp.svg)
 
-![Схема к теме «21. Полиномиальный хеш и алгоритм Рабина — Карпа», часть 2](assets/media/algo2-rabin-karp-2.webp)
 
 @@ prefix-function
 # 22. Префикс-функция
@@ -1028,7 +1025,7 @@ dab
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «22. Префикс-функция», часть 1](assets/media/algo2-prefix-function-1.webp)
+![Схема к теме «22. Префикс-функция»](assets/media/algo2-prefix-function.svg)
 
 @@ z-function
 # 23. Z-функция
@@ -1108,9 +1105,8 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «23. Z-функция», часть 1](assets/media/algo2-z-function-1.webp)
+![Схема к теме «23. Z-функция»](assets/media/algo2-z-function.svg)
 
-![Схема к теме «23. Z-функция», часть 2](assets/media/algo2-z-function-2.webp)
 
 @@ strings
 # 24. Алгоритм Кнута — Морриса — Пратта
@@ -1146,7 +1142,7 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «24. Алгоритм Кнута — Морриса — Пратта», часть 1](assets/media/algo2-strings-1.webp)
+![Схема к теме «24. Алгоритм Кнута — Морриса — Пратта»](assets/media/algo2-strings.svg)
 
 @@ string-automaton
 # 25. Автомат поиска подстроки
@@ -1158,7 +1154,7 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «25. Автомат поиска подстроки», часть 1](assets/media/algo2-string-automaton-1.webp)
+![Схема к теме «25. Автомат поиска подстроки»](assets/media/algo2-string-automaton.svg)
 
 @@ trie
 # 26. Бор
@@ -1184,7 +1180,7 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «26. Бор», часть 1](assets/media/algo2-trie-1.webp)
+![Схема к теме «26. Бор»](assets/media/algo2-trie.svg)
 
 @@ hashing
 # 27. Хеш-функция, хеш-таблица и коллизии
@@ -1232,9 +1228,8 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «27. Хеш-функция, хеш-таблица и коллизии», часть 1](assets/media/algo2-hashing-1.webp)
+![Схема к теме «27. Хеш-функция, хеш-таблица и коллизии»](assets/media/algo2-hashing.svg)
 
-![Схема к теме «27. Хеш-функция, хеш-таблица и коллизии», часть 2](assets/media/algo2-hashing-2.webp)
 
 @@ hash-addressing
 # 28. Открытая адресация и цепочки
@@ -1310,11 +1305,7 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «28. Открытая адресация и цепочки», часть 1](assets/media/algo2-hash-addressing-1.webp)
-
-![Схема к теме «28. Открытая адресация и цепочки», часть 2](assets/media/algo2-hash-addressing-2.webp)
-
-![Схема к теме «28. Открытая адресация и цепочки», часть 3](assets/media/algo2-hash-addressing-3.webp)
+![Схема к теме «28. Открытая адресация и цепочки»](assets/media/algo2-hash-addressing.svg)
 
 @@ cuckoo-hash
 # 29. Хеширование кукушки
@@ -1354,9 +1345,8 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «29. Хеширование кукушки», часть 1](assets/media/algo2-cuckoo-hash-1.webp)
+![Схема к теме «29. Хеширование кукушки»](assets/media/algo2-cuckoo-hash.svg)
 
-![Схема к теме «29. Хеширование кукушки», часть 2](assets/media/algo2-cuckoo-hash-2.webp)
 
 @@ bloom
 # 30. Фильтр Блума
@@ -1394,8 +1384,4 @@ i = 6: a
 
 ## Схемы и рукописные примеры
 
-![Схема к теме «30. Фильтр Блума», часть 1](assets/media/algo2-bloom-1.webp)
-
-![Схема к теме «30. Фильтр Блума», часть 2](assets/media/algo2-bloom-2.webp)
-
-![Схема к теме «30. Фильтр Блума», часть 3](assets/media/algo2-bloom-3.webp)
+![Схема к теме «30. Фильтр Блума»](assets/media/algo2-bloom.svg)

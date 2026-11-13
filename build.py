@@ -6,6 +6,7 @@ import hashlib
 import json
 import re
 import shutil
+import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 from xml.etree.ElementTree import Element, SubElement, tostring
@@ -27,6 +28,9 @@ REPO = CONFIG['repository']
 SITE_URL = CONFIG['url']
 AI_API_URL = CONFIG.get('ai_api_url', '').rstrip('/')
 AI_WEB = ROOT / 'ai-assistant' / 'web'
+sys.path.insert(0, str(AI_WEB.parent))
+from notes_ai.corpus import Corpus
+
 ASSET_VERSION = ''
 DEMOS = {
     'traversal': 'BFS и DFS', 'sorting': 'Сортировки', 'linear': 'Стек и очередь',
@@ -160,10 +164,12 @@ def render(body):
                 output.append(interactive)
                 index += 3
                 continue
-            if len(inline_token.children or []) == 1 and inline_token.children[0].type == 'image':
-                image = inline_token.children[0]
-                image.type = 'note_figure'
-                output.append(image)
+            children = inline_token.children or []
+            if children and all(child.type in {'image', 'softbreak', 'hardbreak'} for child in children):
+                for child in children:
+                    if child.type == 'image':
+                        child.type = 'note_figure'
+                        output.append(child)
                 index += 3
                 continue
         output.append(token)
@@ -185,6 +191,7 @@ def shell(title, description, body, filename=''):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
 <meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#1f1f28">
 <title>{e(title)}</title>
@@ -200,6 +207,7 @@ def shell(title, description, body, filename=''):
 <script defer src="assets/site.js?v={ASSET_VERSION}" data-search-version="{ASSET_VERSION}"></script>
 <script defer src="assets/labs.js?v={ASSET_VERSION}"></script>
 <link rel="stylesheet" href="assets/assistant.css?v={ASSET_VERSION}">
+<script defer src="assets/openrouter.js?v={ASSET_VERSION}"></script>
 <script defer src="assets/assistant.js?v={ASSET_VERSION}" data-api-url="{e(AI_API_URL)}" data-chapter="{e(chapter)}"></script>
 </head>
 <body>
@@ -252,8 +260,9 @@ def catalogue(by_group):
     <p class="overline"><span></span> ИТМО · ИС · ПЕРВЫЙ КУРС</p>
     <h1 id="hero-title">C++ и<br><em>алгоритмы</em></h1>
     <p class="hero-summary">Первый и второй семестры. Теория, примеры на C++ и схемы, которые можно пройти шаг за шагом.</p>
-    <div class="hero-actions"><a class="button primary" href="#semester-1">Открыть конспект <span aria-hidden="true">↓</span></a>
-    <a class="button secondary" href="laboratory.html">Все тренажёры <span aria-hidden="true">↗</span></a></div>
+    <div class="hero-actions"><a class="button primary" href="#semester-1">1 семестр <span aria-hidden="true">↓</span></a>
+    <a class="button secondary" href="#semester-2">2 семестр <span aria-hidden="true">↓</span></a>
+    <a class="button secondary" href="laboratory.html">Тренажёры <span aria-hidden="true">↗</span></a></div>
   </div>
   {demo('traversal', compact=True)}
 </section>
@@ -373,6 +382,12 @@ def main():
             })
     (out / 'assets').mkdir(exist_ok=True)
     write('assets/search-index.js', 'const topicIndex = ' + json.dumps(index, ensure_ascii=False) + ';\n')
+    corpus = Corpus.from_directory(ROOT / 'content')
+    excerpts = [
+        {**section.source(0), 'chapter': section.chapter, 'text': section.body}
+        for section in corpus.sections if section.body.strip()
+    ]
+    write('assets/assistant-notes.json', json.dumps(excerpts, ensure_ascii=False, separators=(',', ':')))
     for asset in assets:
         if asset.is_file():
             (out / 'assets' / asset.name).write_bytes(asset.read_bytes())
