@@ -13,10 +13,12 @@
 <meta property="og:title" content="Двоичное дерево поиска · C++ и алгоритмы">
 <meta property="og:description" content="Поиск, вставка, удаление и обходы BST.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/bst.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="bst"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,18 +33,117 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo1">Алгоритмы · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">Асимптотика и память</a></li><li><a  href="sorting.html">Сортировки</a></li><li><a  href="lists.html">Стек, очередь и списки</a></li><li><a  href="heaps.html">Двоичная куча и очередь с приоритетом</a></li><li><a aria-current=page href="bst.html">Двоичное дерево поиска</a></li><li><a  href="dp.html">Динамическое программирование</a></li><li><a  href="coding.html">Сжатие и коды</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">1–2. Оценка сложности по времени и памяти</a></li><li><a  href="sorting.html">3. Сортировка вставками</a></li><li><a  href="merge-sort.html">4. Сортировка слиянием</a></li><li><a  href="quick-sort.html">5. Быстрая сортировка</a></li><li><a  href="counting-sort.html">6. Сортировка подсчётом</a></li><li><a  href="radix-sort.html">7. Поразрядная сортировка</a></li><li><a  href="lists.html">8. Стек</a></li><li><a  href="queues.html">9. Очередь</a></li><li><a  href="singly-linked.html">10. Односвязный список</a></li><li><a  href="doubly-linked.html">11. Двусвязный список</a></li><li><a  href="circular-linked.html">12. Циклический список</a></li><li><a  href="linked-stack.html">13. Стек на списке</a></li><li><a  href="linked-queue.html">14. Очередь на списке</a></li><li><a  href="heaps.html">15. Двоичная куча и восстановление её свойств</a></li><li><a  href="heap-build.html">16. Построение кучи за O(n)</a></li><li><a  href="heap-sort.html">17. Пирамидальная сортировка</a></li><li><a  href="heap-remove.html">18. Удаление элемента из кучи</a></li><li><a  href="priority-queue.html">19. Очередь с приоритетом</a></li><li><a  href="dp.html">20. Динамическое программирование</a></li><li><a aria-current=page href="bst.html">Двоичное дерево поиска</a></li><li><a  href="coding.html">Сжатие данных и арифметическое кодирование</a></li><li><a  href="huffman.html">Кодирование Хаффмана</a></li><li><a  href="hamming.html">Код Хэмминга</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header blue"><h1>Двоичное дерево поиска</h1><p>Поиск, вставка, удаление и обходы BST.</p></header>
 <div class="prose"><h2 id="section-1">Порядок ключей</h2>
 <p>При уникальных ключах все ключи левого поддерева меньше ключа узла, а правого — больше. Поиск и вставка сравнивают ключ с текущим и спускаются в одну ветвь. Операции стоят O(h), где h — высота. Несбалансированное дерево может выродиться до h = n−1.</p>
 <h2 id="section-2">Удаление</h2>
-<ul><li>Лист можно отсоединить.</li><li>Узел с одним ребёнком заменяется ребёнком.</li><li>У узла с двумя детьми можно взять наименьший ключ правого поддерева, перенести его в удаляемый узел и удалить прежний узел этого ключа.</li></ul>
+<ul>
+<li>Лист можно отсоединить.</li>
+<li>Узел с одним ребёнком заменяется ребёнком.</li>
+<li>У узла с двумя детьми можно взять наименьший ключ правого поддерева, перенести его в удаляемый узел и удалить прежний узел этого ключа.</li>
+</ul>
 <p>Обход inorder (лево, корень, право) выдаёт отсортированные ключи. Preorder посещает корень первым, postorder — последним. Preorder восстанавливает BST с уникальными ключами благодаря его инварианту. Для произвольного бинарного дерева нужны дополнительные данные, например отметки пустых детей.</p>
 <h2 id="section-3">Самопроверка</h2>
-<p>Вставьте 8, 3, 10, 1, 6, 14. Нарисуйте дерево, запишите inorder и удалите 8, используя его преемника.</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="heaps.html"><small>← Назад</small>Двоичная куча и очередь с приоритетом</a><a href="dp.html"><small>Дальше →</small>Динамическое программирование</a></nav>
+<p>Вставьте 8, 3, 10, 1, 6, 14. Нарисуйте дерево, запишите inorder и удалите 8, используя его преемника.</p>
+<h2 id="section-4">Материалы и примеры по пунктам</h2>
+<h3>Двоичное дерево поиска</h3>
+<figure class="note-figure"><a href="assets/media/95397918863a5e9f61.png" target="_blank" rel="noopener"><img src="assets/media/95397918863a5e9f61.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Высота узла (h) – это</h3>
+<h3>максимальное из всех расстояний</h3>
+<h3>от узла до его листьев</h3>
+<figure class="note-figure"><a href="assets/media/527406223b0762af39.png" target="_blank" rel="noopener"><img src="assets/media/527406223b0762af39.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Высота дерева (h) – это</h3>
+<h3>максимальное из всех</h3>
+<h3>расстояний от корня до листьев</h3>
+<figure class="note-figure"><a href="assets/media/10e8454e4d88c50645.png" target="_blank" rel="noopener"><img src="assets/media/10e8454e4d88c50645.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Глубина узла – это расстояние</h3>
+<h3>от корня до этого узла</h3>
+<h3>Для узла 6 глубина 2</h3>
+<figure class="note-figure"><a href="assets/media/3c793e395e3481772e.png" target="_blank" rel="noopener"><img src="assets/media/3c793e395e3481772e.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Двоичное дерево —</h3>
+<h3>древовидная</h3>
+<h3>структура данных, в</h3>
+<h3>которой у</h3>
+<h3>родительских узлов</h3>
+<h3>может быть не</h3>
+<h3>больше двух детей.</h3>
+<figure class="note-figure"><a href="assets/media/12a9d123f4d5fafe21.png" target="_blank" rel="noopener"><img src="assets/media/12a9d123f4d5fafe21.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/262be9f4dbf18f6681.png" target="_blank" rel="noopener"><img src="assets/media/262be9f4dbf18f6681.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/63d54cc29c413a4843.png" target="_blank" rel="noopener"><img src="assets/media/63d54cc29c413a4843.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Поиск Удаление Вставка</h3>
+<h3>Поиск</h3>
+<figure class="note-figure"><a href="assets/media/5295627cb18d9b325a.png" target="_blank" rel="noopener"><img src="assets/media/5295627cb18d9b325a.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Высота дерева</h3>
+<figure class="note-figure"><a href="assets/media/25eceb56a0dd65ef27.png" target="_blank" rel="noopener"><img src="assets/media/25eceb56a0dd65ef27.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/4cbc130892fb0646c9.png" target="_blank" rel="noopener"><img src="assets/media/4cbc130892fb0646c9.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/6578f7e07c98301f8f.png" target="_blank" rel="noopener"><img src="assets/media/6578f7e07c98301f8f.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/4e03dea9d59eb18829.png" target="_blank" rel="noopener"><img src="assets/media/4e03dea9d59eb18829.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/280ba5870acf3031a0.png" target="_blank" rel="noopener"><img src="assets/media/280ba5870acf3031a0.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Чтобы найти минимальный элемент в</h3>
+<h3>бинарном дереве поиска, необходимо</h3>
+<h3>просто следовать указателям left от</h3>
+<h3>корня дерева, пока не встретится</h3>
+<h3>значение null.</h3>
+<figure class="note-figure"><a href="assets/media/ad6c09dac023765567.png" target="_blank" rel="noopener"><img src="assets/media/ad6c09dac023765567.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/be1630cf7c3bcc710d.png" target="_blank" rel="noopener"><img src="assets/media/be1630cf7c3bcc710d.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<p>Чтобы найти максимальный элемент в</p>
+<p>бинарном дереве поиска, необходимо</p>
+<p>просто следовать указателям right от</p>
+<p>корня дерева, пока не встретится</p>
+<p>значение null.</p>
+<figure class="note-figure"><a href="assets/media/76ca3256dd4ad1fcfb.png" target="_blank" rel="noopener"><img src="assets/media/76ca3256dd4ad1fcfb.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/20e658a86b2dcbbcf2.png" target="_blank" rel="noopener"><img src="assets/media/20e658a86b2dcbbcf2.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/d20ea27c6d27de1042.png" target="_blank" rel="noopener"><img src="assets/media/d20ea27c6d27de1042.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Идем направо</h3>
+<figure class="note-figure"><a href="assets/media/06d9965e4a32efd1fb.png" target="_blank" rel="noopener"><img src="assets/media/06d9965e4a32efd1fb.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Идем на право  до первого левого</h3>
+<figure class="note-figure"><a href="assets/media/b01aadd08b1ddc1d3b.png" target="_blank" rel="noopener"><img src="assets/media/b01aadd08b1ddc1d3b.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/775deea1722f067d0f.png" target="_blank" rel="noopener"><img src="assets/media/775deea1722f067d0f.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/e586bdee1ac7a055c4.png" target="_blank" rel="noopener"><img src="assets/media/e586bdee1ac7a055c4.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/5fff935c25baefcdef.png" target="_blank" rel="noopener"><img src="assets/media/5fff935c25baefcdef.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/6656ae44ed7a426124.png" target="_blank" rel="noopener"><img src="assets/media/6656ae44ed7a426124.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/32a4d391920063e0f3.png" target="_blank" rel="noopener"><img src="assets/media/32a4d391920063e0f3.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/ab61821e64ce5fce3c.png" target="_blank" rel="noopener"><img src="assets/media/ab61821e64ce5fce3c.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/f28f5cf22e6e39bb8a.png" target="_blank" rel="noopener"><img src="assets/media/f28f5cf22e6e39bb8a.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/2703e687ffeef652d9.png" target="_blank" rel="noopener"><img src="assets/media/2703e687ffeef652d9.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/ae7ea028539f88a481.png" target="_blank" rel="noopener"><img src="assets/media/ae7ea028539f88a481.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/7ad665d73df09f3b10.png" target="_blank" rel="noopener"><img src="assets/media/7ad665d73df09f3b10.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Обход дерева поиска</h3>
+<figure class="note-figure"><a href="assets/media/0f7ad8205e6498bfd3.png" target="_blank" rel="noopener"><img src="assets/media/0f7ad8205e6498bfd3.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>inorderTraversal</h3>
+<p>В результате данного обхода получаем</p>
+<p>отсортированную последовательность</p>
+<p>ключей дерева.</p>
+<figure class="note-figure"><a href="assets/media/c6835ccd1f3a88d23b.png" target="_blank" rel="noopener"><img src="assets/media/c6835ccd1f3a88d23b.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/3006bfde73b8d7b97a.png" target="_blank" rel="noopener"><img src="assets/media/3006bfde73b8d7b97a.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Сначала левый потом X потом правый</h3>
+<h3>preorderTraversal</h3>
+<h3>Позволяет восстановить дерево по</h3>
+<h3>последовательности, выведенной после</h3>
+<h3>выполнения данной процедуры</h3>
+<figure class="note-figure"><a href="assets/media/1fd5a92ab955ec9202.png" target="_blank" rel="noopener"><img src="assets/media/1fd5a92ab955ec9202.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/d41b4073084d1f8202.png" target="_blank" rel="noopener"><img src="assets/media/d41b4073084d1f8202.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>postorderTraversal</h3>
+<figure class="note-figure"><a href="assets/media/03bcc1d5d5f2905732.png" target="_blank" rel="noopener"><img src="assets/media/03bcc1d5d5f2905732.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>используется для удаления</h3>
+<h3>дерева.</h3>
+<figure class="note-figure"><a href="assets/media/3c8dda557eb02d4319.png" target="_blank" rel="noopener"><img src="assets/media/3c8dda557eb02d4319.png" alt="Иллюстрация к теме «Двоичное дерево поиска»" loading="lazy" decoding="async"></a></figure>
+<h3>Левое Правое себя</h3>
+<h2 id="section-5">Схемы и рукописные примеры</h2>
+<figure class="note-figure"><a href="assets/media/algo1-bst-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-1.webp" alt="Схема к теме «Двоичное дерево поиска», часть 1" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-2.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-2.webp" alt="Схема к теме «Двоичное дерево поиска», часть 2" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-3.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-3.webp" alt="Схема к теме «Двоичное дерево поиска», часть 3" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-4.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-4.webp" alt="Схема к теме «Двоичное дерево поиска», часть 4" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-5.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-5.webp" alt="Схема к теме «Двоичное дерево поиска», часть 5" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-6.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-6.webp" alt="Схема к теме «Двоичное дерево поиска», часть 6" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-7.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-7.webp" alt="Схема к теме «Двоичное дерево поиска», часть 7" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-8.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-8.webp" alt="Схема к теме «Двоичное дерево поиска», часть 8" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-bst-9.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-bst-9.webp" alt="Схема к теме «Двоичное дерево поиска», часть 9" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="dp.html"><small>← Назад</small>20. Динамическое программирование</a><a href="coding.html"><small>Дальше →</small>Сжатие данных и арифметическое кодирование</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Порядок ключей</a></li><li><a href="#section-2">Удаление</a></li><li><a href="#section-3">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Порядок ключей</a></li><li><a href="#section-2">Удаление</a></li><li><a href="#section-3">Самопроверка</a></li><li><a href="#section-4">Материалы и примеры по пунктам</a></li><li><a href="#section-5">Схемы и рукописные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

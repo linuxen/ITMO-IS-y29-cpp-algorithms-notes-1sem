@@ -13,10 +13,12 @@
 <meta property="og:title" content="Умные указатели · C++ и алгоритмы">
 <meta property="og:description" content="Единственный владелец, совместное владение и наблюдение за объектом.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-ownership.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-ownership"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,10 +33,14 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a aria-current=page href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a  href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a aria-current=page href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Умные указатели</h1><p>Единственный владелец, совместное владение и наблюдение за объектом.</p></header>
 <div class="prose"><h2 id="section-1">Модели владения</h2>
-<ul><li><code>std::unique_ptr&lt;T&gt;</code> обозначает единственного владельца. Его можно переместить, копирование запрещено. Создавайте объект через <code>std::make_unique&lt;T&gt;(...)</code>.</li><li><code>std::shared_ptr&lt;T&gt;</code> разделяет владение через управляющий блок. Объект уничтожается, когда исчезает последний сильный владелец. Потокобезопасность счётчика сама по себе не защищает поля объекта.</li><li><code>std::weak_ptr&lt;T&gt;</code> наблюдает за объектом с совместным владением. <code>lock()</code> возвращает сильную ссылку, если объект ещё жив, либо пустой <code>shared_ptr</code>.</li></ul>
+<ul>
+<li><code>std::unique_ptr&lt;T&gt;</code> обозначает единственного владельца. Его можно переместить, копирование запрещено. Создавайте объект через <code>std::make_unique&lt;T&gt;(...)</code>.</li>
+<li><code>std::shared_ptr&lt;T&gt;</code> разделяет владение через управляющий блок. Объект уничтожается, когда исчезает последний сильный владелец. Потокобезопасность счётчика сама по себе не защищает поля объекта.</li>
+<li><code>std::weak_ptr&lt;T&gt;</code> наблюдает за объектом с совместным владением. <code>lock()</code> возвращает сильную ссылку, если объект ещё жив, либо пустой <code>shared_ptr</code>.</li>
+</ul>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
 <span class="tok-directive">#include</span> &lt;memory&gt;
 
@@ -50,10 +56,131 @@
 }</code></pre></div>
 <h2 id="section-2">Циклы и доступ к себе</h2>
 <p>Если два объекта удерживают друг друга через <code>shared_ptr</code>, их счётчики могут остаться положительными после исчезновения внешних владельцев. Для обратной связи вроде «ребёнок → родитель» подходит <code>weak_ptr</code>, если родителем владеют в другом месте.</p>
-<p>Наследование от <code>std::enable_shared_from_this&lt;T&gt;</code> даёт <code>shared_from_this()</code> после подключения объекта к существующему управляющему блоку. Конструкция <code>std::shared_ptr&lt;T&gt;(this)</code> может создать второй независимый блок для того же объекта.</p></div>
+<p>Наследование от <code>std::enable_shared_from_this&lt;T&gt;</code> даёт <code>shared_from_this()</code> после подключения объекта к существующему управляющему блоку. Конструкция <code>std::shared_ptr&lt;T&gt;(this)</code> может создать второй независимый блок для того же объекта.</p>
+<h2 id="section-3">Умные указатели</h2>
+<p><a href="https://habr.com/ru/companies/piter/articles/706866/">https://habr.com/ru/companies/piter/articles/706866/</a></p>
+<p>Умные указатели были созданы для устранения утечек памяти. По сути, они обеспечивают автоматическое управление памятью: когда умный указатель больше не используется, то есть выходит из области видимости, память, на которую он указывает, автоматически высвобождается. Традиционные указатели теперь также называют «обычными» указателями.</p>
+<p>На самом деле это просто классы, которые оборачивают обычный указатель в свои недра и перегружают операторы -&gt; и *. Благодаря этому трюку умный указатель имеет тот же синтаксис, что и обычный указатель. Когда умный указатель выходит из области видимости, срабатывает его деструктор и происходит очистка памяти. Эта техника называется Resource Acquisition Is Initialization (RAII): класс оборачивает динамический ресурс (файл, сокет, подключение к базе данных, выделенная память, ...), который должным образом удаляется/закрывается в своем деструкторе. Таким образом, вы гарантированно избежите утечки ресурсов.</p>
+<h2 id="section-4">Типы умных указателей в современном C++</h2>
+<ul>
+<li>std::unique_ptr — умный указатель, владеющий динамически выделенным ресурсом;</li>
+<li>std::shared_ptr — умный указатель, владеющий разделяемым динамически выделенным ресурсом. Несколько std::shared_ptr могут владеть одним и тем же ресурсом, и внутренний счетчик ведет их учет;</li>
+<li>std::weak_ptr — подобен std::shared_ptr, но не увеличивает счетчик.</li>
+</ul>
+<p>auto_ptr - древний предок unique_ptr запрещен в новом стандарте (не умеет копировать указатель)</p>
+<h3>std::unique_ptr</h3>
+<p>std::unique_ptr владеет объектом, на который он указывает, и никакие другие умные указатели не могут на него указывать. Когда std::unique_ptr выходит из области видимости, объект удаляется. Это полезно, когда вы работаете с временным, динамически выделенным ресурсом, который может быть уничтожен после выхода из области действия.</p>
+<p><strong>Как создать std::unique_ptr</strong></p>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>std::unique_ptr&lt;Type&gt; p(new Type);</code></pre></div>
+<p>Также можно создать std::unique_ptrs с помощью специальной функции std::make_unique, вот так:</p>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>std::unique_ptr&lt;Type&gt; p = std::make_unique&lt;Type&gt;(...размер или параметры...);</code></pre></div>
+<p>Если есть возможность, всегда старайтесь выделять объекты с помощью std::make_unique.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-keyword">class</span> Robot {
+<span class="tok-keyword">private</span>:
+    std::<span class="tok-type">string</span> name;
+<span class="tok-keyword">public</span>:
+    <span class="tok-function">Robot</span>(std::<span class="tok-type">string</span>&amp; n) {
+        this-&gt;name = n;
+        std::cout &lt;&lt; <span class="tok-string">&quot;Robot &quot;</span> &lt;&lt; n &lt;&lt; <span class="tok-string">&quot; created&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+    ~<span class="tok-function">Robot</span>() {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Robot &quot;</span>&lt;&lt; this-&gt;name &lt;&lt; <span class="tok-string">&quot; destroyed&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+    <span class="tok-type">void</span> <span class="tok-function">speak</span>() {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Hello, I am &quot;</span> &lt;&lt; this-&gt;name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">string</span> name1 = <span class="tok-string">&quot;Valera&quot;</span>;
+    std::<span class="tok-type">string</span> name3 = <span class="tok-string">&quot;Sisa&quot;</span>;
+    std::<span class="tok-type">string</span> name2 = <span class="tok-string">&quot;Epchtain&quot;</span>;
+    std::<span class="tok-type">vector</span>&lt;std::<span class="tok-type">unique_ptr</span>&lt;Robot&gt;&gt; vec;
+    vec.<span class="tok-function">push_back</span>(std::make_unique&lt;Robot&gt;(name1));
+    vec.<span class="tok-function">push_back</span>(std::make_unique&lt;Robot&gt;(name2));
+    vec.<span class="tok-function">push_back</span>(std::make_unique&lt;Robot&gt;(name3));
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">auto</span>&amp; i : vec) {
+        i-&gt;<span class="tok-function">speak</span>();
+    }
+}</code></pre></div>
+<p>Почему std::unique_ptr нельзя копировать?
+Потому что он <strong>гарантирует единственного владельца ресурса</strong>.</p>
+<h3>std::shared_ptr</h3>
+<p>std::shared_ptr владеет объектом, на который он указывает, но, в отличие от std::unique_ptr, он допускает множественные ссылки. Специальный внутренний счетчик уменьшается каждый раз, когда std::shared_ptr, указывающий на тот же ресурс, выходит из области видимости. Эта техника называется подсчетом ссылок. Когда последняя из них будет уничтожена, счетчик станет равным нулю, и данные будут высвобождены.</p>
+<p>распространённый подход  automatic reference counter</p>
+<p>счетчик хранится в control_block</p>
+<p>Умный указатель такого типа полезен, когда требуется обмениваться динамически распределенными данными, точно так же, как это делается с обычными указателями или ссылками.</p>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>std::shared_ptr&lt;Type&gt; p(new Type);</code></pre></div>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>std::shared_ptr&lt;Type&gt; p = std::make_shared&lt;Type&gt;(...parameters...);</code></pre></div>
+<p>Одна из главных особенностей std::shared_ptr — возможность отслеживать, сколько указателей ссылаются на один и тот же ресурс. Получить информацию о количестве ссылок можно с помощью метода use_count().</p>
+<p>Для чего вообще нужен <code>std::shared_ptr</code>?
+<code>std::shared_ptr</code> подходит для совместного владения, когда заранее неизвестно, какой владелец освободит объект последним.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-keyword">class</span> Person {
+<span class="tok-keyword">private</span>:
+    std::<span class="tok-type">string</span> name;
+<span class="tok-keyword">public</span>:
+    <span class="tok-function">Person</span>(std::<span class="tok-type">string</span> name) {
+        std::cout &lt;&lt; <span class="tok-string">&quot;called constr &quot;</span> &lt;&lt; name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+    ~<span class="tok-function">Person</span>() {
+        std::cout &lt;&lt; <span class="tok-string">&quot;called distr &quot;</span> &lt;&lt; name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+};
+
+<span class="tok-type">void</span> <span class="tok-function">PrintPerson</span>(std::<span class="tok-type">shared_ptr</span>&lt;Person&gt; p) {
+    std::cout &lt;&lt; p.<span class="tok-function">use_count</span>() &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">shared_ptr</span>&lt;Person&gt; p = std::make_shared&lt;Person&gt;(<span class="tok-string">&quot;Dima&quot;</span>);
+    std::<span class="tok-type">shared_ptr</span>&lt;Person&gt; t = std::<span class="tok-function">move</span>(p);
+    std::cout &lt;&lt; t.<span class="tok-function">use_count</span>() &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    <span class="tok-function">PrintPerson</span>(t);
+    std::cout &lt;&lt; t.<span class="tok-function">use_count</span>() &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}
+
+called constr Dima
+<span class="tok-number">1</span>
+<span class="tok-number">2</span>
+<span class="tok-number">1</span>
+called distr</code></pre></div>
+<h3>weak_ptr</h3>
+<p>std::weak_ptr — это, по сути, std::shared_ptr, который не увеличивает счетчик ссылок. Он определяется как умный указатель, который содержит несобственную ссылку, или ослабленную ссылку, на объект, управляемый другим std::shared_ptr.</p>
+<p>Этот умный указатель полезен для решения некоторых раздражающих проблем, которые нельзя решить с помощью необработанных указателей.</p>
+<p>только от shared_ptr в момент возникновения цикла</p>
+<p>С помощью std::weak_ptr очень легко решить проблему висящих указателей — тех, которые указывают на уже удаленные данные. Он предоставляет метод expired(), который проверяет, был ли объект, на который ссылается ссылка, уже удален. Если expired()  true, исходный объект был где-то удален, и вы можете действовать соответствующим образом. Это то, что вы не можете сделать с необработанными указателями.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">shared_ptr</span>&lt;<span class="tok-type">int</span>&gt; sp = std::make_shared&lt;<span class="tok-type">int</span>&gt;(<span class="tok-number">42</span>);
+    std::<span class="tok-type">weak_ptr</span>&lt;<span class="tok-type">int</span>&gt; wp = sp;  <span class="tok-comment">// weak_ptr не владеет объектом</span>
+
+    std::cout &lt;&lt; <span class="tok-string">&quot;use_count: &quot;</span> &lt;&lt; sp.<span class="tok-function">use_count</span>() &lt;&lt; std::endl; <span class="tok-comment">// 1</span>
+
+    <span class="tok-keyword">if</span> (<span class="tok-keyword">auto</span> locked = wp.<span class="tok-function">lock</span>()) {   <span class="tok-comment">// пытаемся получить shared_ptr</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;Value: &quot;</span> &lt;&lt; *locked &lt;&lt; std::endl;
+    }
+
+    sp.<span class="tok-function">reset</span>();  <span class="tok-comment">// удаляем последний shared_ptr</span>
+
+    <span class="tok-keyword">if</span> (wp.<span class="tok-function">expired</span>()) {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Object deleted\n&quot;</span>;
+    }
+
+    <span class="tok-keyword">if</span> (<span class="tok-keyword">auto</span> locked = wp.<span class="tok-function">lock</span>()) {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Won&#x27;t print\n&quot;</span>;
+    } <span class="tok-keyword">else</span> {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Cannot access object anymore\n&quot;</span>;
+    }
+
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}</code></pre></div>
+<h3>std::enable_shared_from_this</h3>
+<p>Он позволяет функциям-членам класса, экземпляр которого создан в std::shared_ptr, получить дополнительные сильные (shared_from_this()) или слабые (weak_from_this(), начиная с C++17) копии того std::shared_ptr, в котором он был создан. Вызывать shared_from_this() и weak_from_this() из конструктора и деструктора нельзя.</p>
+<p>Из сырого объекта получать копию shared_ptr</p>
+<figure class="note-figure"><a href="assets/media/105f913d441baa89f2.png" target="_blank" rel="noopener"><img src="assets/media/105f913d441baa89f2.png" alt="Иллюстрация к теме «Типы умных указателей в современном C++»" loading="lazy" decoding="async"></a></figure>
+</div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-stl.html"><small>Дальше →</small>STL, итераторы и алгоритмы</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Модели владения</a></li><li><a href="#section-2">Циклы и доступ к себе</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Модели владения</a></li><li><a href="#section-2">Циклы и доступ к себе</a></li><li><a href="#section-3">Умные указатели</a></li><li><a href="#section-4">Типы умных указателей в современном C++</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

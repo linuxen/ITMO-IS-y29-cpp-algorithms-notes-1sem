@@ -13,10 +13,12 @@
 <meta property="og:title" content="Тесты с GoogleTest · C++ и алгоритмы">
 <meta property="og:description" content="Тест-кейсы, EXPECT и ASSERT, запуск через CTest.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-gtest.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-gtest"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,7 +33,7 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#tools">Практика</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>Практика</summary><ul><li><a  href="cpp-style.html">Стиль кода</a></li><li><a  href="cpp-cmake.html">Сборка с CMake</a></li><li><a aria-current=page href="cpp-gtest.html">Тесты с GoogleTest</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>Практика</summary><ul><li><a  href="cpp-style.html">Стиль кода C++</a></li><li><a  href="cpp-cmake.html">Сборка с CMake</a></li><li><a aria-current=page href="cpp-gtest.html">Тесты с GoogleTest</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header amber"><h1>Тесты с GoogleTest</h1><p>Тест-кейсы, EXPECT и ASSERT, запуск через CTest.</p></header>
 <div class="prose"><h2 id="section-1">Пример модульного теста</h2>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;gtest/gtest.h&gt;
@@ -59,10 +61,116 @@ include(GoogleTest)
 gtest_discover_tests(calc_tests)</code></pre></div>
 <div class="code-block"><div class="code-bar">sh<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>cmake --build build
 ctest --test-dir build --output-on-failure</code></pre></div>
-<p>Добавляйте обычные значения, границы и ошибки, описанные контрактом функции. При подключении GoogleTest как Git-подмодуля клонируйте проект с <code>--recurse-submodules</code> и добавляйте зависимость через <code>add_subdirectory</code> вместо <code>find_package</code>. Подробности в <a href="https://google.github.io/googletest/primer.html">GoogleTest Primer</a>.</p></div>
+<p>Добавляйте обычные значения, границы и ошибки, описанные контрактом функции. При подключении GoogleTest как Git-подмодуля клонируйте проект с <code>--recurse-submodules</code> и добавляйте зависимость через <code>add_subdirectory</code> вместо <code>find_package</code>. Подробности в <a href="https://google.github.io/googletest/primer.html">GoogleTest Primer</a>.</p>
+<h2 id="section-3">Дополнительные примеры</h2>
+<h3>🔍 Код:</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-function">TEST</span>(Plus, BasicPositive) {
+    <span class="tok-function">EXPECT_EQ</span>(<span class="tok-number">5</span>, <span class="tok-function">plus</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>));
+    <span class="tok-function">EXPECT_EQ</span>(<span class="tok-number">0</span>, <span class="tok-function">plus</span>(<span class="tok-number">0</span>, <span class="tok-number">0</span>));
+    <span class="tok-function">EXPECT_EQ</span>(<span class="tok-number">300</span>, <span class="tok-function">plus</span>(<span class="tok-number">100</span>, <span class="tok-number">200</span>));
+}</code></pre></div>
+<hr />
+<h3>📘 Что это такое:</h3>
+<p>Это <strong>юнит-тест</strong> (модульный тест), написанный с использованием <strong>фреймворка GoogleTest (gtest)</strong>.
+Он проверяет, что функция <code>plus()</code> из учебного калькулятора <strong>корректно выполняет сложение положительных чисел</strong>.</p>
+<hr />
+<h3>🔧 Подробное объяснение по частям</h3>
+<h4>🧩 <code>TEST(Plus, BasicPositive)</code></h4>
+<ul>
+<li>
+<p>Макрос <code>TEST</code> — это способ объявить тест в GoogleTest.</p>
+</li>
+<li>
+<p>Он принимает два аргумента:</p>
+<ol>
+<li>
+<p><strong>Первая часть (<code>Plus</code>)</strong> — это имя группы тестов.
+В неё можно объединять тесты, относящиеся к одной функции или подсистеме.
+Например, позже можно сделать <code>TEST(Plus, WithNegatives)</code> — и они будут в одной группе.</p>
+</li>
+<li>
+<p><strong>Вторая часть (<code>BasicPositive</code>)</strong> — это название конкретного теста внутри группы.</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>Вместе они образуют <strong>имя теста</strong> <code>Plus.BasicPositive</code>.</p>
+<hr />
+<h4>⚙️ Тело теста <code>{ ... }</code></h4>
+<p>В фигурных скобках находятся <strong>утверждения (assertions)</strong> — проверки, которые должен пройти код.</p>
+<hr />
+<h4>🧮 <code>EXPECT_EQ(5, plus(2, 3));</code></h4>
+<ul>
+<li>
+<p>Вызывает проверяемую функцию <code>plus(2, 3)</code>.</p>
+</li>
+<li>
+<p>Сравнивает возвращаемое значение с ожидаемым результатом <code>5</code>.</p>
+</li>
+<li>
+<p>Макрос <code>EXPECT_EQ(val1, val2)</code> проверяет <strong>равенство</strong>:</p>
+<ul>
+<li>
+<p>если выражение истинно — тест проходит;</p>
+</li>
+<li>
+<p>если нет — тест помечается как <strong>FAILED</strong>, но выполнение продолжается.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>То есть эта строка буквально означает:</p>
+<blockquote>
+<p>«Проверьте, что <code>plus(2, 3)</code> возвращает <code>5</code>».</p>
+</blockquote>
+<hr />
+<h4>🧮 <code>EXPECT_EQ(0, plus(0, 0));</code></h4>
+<p>Проверяет, что сложение нулей даёт ноль — <strong>проверка базового случая.</strong></p>
+<hr />
+<h4>🧮 <code>EXPECT_EQ(300, plus(100, 200));</code></h4>
+<p>Проверяет, что функция корректно обрабатывает <strong>большие положительные числа.</strong></p>
+<hr />
+<h3>✅ Что происходит при запуске тестов:</h3>
+<p>Соберите проект и выполните команду.</p>
+<div class="code-block"><div class="code-bar">bash<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>ctest --output-on-failure</code></pre></div>
+<p>GoogleTest автоматически:</p>
+<ol>
+<li>
+<p>запускает все функции, объявленные через <code>TEST(...)</code>;</p>
+</li>
+<li>
+<p>показывает отчёт в консоли:</p>
+</li>
+</ol>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>    [ RUN      ] Plus.BasicPositive
+    [       OK ] Plus.BasicPositive (0 ms)</code></pre></div>
+<p>Если проверка не прошла, CTest выведет сообщение об ошибке.</p>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>    Expected equality of these values:
+      plus(2, 3)
+        Which is: 4
+      5
+    [  FAILED  ] Plus.BasicPositive (0 ms)</code></pre></div>
+<hr />
+<h3>🧠 В итоге</h3>
+<ul>
+<li>
+<p>Этот тест <strong>автоматически проверяет корректность работы функции сложения.</strong></p>
+</li>
+<li>
+<p>Он охватывает три простых сценария: <code>(2 + 3)</code>, <code>(0 + 0)</code>, <code>(100 + 200)</code>.</p>
+</li>
+<li>
+<p>Если хотя бы один из них вернёт неверное значение — тест сообщит об ошибке.</p>
+</li>
+<li>
+<p>Таким образом, можно быстро проверить, работает ли функция <code>plus()</code> правильно, <strong>без ручного ввода и вывода в консоль.</strong></p>
+</li>
+</ul>
+<figure class="note-figure"><a href="assets/media/589e2f01d1d3bdd8db.png" target="_blank" rel="noopener"><img src="assets/media/589e2f01d1d3bdd8db.png" alt="Иллюстрация к теме «Тесты с GoogleTest»" loading="lazy" decoding="async"></a></figure>
+</div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-cmake.html"><small>← Назад</small>Сборка с CMake</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Пример модульного теста</a></li><li><a href="#section-2">Подключение к CMake</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Пример модульного теста</a></li><li><a href="#section-2">Подключение к CMake</a></li><li><a href="#section-3">Дополнительные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

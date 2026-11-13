@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Конкурентность, параллелизм, mutex, atomic и передача результата.">
 <meta name="theme-color" content="#1f1f28">
-<title>Потоки и синхронизация · C++ и алгоритмы</title>
+<title>Асинхронность и многопоточность · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-threads.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Потоки и синхронизация · C++ и алгоритмы">
+<meta property="og:title" content="Асинхронность и многопоточность · C++ и алгоритмы">
 <meta property="og:description" content="Конкурентность, параллелизм, mutex, atomic и передача результата.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-threads.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-threads"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a  href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a aria-current=page href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Потоки и синхронизация</h1><p>Конкурентность, параллелизм, mutex, atomic и передача результата.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a aria-current=page href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Асинхронность и многопоточность</h1><p>Конкурентность, параллелизм, mutex, atomic и передача результата.</p></header>
 <div class="prose"><h2 id="section-1">Несколько задач одновременно</h2>
 <p>Конкурентность позволяет нескольким задачам продвигаться во времени, в том числе по очереди на одном ядре. Параллелизм означает одновременное выполнение. Асинхронный интерфейс позволяет продолжить работу до получения результата. <code>std::thread::join()</code> ждёт завершения потока, а <code>std::jthread</code> (C++20) присоединяет поток при уничтожении. <code>detach()</code> требует отдельного контроля времени жизни данных.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;<span class="tok-type">atomic</span>&gt;
@@ -48,11 +50,60 @@
 }</code></pre></div>
 <h2 id="section-2">Общие данные</h2>
 <p>Data race возникает при конфликтующих обращениях из разных потоков без необходимой синхронизации, если хотя бы одно обращение — запись и операции не атомарны. В C++ это неопределённое поведение. Даже коммутативное сложение требует синхронизации, когда несколько потоков пишут в обычную переменную.</p>
-<ul><li><code>std::mutex</code> защищает критическую секцию, <code>std::lock_guard</code> освобождает блокировку по RAII.</li><li><code>std::atomic</code> подходит для отдельных атомарных операций. Инвариант из нескольких связанных полей может требовать общего mutex.</li><li><code>condition_variable</code> позволяет ждать условие. Используйте <code>wait(lock, predicate)</code>, чтобы повторно проверять его после пробуждения.</li><li><code>promise</code> передаёт результат или исключение связанному <code>future</code>.</li></ul>
-<p>Deadlock — взаимное ожидание ресурсов. Livelock — активные действия без прогресса. По закону Амдала последовательная доля программы ограничивает выигрыш от распараллеливания.</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-meta.html"><small>← Назад</small>Шаблоны, concepts и variant</a></nav>
+<ul>
+<li><code>std::mutex</code> защищает критическую секцию, <code>std::lock_guard</code> освобождает блокировку по RAII.</li>
+<li><code>std::atomic</code> подходит для отдельных атомарных операций. Инвариант из нескольких связанных полей может требовать общего mutex.</li>
+<li><code>condition_variable</code> позволяет ждать условие. Используйте <code>wait(lock, predicate)</code>, чтобы повторно проверять его после пробуждения.</li>
+<li><code>promise</code> передаёт результат или исключение связанному <code>future</code>.</li>
+</ul>
+<p>Deadlock — взаимное ожидание ресурсов. Livelock — активные действия без прогресса. По закону Амдала последовательная доля программы ограничивает выигрыш от распараллеливания.</p>
+<h2 id="section-3">Асинхронное программирование</h2>
+<p><strong>Закон Мура</strong> — это правило, согласно которому количество транзисторов на компьютерном чипе увеличивается в два яаза примерно каждые два года</p>
+<figure class="note-figure"><a href="assets/media/769c5552f3d9be4484.png" target="_blank" rel="noopener"><img src="assets/media/769c5552f3d9be4484.png" alt="Иллюстрация к теме «Асинхронное программирование»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-4">Concurrency vs Parallelism</h2>
+<p>программа может быть параллельная и асинхронная</p>
+<p>Concurrency — конкурентное выполнение, при котором несколько задач продвигаются в течение общего интервала времени.
+Parallelism — параллельное выполнение нескольких действий в один момент времени.</p>
+<figure class="note-figure"><a href="assets/media/18b77184d20d98d4d1.png" target="_blank" rel="noopener"><img src="assets/media/18b77184d20d98d4d1.png" alt="Иллюстрация к теме «Concurrency vs Parallelism»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/e19ccc9ad388716002.png" target="_blank" rel="noopener"><img src="assets/media/e19ccc9ad388716002.png" alt="Иллюстрация к теме «Concurrency vs Parallelism»" loading="lazy" decoding="async"></a></figure>
+<p>Асинхронная операция позволяет продолжить работу до получения результата.
+Параллельность описывает одновременное выполнение, асинхронность — способ ожидания и получения результата.</p>
+<p><code>thread.join()</code> ожидает завершения потока.</p>
+<p><strong>Горутины</strong> (goroutines) это в языке Go — это легковесные потоки, управляемые планировщиком Go (встроено в язык), а не ОС. Они стартуют с 2 КБ стека, позволяя запускать сотни тысяч задач.</p>
+<p><strong>Корутины</strong> (coroutines) в других языках — это общее понятие сопрограмм (функций, способных приостанавливать выполнение и возвращать управление), которые могут быть как с поддержкой стека (stackful), так и без (stackless).</p>
+<p>Join присоединяет
+Detach - отсоединяет поток</p>
+<p><code>sleep_for</code> приостанавливает поток как минимум на заданный интервал. Фактическое время может быть больше из-за планирования.</p>
+<p>По закону Амдала последовательная часть работы ограничивает ускорение при распараллеливании.</p>
+<figure class="note-figure"><a href="assets/media/8d427db24fac27fc1f.png" target="_blank" rel="noopener"><img src="assets/media/8d427db24fac27fc1f.png" alt="Иллюстрация к теме «Concurrency vs Parallelism»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-5">Проблемы при многопоточке</h2>
+<p>Состояние гонки возникает, когда результат зависит от порядка выполнения событий. Гонка данных в C++ возникает при несинхронизированных конфликтующих обращениях к одной области памяти, если хотя бы одно из них записывает данные.</p>
+<p>Коммутативность операций не устраняет гонку данных. Обновление разделяемого счётчика требует атомарной операции или синхронизации.</p>
+<figure class="note-figure"><a href="assets/media/7073069cde9885de61.png" target="_blank" rel="noopener"><img src="assets/media/7073069cde9885de61.png" alt="Иллюстрация к теме «Проблемы при многопоточке»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/5b0548c5b2724bc49f.png" target="_blank" rel="noopener"><img src="assets/media/5b0548c5b2724bc49f.png" alt="Иллюстрация к теме «Проблемы при многопоточке»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/92c01b8be53dd1c17e.png" target="_blank" rel="noopener"><img src="assets/media/92c01b8be53dd1c17e.png" alt="Иллюстрация к теме «Проблемы при многопоточке»" loading="lazy" decoding="async"></a></figure>
+<ol>
+<li>mutex- позволяет запретить одновременное обращение из разных потоков</li>
+<li>try_lock -&gt; true false если получилось залочить</li>
+<li>lock unlock</li>
+<li>lock_guard - авто лок анлок</li>
+<li>std::atomic - примитив синхронизации с переменными. Хорошо подходит для обычных операций. Атомарное действие- неделимое действие в информатике, которое выполняется либо полностью, либо не выполняется вовсе, гарантируя отсутствие промежуточных состояний
+Для отдельных атомарных операций блокировка может не требоваться. Для составного инварианта может понадобиться мьютекс.
+Для одной атомарной операции отдельная блокировка может не требоваться.
+fetch_add</li>
+</ol>
+<h3>Ошибки многопоточного программирования</h3>
+<figure class="note-figure"><a href="assets/media/4ecdecc3dd5a105033.png" target="_blank" rel="noopener"><img src="assets/media/4ecdecc3dd5a105033.png" alt="Иллюстрация к теме «Проблемы при многопоточке»" loading="lazy" decoding="async"></a></figure>
+<p>DeadLock - ситуация когда несколько процессов ожидают ресурсы занятные самими этими процессами (цикл в графе ожидания команд)
+Например 1 взял 1гантелю другой вторую и обоим нужна 2 и они ждут</p>
+<p>LiveLock - ситуация в которой система система не застревает (как в обычной блокировке) а занимается бесполезной работой, чтобы не простаивать</p>
+<p>condition_variable - переводит поток в состояние ожидания и проверяем доступно или недоступно можно notify уведомить</p>
+<p>Std::promise - это объект в котором храним какой-то объект обещания в котором потом будет результат</p>
+<p><code>std::future</code> получает результат или исключение из общего состояния, связанного со <code>std::promise</code>.</p>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-meta.html"><small>← Назад</small>Метапрограммирование и концепты</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Несколько задач одновременно</a></li><li><a href="#section-2">Общие данные</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Несколько задач одновременно</a></li><li><a href="#section-2">Общие данные</a></li><li><a href="#section-3">Асинхронное программирование</a></li><li><a href="#section-4">Concurrency vs Parallelism</a></li><li><a href="#section-5">Проблемы при многопоточке</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

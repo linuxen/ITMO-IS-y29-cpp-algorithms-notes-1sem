@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Коды возврата, optional, expected и гарантии безопасности.">
 <meta name="theme-color" content="#1f1f28">
-<title>Ошибки и исключения · C++ и алгоритмы</title>
+<title>Обработка ошибок и исключения · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-errors.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Ошибки и исключения · C++ и алгоритмы">
+<meta property="og:title" content="Обработка ошибок и исключения · C++ и алгоритмы">
 <meta property="og:description" content="Коды возврата, optional, expected и гарантии безопасности.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-errors.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-errors"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a aria-current=page href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a  href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Ошибки и исключения</h1><p>Коды возврата, optional, expected и гарантии безопасности.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a aria-current=page href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Обработка ошибок и исключения</h1><p>Коды возврата, optional, expected и гарантии безопасности.</p></header>
 <div class="prose"><h2 id="section-1">Выбор представления</h2>
 <p><code>std::optional&lt;T&gt;</code> выражает значение, которое может отсутствовать. <code>std::expected&lt;T, E&gt;</code> (C++23) хранит успешный результат или данные об ошибке. Коды возврата удобны на границах с C API. Исключения передают ошибку вверх по стеку до подходящего обработчика.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
@@ -52,12 +54,124 @@ std::<span class="tok-type">optional</span>&lt;<span class="tok-type">int</span>
 }</code></pre></div>
 <h2 id="section-2">Как работает исключение</h2>
 <p><code>throw</code> начинает распространение исключения. При раскрутке стека уничтожаются построенные локальные объекты. Типичные исключения стандартной библиотеки ловят через <code>const std::exception&amp;</code>. Если исключение покидает функцию с <code>noexcept</code>, вызывается <code>std::terminate</code>.</p>
-<ul><li><strong>Базовая гарантия.</strong> Инварианты сохранены, утечек ресурсов нет.</li><li><strong>Сильная гарантия.</strong> Если операция завершилась исключением, наблюдаемое состояние сохраняется.</li><li><strong>Гарантия отсутствия исключений.</strong> Операция не выпускает исключений наружу.</li></ul>
+<ul>
+<li><strong>Базовая гарантия.</strong> Инварианты сохранены, утечек ресурсов нет.</li>
+<li><strong>Сильная гарантия.</strong> Если операция завершилась исключением, наблюдаемое состояние сохраняется.</li>
+<li><strong>Гарантия отсутствия исключений.</strong> Операция не выпускает исключений наружу.</li>
+</ul>
 <h2 id="section-3">Самопроверка</h2>
-<p>Какой тип вернуть из поиска по таблице, если ключ может отсутствовать? Что изменится, если вызывающему коду нужна причина отказа?</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-stl.html"><small>← Назад</small>STL, итераторы и алгоритмы</a><a href="cpp-callables.html"><small>Дальше →</small>Приведения, CRTP и лямбды</a></nav>
+<p>Какой тип вернуть из поиска по таблице, если ключ может отсутствовать? Что изменится, если вызывающему коду нужна причина отказа?</p>
+<h2 id="section-4">Error Handling</h2>
+<figure class="note-figure"><a href="assets/media/dc2520328dc2cf1c31.png" target="_blank" rel="noopener"><img src="assets/media/dc2520328dc2cf1c31.png" alt="Иллюстрация к теме «Error Handling»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/825aa5442f1e46dade.png" target="_blank" rel="noopener"><img src="assets/media/825aa5442f1e46dade.png" alt="Иллюстрация к теме «Error Handling»" loading="lazy" decoding="async"></a></figure>
+<p>static_assert -  ошибка на этапе компиляции
+<code>static_assert(sizeof(int)  4, &quot;int must be 4 bytes&quot;);</code></p>
+<h2 id="section-5">Метод кодов возврата</h2>
+<p>старый подход иногда имеет смысл</p>
+<figure class="note-figure"><a href="assets/media/fbb2c69045a7043652.png" target="_blank" rel="noopener"><img src="assets/media/fbb2c69045a7043652.png" alt="Иллюстрация к теме «Метод кодов возврата»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-6">Метод Exception. throw + try + catch</h2>
+<figure class="note-figure"><a href="assets/media/c14fec684aabb6890d.png" target="_blank" rel="noopener"><img src="assets/media/c14fec684aabb6890d.png" alt="Иллюстрация к теме «Метод Exception. throw + try + catch»" loading="lazy" decoding="async"></a></figure>
+<p>... ловит любую ошибку</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-type">int</span> a, b;
+
+    std::cin &gt;&gt; a &gt;&gt; b;
+
+    <span class="tok-keyword">try</span> {
+        <span class="tok-keyword">if</span> (std::cin.<span class="tok-function">fail</span>()) {
+            <span class="tok-keyword">throw</span> std::<span class="tok-function">runtime_error</span>(<span class="tok-string">&quot;Input is not a number&quot;</span>);
+        }
+
+        <span class="tok-keyword">if</span> (b == <span class="tok-number">0</span>) {
+            <span class="tok-keyword">throw</span> std::<span class="tok-function">runtime_error</span>(<span class="tok-string">&quot;Division by zero&quot;</span>);
+        }
+
+        std::cout &lt;&lt; <span class="tok-string">&quot;Result: &quot;</span> &lt;&lt; a / b &lt;&lt; std::endl;
+    }
+    <span class="tok-keyword">catch</span> (<span class="tok-keyword">const</span> std::runtime_error&amp; e) {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Error: &quot;</span> &lt;&lt; e.<span class="tok-function">what</span>() &lt;&lt; std::endl;
+    }
+
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}</code></pre></div>
+<p>если разные типы ошибок нужно писать два catch</p>
+<p>на практике пишут сначала все известные ошибки а потом  catch(...){}</p>
+<h2 id="section-7">как работает исключение в работе программы</h2>
+<p>исключение живет все время пока его кто-то не поймает</p>
+<p>при исключении работа программы останавливается и в стек вызова функции пробрасывается вверх наше исключение =&gt; <img src="assets/media/e40c6f548e30ed4a34.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" /></p>
+<ul>
+<li>создаётся объект исключения</li>
+<li>начинается <strong>поиск обработчика</strong></li>
+<li>программа начинает <strong>разматывать стек (stack unwinding)</strong></li>
+</ul>
+<p><img src="assets/media/fefa86952d4f6bd4f3.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" />
+<img src="assets/media/2017fb52e29d4785cf.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" />
+<img src="assets/media/a95a8bde7cd3e4ae98.png" alt="Иллюстрация к теме «как работает исключение в работе программы»" /></p>
+<h2 id="section-8">noexcept</h2>
+<p>это ключевое слово для компилятора, оно сообщает, что функция не бросает исключений
+noexcept{false} - значит бросает</p>
+<figure class="note-figure"><a href="assets/media/b3bf4ab52a4bdc413f.png" target="_blank" rel="noopener"><img src="assets/media/b3bf4ab52a4bdc413f.png" alt="Иллюстрация к теме «noexcept»" loading="lazy" decoding="async"></a></figure>
+<p>два исключения подряд приводят к std::terminate   <strong>так нельзя</strong></p>
+<p>деструктор никогда не бросает исключение</p>
+<p>конструктор вполне может ,например, если память не выделилась</p>
+<h2 id="section-9">Гарантии безопасности исключений</h2>
+<figure class="note-figure"><a href="assets/media/a9cee930869930d456.png" target="_blank" rel="noopener"><img src="assets/media/a9cee930869930d456.png" alt="Иллюстрация к теме «Гарантии безопасности исключений»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-10">std::exception</h2>
+<figure class="note-figure"><a href="assets/media/3400f76b55a4ab01be.png" target="_blank" rel="noopener"><img src="assets/media/3400f76b55a4ab01be.png" alt="Иллюстрация к теме «std::exception»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/6a0cd461ddb9eeae51.png" target="_blank" rel="noopener"><img src="assets/media/6a0cd461ddb9eeae51.png" alt="Иллюстрация к теме «std::exception»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/cf27f724db99856e4f.png" target="_blank" rel="noopener"><img src="assets/media/cf27f724db99856e4f.png" alt="Иллюстрация к теме «std::exception»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-11">std::expected</h2>
+<figure class="note-figure"><a href="assets/media/f83391612643827982.png" target="_blank" rel="noopener"><img src="assets/media/f83391612643827982.png" alt="Иллюстрация к теме «std::expected»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/9a1792d7f826be4a27.png" target="_blank" rel="noopener"><img src="assets/media/9a1792d7f826be4a27.png" alt="Иллюстрация к теме «std::expected»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/030e67ae3f9d4d8bea.png" target="_blank" rel="noopener"><img src="assets/media/030e67ae3f9d4d8bea.png" alt="Иллюстрация к теме «std::expected»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-12">std::optional</h2>
+<p><code>std::optional</code> — это контейнер, который говорит: <strong>&quot;Здесь может быть значение, а может и не быть.&quot;</strong></p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">optional</span>&lt;<span class="tok-type">int</span>&gt; opt = std::nullopt;
+    opt = <span class="tok-number">10</span>;
+    <span class="tok-keyword">if</span> (opt.<span class="tok-function">has_value</span>()) {
+        std::cout &lt;&lt; opt.<span class="tok-function">value</span>() &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+    <span class="tok-keyword">else</span> {
+        std::cout &lt;&lt; <span class="tok-string">&quot;No value&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+}</code></pre></div>
+<ol>
+<li>Проблема, которую решает <code>optional</code></li>
+</ol>
+<p>Раньше часто делали так:</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">find_user_id</span>();</code></pre></div>
+<p>Но что возвращать, если пользователь <strong>не найден</strong>?
+Обычно делали костыли:</p>
+<p>❌ Способ 1 — специальное значение</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">find_user_id</span>() {
+    <span class="tok-keyword">return</span> -<span class="tok-number">1</span>;
+}</code></pre></div>
+<p>Проблема:</p>
+<ul>
+<li><code>-1</code> может быть <strong>валидным значением</strong></li>
+</ul>
+<p>❌ Способ 2 — указатель</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span>* <span class="tok-function">find_user_id</span>();</code></pre></div>
+<p>Если нет результата:</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-keyword">return</span> <span class="tok-keyword">nullptr</span>;</code></pre></div>
+<p>Проблема:</p>
+<ul>
+<li>неудобно</li>
+<li>можно случайно разименовать <code>nullptr</code></li>
+</ul>
+<ol start="2">
+<li>Решение — <code>std::optional</code></li>
+</ol>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;<span class="tok-type">optional</span>&gt;
+
+std::<span class="tok-type">optional</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">find_user_id</span>();</code></pre></div>
+<p>Теперь функция говорит:
+либо есть <code>int</code>, либо <strong>ничего</strong></p>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-containers.html"><small>← Назад</small>Контейнеры, аллокаторы и адаптеры</a><a href="cpp-callables.html"><small>Дальше →</small>Приведения типов и CRTP</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Выбор представления</a></li><li><a href="#section-2">Как работает исключение</a></li><li><a href="#section-3">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Выбор представления</a></li><li><a href="#section-2">Как работает исключение</a></li><li><a href="#section-3">Самопроверка</a></li><li><a href="#section-4">Error Handling</a></li><li><a href="#section-5">Метод кодов возврата</a></li><li><a href="#section-6">Метод Exception. throw + try + catch</a></li><li><a href="#section-7">как работает исключение в работе программы</a></li><li><a href="#section-8">noexcept</a></li><li><a href="#section-9">Гарантии безопасности исключений</a></li><li><a href="#section-10">std::exception</a></li><li><a href="#section-11">std::expected</a></li><li><a href="#section-12">std::optional</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

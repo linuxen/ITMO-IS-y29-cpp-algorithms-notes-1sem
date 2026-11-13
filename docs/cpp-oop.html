@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Конструирование, копирование, перегрузка операторов и владение ресурсами.">
 <meta name="theme-color" content="#1f1f28">
-<title>Классы, инварианты и RAII · C++ и алгоритмы</title>
+<title>Классы, инварианты и конструкторы · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-oop.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Классы, инварианты и RAII · C++ и алгоритмы">
+<meta property="og:title" content="Классы, инварианты и конструкторы · C++ и алгоритмы">
 <meta property="og:description" content="Конструирование, копирование, перегрузка операторов и владение ресурсами.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-oop.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-oop"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения и управление</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-storage.html">Структуры, представление и память</a></li><li><a  href="cpp-build.html">Компиляция и пространства имён</a></li><li><a aria-current=page href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Классы, инварианты и RAII</h1><p>Конструирование, копирование, перегрузка операторов и владение ресурсами.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a aria-current=page href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Классы, инварианты и конструкторы</h1><p>Конструирование, копирование, перегрузка операторов и владение ресурсами.</p></header>
 <div class="prose"><h2 id="section-1">Инвариант объекта</h2>
 <p>Класс объединяет состояние и операции. Конструктор устанавливает допустимое состояние, публичные методы поддерживают его, закрытые поля позволяют контролировать изменения. Поля инициализируются в порядке объявления в классе. <code>this</code> — указатель на текущий объект внутри нестатического метода.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
@@ -67,10 +69,372 @@
 <h2 id="section-3">Перегрузка операторов</h2>
 <p>Сохраняйте привычный смысл операций. <code>operator+=</code> обычно меняет объект и возвращает <code>T&amp;</code>. <code>operator+</code> можно выразить через него с копией левого аргумента. <code>operator[]</code> часто имеет перегрузки для обычного и <code>const</code>-объекта. Постфиксный <code>operator++(int)</code> возвращает старое значение, префиксный <code>operator++()</code> обычно возвращает ссылку на обновлённый объект.</p>
 <h2 id="section-4">Самопроверка</h2>
-<p>Замените владеющий <code>char*</code> в учебном классе на <code>std::string</code>. Какие специальные функции теперь можно доверить компилятору?</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-build.html"><small>← Назад</small>Компиляция и пространства имён</a><a href="cpp-polymorphism.html"><small>Дальше →</small>Наследование и полиморфизм</a></nav>
+<p>Замените владеющий <code>char*</code> в учебном классе на <code>std::string</code>. Какие специальные функции теперь можно доверить компилятору?</p>
+<h2 id="section-5">OOP</h2>
+<h2 id="section-6">Абстракция</h2>
+<figure class="note-figure"><a href="assets/media/9d8506347ba1a7bf60.png" target="_blank" rel="noopener"><img src="assets/media/9d8506347ba1a7bf60.png" alt="Иллюстрация к теме «Абстракция»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-7">Инвариант</h2>
+<figure class="note-figure"><a href="assets/media/ad23a35bb1d9d151cc.png" target="_blank" rel="noopener"><img src="assets/media/ad23a35bb1d9d151cc.png" alt="Иллюстрация к теме «Инвариант»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-8">Class 1) Инкапсуляция</h2>
+<p>Это парадигма с++ как есть функциональное так есть и ООП
+<img src="assets/media/b2b5e1fa0800ec4878.png" alt="Иллюстрация к теме «Class 1) Инкапсуляция»" />
+<img src="assets/media/a0003bd30d7613036e.png" alt="Иллюстрация к теме «Class 1) Инкапсуляция»" /></p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> Human {
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">int</span> age = <span class="tok-number">18</span>;
+    <span class="tok-type">char</span> name[<span class="tok-number">10</span>] = {<span class="tok-string">&quot;Alex&quot;</span>};
+};
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    Human Name;
+
+    std::cout &lt;&lt; Name.age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    std::cout &lt;&lt; Name.name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> Human {
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">int</span> age = <span class="tok-number">18</span>;
+    std::<span class="tok-type">string</span> name;
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    Human Name1;
+
+    Name1.age = <span class="tok-number">18</span>;
+    Name1.name = <span class="tok-string">&quot;Alex&quot;</span>;
+    std::cout &lt;&lt; Name1.age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    std::cout &lt;&lt; Name1.name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+
+    Human Name2;
+
+    Name2.age = <span class="tok-number">20</span>;
+    Name2.name = <span class="tok-string">&quot;Gosha&quot;</span>;
+    std::cout &lt;&lt; Name2.age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    std::cout &lt;&lt; Name2.name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}</code></pre></div>
+<h3>метод - функция принадлежащая классу</h3>
+<p>Метод с квалификатором <code>const</code> не может изменять обычные поля объекта. Поля с <code>mutable</code> составляют исключение.</p>
+<p>Если метод можно сделать const значит он обязательно должен быть const иначе будет ошибка в лабе</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> Human {
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">int</span> age = <span class="tok-number">18</span>;
+    std::<span class="tok-type">string</span> name;
+
+    <span class="tok-type">void</span> <span class="tok-function">Print</span>() { <span class="tok-comment">// Метод</span>
+        std::cout &lt;&lt; name &lt;&lt; <span class="tok-string">&#x27;\t&#x27;</span> &lt;&lt; age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    Human Name1;
+    Name1.age = <span class="tok-number">18</span>;
+    Name1.name = <span class="tok-string">&quot;Alex&quot;</span>;
+
+    Name1.<span class="tok-function">Print</span>();
+}</code></pre></div>
+<figure class="note-figure"><a href="assets/media/5bb6dcdc4f27793d37.png" target="_blank" rel="noopener"><img src="assets/media/5bb6dcdc4f27793d37.png" alt="Иллюстрация к теме «Class 1) Инкапсуляция»" loading="lazy" decoding="async"></a></figure>
+<h3>Поля доступа</h3>
+<p>public - можно использовать вне класса
+private - только внутри класса</p>
+<p>по умолчанию все поля private</p>
+<figure class="note-figure"><a href="assets/media/264956409a067b4786.png" target="_blank" rel="noopener"><img src="assets/media/264956409a067b4786.png" alt="Иллюстрация к теме «Class 1) Инкапсуляция»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> Human {
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> age = <span class="tok-number">18</span>;
+    std::<span class="tok-type">string</span> name = <span class="tok-string">&quot;Alex&quot;</span>;
+
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">void</span> <span class="tok-function">Print</span>() {
+        std::cout &lt;&lt; name &lt;&lt; <span class="tok-string">&#x27;\t&#x27;</span> &lt;&lt; age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    Human Name;
+    Name.<span class="tok-function">Print</span>();
+}</code></pre></div>
+<h3>Геттеры и Сеттеры</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> Human {
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> age = <span class="tok-number">18</span>;
+    std::<span class="tok-type">string</span> name = <span class="tok-string">&quot;Alex&quot;</span>;
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">int</span> <span class="tok-function">Get</span>(){
+        <span class="tok-keyword">return</span> age;
+    }
+
+    <span class="tok-type">void</span> <span class="tok-function">Set</span>(<span class="tok-type">int</span> set_age) {
+        age = set_age;
+    }
+
+    <span class="tok-type">void</span> <span class="tok-function">Print</span>() {
+        std::cout &lt;&lt; age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    Human Name;
+
+    <span class="tok-comment">// GETTER</span>
+    <span class="tok-type">int</span> result = Name.<span class="tok-function">Get</span>();
+    std::cout &lt;&lt; result &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+
+    <span class="tok-comment">// SETTER</span>
+    <span class="tok-type">int</span> new_age = <span class="tok-number">19</span>;
+    Name.<span class="tok-function">Set</span>(new_age);
+    Name.<span class="tok-function">Print</span>();
+}</code></pre></div>
+<h3>Конструктор</h3>
+<p>Чтобы создать объект класса без мусора в начале и чтобы избежать бесконечных getterov and setter</p>
+<figure class="note-figure"><a href="assets/media/8fb5a032971de583fc.png" target="_blank" rel="noopener"><img src="assets/media/8fb5a032971de583fc.png" alt="Иллюстрация к теме «Class 1) Инкапсуляция»" loading="lazy" decoding="async"></a></figure>
+<p>Поля  — это переменные, объявленные внутри класса, которые хранят данные объекта</p>
+<p>Конструктор - вызывается по имени класса</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> Human {
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> age;
+    std::<span class="tok-type">string</span> name;
+
+<span class="tok-keyword">public</span>:
+	<span class="tok-comment">// Конструктор</span>
+    <span class="tok-function">Human</span> (<span class="tok-type">int</span> value_age, std::<span class="tok-type">string</span> ind_name){
+        age = value_age;
+        name = ind_name;
+    }
+
+    <span class="tok-type">int</span> <span class="tok-function">Get</span>(){
+        <span class="tok-keyword">return</span> age;
+    }
+
+    <span class="tok-type">void</span> <span class="tok-function">Set</span>(<span class="tok-type">int</span> set_age) {
+        age = set_age;
+    }
+
+    <span class="tok-type">void</span> <span class="tok-function">Print</span>() {
+        std::cout &lt;&lt; age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    Human <span class="tok-function">Name</span>(<span class="tok-number">18</span>, <span class="tok-string">&quot;Alex&quot;</span>); <span class="tok-comment">// Конструктор</span>
+    <span class="tok-type">int</span> new_age = <span class="tok-number">19</span>;
+
+    <span class="tok-comment">// GETTER</span>
+    <span class="tok-type">int</span> result = Name.<span class="tok-function">Get</span>();
+    std::cout &lt;&lt; result &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+
+    <span class="tok-comment">// SETTER</span>
+    Name.<span class="tok-function">Set</span>(new_age);
+    Name.<span class="tok-function">Print</span>();
+}</code></pre></div>
+<p>Если поле приватное ставим value_</p>
+<h4>конструктор по умолчанию</h4>
+<p>вызывается при создании объекта класса и ничего не делает</p>
+<p><code>Human Name;</code></p>
+<h4>конструктор копирования</h4>
+<p>реализуется неявно если не задано ничего</p>
+<p>Запускается при копировании класса в функцию</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> MyClass {
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">int</span>* data = new <span class="tok-type">int</span>[size];
+    <span class="tok-function">MyClass</span>(<span class="tok-type">int</span> size){ <span class="tok-comment">// Constructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;Constructor called&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        this-&gt;size = size;
+
+        <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++) {
+            data[i] = i;
+        }
+    }
+
+    ~<span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Destructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;called Destructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        delete[] data;
+    }
+
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> size;
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    MyClass <span class="tok-function">Hello</span>(<span class="tok-number">10</span>);
+    MyClass <span class="tok-function">Hello2</span>(Hello);
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>Constructor called
+Copy called
+called Destructor
+called Destructor</code></pre></div>
+<p>При поверхностном копировании владеющего указателя оба объекта обращаются к одному ресурсу.
+При уничтожении обоих объектов один и тот же ресурс освобождается повторно. Копирующий конструктор должен создать отдельную копию ресурса либо копирование нужно запретить.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> MyClass {
+<span class="tok-keyword">public</span>:
+    <span class="tok-type">int</span>* data;
+    <span class="tok-type">int</span> copy_size;
+
+    <span class="tok-function">MyClass</span>(<span class="tok-type">int</span> size){ <span class="tok-comment">// Constructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;Constructor called&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        this-&gt;data = new <span class="tok-type">int</span>[size];
+        this-&gt;copy_size = size;
+
+        <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++) {
+            data[i] = i;
+        }
+    }
+
+    <span class="tok-function">MyClass</span>(<span class="tok-keyword">const</span> MyClass&amp; other){ <span class="tok-comment">//Copy called</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;Copy called&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        this-&gt;data = new <span class="tok-type">int</span>[other.copy_size];
+        <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; other.copy_size; i++){
+            other.data[i] = i;
+        }
+    }
+
+    ~<span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Destructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;called Destructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        delete[] data;
+    }
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    MyClass <span class="tok-function">Hello</span>(<span class="tok-number">10</span>);
+    MyClass <span class="tok-function">Hello2</span>(Hello);
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>Constructor called
+Copy called
+called Destructor
+called Destructor</code></pre></div>
+<p>В этом примере копирование создаёт самостоятельную копию ресурса.</p>
+<p>Это по умолчанию</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-function">MyClass</span>(<span class="tok-keyword">const</span> MyClass&amp; other){
+        this-&gt;data = other.data;
+    }</code></pre></div>
+<h2 id="section-9">Деструктор</h2>
+<p>Когда выполнение выходит из области видимости в <code>main</code>, автоматически вызываются деструкторы локальных объектов.</p>
+<p>Деструктор не принимает параметры</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> MyClass {
+<span class="tok-keyword">public</span>:
+    <span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Constructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;called constructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+    ~<span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Destructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;called Destructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    MyClass a;
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>called constructor
+called Destructor</code></pre></div>
+<h2 id="section-10">Указатель this</h2>
+<p><code>this</code> — указатель на текущий объект внутри нестатического метода.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> MyClass {
+<span class="tok-keyword">public</span>:
+    <span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Constructor</span>
+        std::cout &lt;&lt; this &lt;&lt; <span class="tok-string">&quot; called constructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+    ~<span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Destructor</span>
+        std::cout &lt;&lt; this &lt;&lt; <span class="tok-string">&quot; called Destructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> age;
+    std::<span class="tok-type">string</span> name;
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    MyClass a;
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>0x7fff623adc90 called constructor
+0x7fff623adc90 called Destructor</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> MyClass {
+<span class="tok-keyword">public</span>:
+    <span class="tok-function">MyClass</span>(<span class="tok-type">int</span> new_age, std::<span class="tok-type">string</span> new_name){ <span class="tok-comment">// Constructor</span>
+        age = new_age;
+        name = new_name;
+        std::cout &lt;&lt; this-&gt;age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        std::cout &lt;&lt; this-&gt;name &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+
+    ~<span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Destructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;called Destructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> age;
+    std::<span class="tok-type">string</span> name;
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    MyClass <span class="tok-function">Hello</span>(<span class="tok-number">18</span>, <span class="tok-string">&quot;Alex&quot;</span>);
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">text<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>18
+Alex
+called Destructor</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">class</span> MyClass {
+
+<span class="tok-keyword">public</span>:
+    <span class="tok-function">MyClass</span>(<span class="tok-type">int</span> new_age, std::<span class="tok-type">string</span> new_name){ <span class="tok-comment">// Constructor</span>
+        age = new_age;
+        name = new_name;
+    }
+
+    ~<span class="tok-function">MyClass</span>(){ <span class="tok-comment">// Destructor</span>
+        std::cout &lt;&lt; <span class="tok-string">&quot;called Destructor&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+
+    <span class="tok-type">void</span> <span class="tok-function">Get</span>() {
+        std::cout &lt;&lt; this-&gt;age &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+    }
+
+    <span class="tok-type">void</span> <span class="tok-function">Set</span>(<span class="tok-type">int</span> age) {
+        this-&gt;age = age; <span class="tok-comment">// this-&gt;age обозначает поле, age — параметр конструктора</span>
+    }
+
+<span class="tok-keyword">private</span>:
+    <span class="tok-type">int</span> age;
+    std::<span class="tok-type">string</span> name;
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    MyClass <span class="tok-function">Hello</span>(<span class="tok-number">18</span>, <span class="tok-string">&quot;Alex&quot;</span>);
+    Hello.<span class="tok-function">Get</span>();
+
+    Hello.<span class="tok-function">Set</span>(<span class="tok-number">20</span>);
+    Hello.<span class="tok-function">Get</span>();
+}</code></pre></div>
+<figure class="note-figure"><a href="assets/media/fd070be1f1abf1171d.png" target="_blank" rel="noopener"><img src="assets/media/fd070be1f1abf1171d.png" alt="Иллюстрация к теме «This»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-11">explicit</h2>
+<p><code>explicit</code> - означает явное указание компилятору, что конструктор или оператор преобразования не должен использоваться для <strong>неявного</strong> (автоматического) преобразования типов, что предотвращает ошибки и неожиданное поведение</p>
+<h2 id="section-12">Правило трех и пяти</h2>
+<figure class="note-figure"><a href="assets/media/63f3448a0562065f58.png" target="_blank" rel="noopener"><img src="assets/media/63f3448a0562065f58.png" alt="Иллюстрация к теме «Правило трех и пяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/84bd2f3a25cad0f9b5.png" target="_blank" rel="noopener"><img src="assets/media/84bd2f3a25cad0f9b5.png" alt="Иллюстрация к теме «Правило трех и пяти»" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-build.html"><small>← Назад</small>Компиляция и компоновка</a><a href="cpp-operators.html"><small>Дальше →</small>Перегрузка операторов</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Инвариант объекта</a></li><li><a href="#section-2">Владение ресурсом</a></li><li><a href="#section-3">Перегрузка операторов</a></li><li><a href="#section-4">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Инвариант объекта</a></li><li><a href="#section-2">Владение ресурсом</a></li><li><a href="#section-3">Перегрузка операторов</a></li><li><a href="#section-4">Самопроверка</a></li><li><a href="#section-5">OOP</a></li><li><a href="#section-6">Абстракция</a></li><li><a href="#section-7">Инвариант</a></li><li><a href="#section-8">Class 1) Инкапсуляция</a></li><li><a href="#section-9">Деструктор</a></li><li><a href="#section-10">Указатель this</a></li><li><a href="#section-11">explicit</a></li><li><a href="#section-12">Правило трех и пяти</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

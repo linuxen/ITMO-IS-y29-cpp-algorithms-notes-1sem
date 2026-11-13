@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Теория, примеры и иллюстрации по теме.">
+<meta name="theme-color" content="#1f1f28">
+<title>Контейнеры, аллокаторы и адаптеры · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-containers.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Контейнеры, аллокаторы и адаптеры · C++ и алгоритмы">
+<meta property="og:description" content="Теория, примеры и иллюстрации по теме.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-containers.html">
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-containers"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a aria-current=page href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Контейнеры, аллокаторы и адаптеры</h1><p>Теория, примеры и иллюстрации по теме.</p></header>
+<div class="prose"><h2 id="section-1">STL. Итераторы и основные алгоритмы - II</h2>
+<figure class="note-figure"><a href="assets/media/e9fc583271199f6256.png" target="_blank" rel="noopener"><img src="assets/media/e9fc583271199f6256.png" alt="Иллюстрация к теме «STL. Итераторы и основные алгоритмы - II»" loading="lazy" decoding="async"></a></figure>
+<p>Named Requirements - это минимальные требования чтобы контейнер можно было назвать им</p>
+<figure class="note-figure"><a href="assets/media/696ad5555703d6e3e4.png" target="_blank" rel="noopener"><img src="assets/media/696ad5555703d6e3e4.png" alt="Иллюстрация к теме «STL. Итераторы и основные алгоритмы - II»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-2">Последовательные массивы</h2>
+<figure class="note-figure"><a href="assets/media/e3654aea788ea69a46.png" target="_blank" rel="noopener"><img src="assets/media/e3654aea788ea69a46.png" alt="Иллюстрация к теме «Последовательные массивы»" loading="lazy" decoding="async"></a></figure>
+<p><img src="assets/media/e285506b27a15c137a.png" alt="Иллюстрация к теме «Последовательные массивы»" />
+<img src="assets/media/a0fb0baa1d7f213381.png" alt="Иллюстрация к теме «Последовательные массивы»" />
+Требования чтобы удовлетворять STL контейнеру</p>
+<figure class="note-figure"><a href="assets/media/38d321d6a49baccf21.png" target="_blank" rel="noopener"><img src="assets/media/38d321d6a49baccf21.png" alt="Иллюстрация к теме «Последовательные массивы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-3">На деревьях</h2>
+<figure class="note-figure"><a href="assets/media/353fe37d9ead1a639f.png" target="_blank" rel="noopener"><img src="assets/media/353fe37d9ead1a639f.png" alt="Иллюстрация к теме «На деревьях»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-4">На хеш-таблицах</h2>
+<figure class="note-figure"><a href="assets/media/0a57a3850624558760.png" target="_blank" rel="noopener"><img src="assets/media/0a57a3850624558760.png" alt="Иллюстрация к теме «На хеш-таблицах»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-5">Поломка итератора</h2>
+<figure class="note-figure"><a href="assets/media/843d4235c02797c0dd.png" target="_blank" rel="noopener"><img src="assets/media/843d4235c02797c0dd.png" alt="Иллюстрация к теме «Поломка итератора»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-6">Allocator</h2>
+<figure class="note-figure"><a href="assets/media/6450b59b5260c32547.png" target="_blank" rel="noopener"><img src="assets/media/6450b59b5260c32547.png" alt="Иллюстрация к теме «Allocator»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/4fa1a332f8b80f46ed.png" target="_blank" rel="noopener"><img src="assets/media/4fa1a332f8b80f46ed.png" alt="Иллюстрация к теме «Allocator»" loading="lazy" decoding="async"></a></figure>
+<p>Аллокатор — это объект, который <strong>выделяет и освобождает память для объектов</strong>.
+Например, контейнеры STL используют его внутри:</p>
+<ul>
+<li><code>std::vector</code></li>
+<li><code>std::list</code></li>
+<li><code>std::map</code></li>
+</ul>
+<p>Он делает две основные вещи:</p>
+<ul>
+<li><strong>allocate()</strong> — выделяет память</li>
+<li><strong>deallocate()</strong> — освобождает память</li>
+</ul>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::allocator&lt;<span class="tok-type">int</span>&gt; alloc;
+    <span class="tok-type">int</span>* ptr = alloc.<span class="tok-function">allocate</span>(<span class="tok-number">5</span>);
+
+    alloc.<span class="tok-function">construct</span>(&amp;ptr[<span class="tok-number">0</span>], <span class="tok-number">10</span>);
+    alloc.<span class="tok-function">construct</span>(&amp;ptr[<span class="tok-number">1</span>], <span class="tok-number">20</span>);
+
+    std::cout &lt;&lt; ptr[<span class="tok-number">0</span>];
+    alloc.<span class="tok-function">deallocate</span>(ptr, <span class="tok-number">5</span>);
+}</code></pre></div>
+<h2 id="section-7">Адаптеры контейнеров</h2>
+<figure class="note-figure"><a href="assets/media/7b0ff8a1e88aa4883f.png" target="_blank" rel="noopener"><img src="assets/media/7b0ff8a1e88aa4883f.png" alt="Иллюстрация к теме «Адаптеры контейнеров»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-8">Адаптеры итераторов</h2>
+<figure class="note-figure"><a href="assets/media/c36478d1ce9aaa6811.png" target="_blank" rel="noopener"><img src="assets/media/c36478d1ce9aaa6811.png" alt="Иллюстрация к теме «Адаптеры итераторов»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-9">Потоковые итераторы</h2>
+<figure class="note-figure"><a href="assets/media/ab3bef65b8c3621d14.png" target="_blank" rel="noopener"><img src="assets/media/ab3bef65b8c3621d14.png" alt="Иллюстрация к теме «Потоковые итераторы»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/f2a2f5c57fa5166fea.png" target="_blank" rel="noopener"><img src="assets/media/f2a2f5c57fa5166fea.png" alt="Иллюстрация к теме «Потоковые итераторы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-10">Tag Dispatch Idiom</h2>
+<figure class="note-figure"><a href="assets/media/392ea617280c6fc79d.png" target="_blank" rel="noopener"><img src="assets/media/392ea617280c6fc79d.png" alt="Иллюстрация к теме «Tag Dispatch Idiom»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-11">iterator_traits - признаки оператора</h2>
+<p><code>std::iterator_traits</code> в C++ — это шаблонный класс-«traits» (свойство), используемый для получения информации об итераторах (тип значения, категория итератора и т.д.) внутри обобщенных алгоритмов.</p>
+<h2 id="section-12">Iterator Operation</h2>
+<figure class="note-figure"><a href="assets/media/7a6f7d7314bcda4d82.png" target="_blank" rel="noopener"><img src="assets/media/7a6f7d7314bcda4d82.png" alt="Иллюстрация к теме «Iterator Operation»" loading="lazy" decoding="async"></a></figure>
+<p>advence -  сдвинуть итератор на n ячеек вперед
+distance - разность итераторов
+next - след
+prev - пред</p>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-stl.html"><small>← Назад</small>STL, итераторы и алгоритмы</a><a href="cpp-errors.html"><small>Дальше →</small>Обработка ошибок и исключения</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">STL. Итераторы и основные алгоритмы - II</a></li><li><a href="#section-2">Последовательные массивы</a></li><li><a href="#section-3">На деревьях</a></li><li><a href="#section-4">На хеш-таблицах</a></li><li><a href="#section-5">Поломка итератора</a></li><li><a href="#section-6">Allocator</a></li><li><a href="#section-7">Адаптеры контейнеров</a></li><li><a href="#section-8">Адаптеры итераторов</a></li><li><a href="#section-9">Потоковые итераторы</a></li><li><a href="#section-10">Tag Dispatch Idiom</a></li><li><a href="#section-11">iterator_traits - признаки оператора</a></li><li><a href="#section-12">Iterator Operation</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

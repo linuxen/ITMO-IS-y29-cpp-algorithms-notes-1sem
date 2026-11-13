@@ -13,10 +13,12 @@
 <meta property="og:title" content="Указатели, ссылки, массивы и строки · C++ и алгоритмы">
 <meta property="og:description" content="Адрес объекта, передача параметров и время жизни данных.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-addresses.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-addresses"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,7 +33,7 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения и управление</a></li><li><a aria-current=page href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-storage.html">Структуры, представление и память</a></li><li><a  href="cpp-build.html">Компиляция и пространства имён</a></li><li><a  href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a aria-current=page href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>Указатели, ссылки, массивы и строки</h1><p>Адрес объекта, передача параметров и время жизни данных.</p></header>
 <div class="prose"><h2 id="section-1">Адрес и псевдоним</h2>
 <p><code>&amp;value</code> получает адрес, <code>*ptr</code> обращается к объекту по адресу. Указатель можно переназначить и проверить на <code>nullptr</code>. Ссылка <code>T&amp;</code> привязывается при инициализации. <code>const T&amp;</code> полезна для доступа без копирования через этот параметр.</p>
@@ -51,14 +53,279 @@
 <h2 id="section-2">Массивы и строки</h2>
 <p>У встроенного массива фиксированная длина, индексация начинается с нуля. В параметре <code>int a[]</code> тип корректируется до <code>int*</code>, поэтому длину передают отдельно. <code>std::array&lt;T, N&gt;</code> хранит размер в типе, <code>std::vector&lt;T&gt;</code> меняет длину, а <code>std::span&lt;T&gt;</code> (C++20) представляет непрерывный диапазон без владения им.</p>
 <p>Арифметика указателей допустима внутри одного массива и до позиции за его концом. Последнюю позицию нельзя разыменовывать. <code>sizeof(array)</code> в месте объявления даёт размер всего массива, а <code>sizeof(ptr)</code> — размер самого указателя.</p>
-<p>C-строка оканчивается <code>&#x27;\0&#x27;</code>. <code>std::string</code> владеет своей памятью и хранит длину. <code>std::string_view</code> ссылается на существующие символы. Проверяйте, что исходная строка переживает все обращения через view.</p>
+<p>C-строка оканчивается <code>'\0'</code>. <code>std::string</code> владеет своей памятью и хранит длину. <code>std::string_view</code> ссылается на существующие символы. Проверяйте, что исходная строка переживает все обращения через view.</p>
 <h2 id="section-3">Массивы и функции</h2>
 <p>В двумерном массиве <code>int table[2][3]</code> хранится два массива по три числа. При передаче функции как <code>int table[][3]</code> размер строки нужен, чтобы правильно перейти к следующей строке. Указатель на функцию <code>int (*operation)(int)</code> можно вызвать как <code>operation(5)</code>, если он указывает на функцию с соответствующей сигнатурой.</p>
 <h2 id="section-4">Самопроверка</h2>
-<p>Можно ли использовать указатель на элемент <code>vector</code> после <code>push_back</code>? Если контейнер перевыделил буфер, старый адрес становится недействительным.</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-basics.html"><small>← Назад</small>Типы, выражения и управление</a><a href="cpp-storage.html"><small>Дальше →</small>Структуры, представление и память</a></nav>
+<p>Можно ли использовать указатель на элемент <code>vector</code> после <code>push_back</code>? Если контейнер перевыделил буфер, старый адрес становится недействительным.</p>
+<h2 id="section-5">Указатели, массивы и строки</h2>
+<h2 id="section-6">Указатели</h2>
+<figure class="note-figure"><a href="assets/media/34e6d5798bd8decc48.png" target="_blank" rel="noopener"><img src="assets/media/34e6d5798bd8decc48.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">5</span>;
+    <span class="tok-type">int</span> *px = &amp;a;
+    std::cout &lt;&lt; px;
+}</code></pre></div>
+<p><code>px</code> получает адрес переменной <code>a</code>. Оператор <code>&amp;</code> берёт адрес объекта.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">5</span>;
+    <span class="tok-type">int</span> *px = &amp;a;
+    std::cout &lt;&lt; *px;
+}</code></pre></div>
+<p>выводим значение указателя px</p>
+<p><img src="assets/media/8e5189665d8d32e0b2.png" alt="Иллюстрация к теме «Указатели»" />
+<img src="assets/media/30d86a8ab2e96348a0.png" alt="Иллюстрация к теме «Указатели»" /></p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">5</span>;
+    <span class="tok-type">int</span> *px = &amp;a;
+    <span class="tok-type">int</span> *px2 = &amp;a;
+
+    std::cout &lt;&lt; *px &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+
+    *px2 = <span class="tok-number">2</span>;
+
+    std::cout &lt;&lt; a &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}</code></pre></div>
+<p>выводим сначала значение a через указатель, а потом заменяем само а через указатель px2</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">5</span>;
+    <span class="tok-type">int</span> arr[<span class="tok-number">5</span>] = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+    <span class="tok-type">int</span> *pArr = arr;
+    std::cout &lt;&lt; *(pArr+<span class="tok-number">3</span>);
+}</code></pre></div>
+<p>выводим значение 4 элемента массива через указатели</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">foo</span>(<span class="tok-type">int</span> *pa){
+    (*pa)++; <span class="tok-comment">// сначала получаем значение потом ++</span>
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">1</span>;
+    <span class="tok-function">foo</span>(&amp;a);
+    std::cout &lt;&lt; a;
+}</code></pre></div>
+<p>работа с переменной в функции</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">foo</span>(<span class="tok-type">int</span> *pa, <span class="tok-type">int</span> *px, <span class="tok-type">int</span> *pu) {
+    (*pa)++;
+    *px = <span class="tok-number">52</span>;
+    *pu = <span class="tok-number">53</span>;
+}
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">1</span>;
+    <span class="tok-type">int</span> b = <span class="tok-number">2</span>;
+    <span class="tok-type">int</span> c = <span class="tok-number">3</span>;
+    <span class="tok-function">foo</span>(&amp;a, &amp;b, &amp;c);
+    std::cout &lt;&lt; a &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; c;
+}</code></pre></div>
+<p>передача в функцию несколько значений указателей</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">foo</span>(<span class="tok-type">int</span> *pa, <span class="tok-type">int</span> *pb) {
+    <span class="tok-type">int</span> temp;
+    temp = *pb;
+    *pb = *pa;
+    *pa = temp;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">1</span>;
+    <span class="tok-type">int</span> b = <span class="tok-number">2</span>;
+    <span class="tok-function">foo</span>(&amp;a, &amp;b);
+    std::cout &lt;&lt; a &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; b;
+}</code></pre></div>
+<p>Обмен значений через указатели</p>
+<figure class="note-figure"><a href="assets/media/4b7cb3493366f91edc.png" target="_blank" rel="noopener"><img src="assets/media/4b7cb3493366f91edc.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/287d1416de94fd2d29.png" target="_blank" rel="noopener"><img src="assets/media/287d1416de94fd2d29.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/d6c64b2b54641fd72c.png" target="_blank" rel="noopener"><img src="assets/media/d6c64b2b54641fd72c.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/ce22b327a8cf225086.png" target="_blank" rel="noopener"><img src="assets/media/ce22b327a8cf225086.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/8c2a81410b66892a8a.png" target="_blank" rel="noopener"><img src="assets/media/8c2a81410b66892a8a.png" alt="Иллюстрация к теме «Указатели»" loading="lazy" decoding="async"></a></figure>
+<h3>Инкремент указателя</h3>
+<p>Указатель - переменная в которой хранится адрес переменной</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">52</span>;
+
+    <span class="tok-type">int</span>* f = &amp;a;
+    <span class="tok-type">int</span>* newf = &amp;a;
+
+    std::cout &lt;&lt; *f &lt;&lt; <span class="tok-string">&quot; &quot;</span>;
+    *newf = <span class="tok-number">53</span>;
+    std::cout &lt;&lt; *newf;
+}</code></pre></div>
+<p>указатель в функции</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">swap_1</span>(<span class="tok-type">int</span> x1,<span class="tok-type">int</span>  x2) {
+    <span class="tok-type">int</span> tmp = x2;
+    x2 = x1;
+    x1 = tmp;
+}
+
+<span class="tok-type">void</span> <span class="tok-function">swap_2</span>(<span class="tok-type">int</span> *x1,<span class="tok-type">int</span> *x2){
+    <span class="tok-type">int</span> tmp = *x2;
+    *x2 = *x1;
+    *x1 = tmp;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> x1 = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span> x2 = <span class="tok-number">1</span>;
+
+   <span class="tok-function">swap_1</span>(x1, x2);
+   std::cout &lt;&lt; x1 &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; x2;
+   std::cout &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+
+   <span class="tok-function">swap_2</span>(&amp;x1, &amp;x2);
+   std::cout &lt;&lt; x1 &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; x2;
+}</code></pre></div>
+<h3>арифметика указателей</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> arr[<span class="tok-number">5</span>] = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+    std::cout &lt;&lt; *(arr + <span class="tok-number">2</span>) &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>; <span class="tok-comment">// имя массива + двигаем указатель вправо</span>
+}</code></pre></div>
+<p>Операции над указателями на элементы массива</p>
+<ol>
+<li>Прибавление целого смещения. Если <code>a</code> указывает на элемент массива, <code>a + i</code> указывает на элемент со смещением <code>i</code> в пределах массива либо на позицию сразу за ним.</li>
+<li>Присваивание. Значение можно присвоить указателю совместимого типа.</li>
+<li>Сравнение. Указатели на элементы одного массива можно сравнивать по их позициям.</li>
+</ol>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> arr[<span class="tok-number">5</span>] = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+    <span class="tok-type">int</span> *p_1 = arr + <span class="tok-number">3</span>;
+    <span class="tok-type">int</span> *p_2 = arr;
+    <span class="tok-keyword">if</span> (p_1 &gt; p_2){
+        std::cout &lt;&lt; <span class="tok-string">&quot;OK&quot;</span>;
+    }
+}</code></pre></div>
+<ol start="4">
+<li>Разность двух указателей внутри одного массива даёт расстояние между элементами в единицах типа элемента.</li>
+</ol>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> arr[<span class="tok-number">5</span>] = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+    <span class="tok-type">int</span> *p_1 = arr + <span class="tok-number">3</span>;
+    <span class="tok-type">int</span> *p_2 = arr;
+    std::cout &lt;&lt; p_1 - p_2;
+}</code></pre></div>
+<h3>Указатель void*</h3>
+<p><code>void*</code> может хранить адрес объекта любого типа. Перед разыменованием восстановите тип указателя, соответствующий объекту.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> x = <span class="tok-number">10</span>;
+    <span class="tok-type">char</span> f = <span class="tok-string">&#x27;d&#x27;</span>;
+    <span class="tok-type">float</span> s = <span class="tok-number">10.78</span>;
+
+    <span class="tok-type">void</span>* p;
+    p = &amp;x;
+    std::cout &lt;&lt; *(<span class="tok-type">int</span>* )p &lt;&lt; <span class="tok-string">&quot; &quot;</span>;
+    p = &amp;f;
+    std::cout &lt;&lt; *(<span class="tok-type">char</span>* )p &lt;&lt; <span class="tok-string">&quot; &quot;</span>;
+    p = &amp;s;
+    std::cout &lt;&lt; *(<span class="tok-type">float</span>* )p&lt;&lt; <span class="tok-string">&quot; &quot;</span>;
+}</code></pre></div>
+<h3>Вывод строки</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-keyword">const</span> <span class="tok-type">char</span>* arr[] = {<span class="tok-string">&quot;python&quot;</span>, <span class="tok-string">&quot;java&quot;</span>, <span class="tok-string">&quot;c++&quot;</span>};
+    <span class="tok-type">int</span> size = <span class="tok-function">sizeof</span>(arr) / <span class="tok-function">sizeof</span>(arr[<span class="tok-number">0</span>]);
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++) {
+        std::cout &lt;&lt; *(arr + i) &lt;&lt; <span class="tok-string">&quot; &quot;</span>;
+   }
+}</code></pre></div>
+<h3>Указатель на функцию</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+<span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *x1,<span class="tok-type">int</span> *x2){
+    <span class="tok-type">int</span> tmp = *x2;
+    *x2 = *x1;
+    *x1 = tmp;
+}
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">void</span> (*p_swap)(<span class="tok-type">int</span>* x1, <span class="tok-type">int</span>* x2) = swap;
+    <span class="tok-type">int</span> x1 = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span> x2 = <span class="tok-number">1</span>;
+    <span class="tok-function">p_swap</span>(&amp;x1, &amp;x2);
+    std::cout &lt;&lt; x1 &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; x2;
+}</code></pre></div>
+<h3>Указатель на структуру struct</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">struct</span> ichbin {
+    <span class="tok-type">char</span> name[<span class="tok-number">100</span>];
+    <span class="tok-type">int</span> age;
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-keyword">struct</span> ichbin ADD = {<span class="tok-string">&quot;Mickhail&quot;</span>, <span class="tok-number">18</span>};
+    <span class="tok-keyword">struct</span> ichbin *p1 = &amp;ADD;
+    std::cout &lt;&lt; p1 -&gt; name; <span class="tok-comment">//доступ к элементу структуры через указатель</span>
+}</code></pre></div>
+<h2 id="section-7">Строка</h2>
+<figure class="note-figure"><a href="assets/media/e83210c10ec884ab12.png" target="_blank" rel="noopener"><img src="assets/media/e83210c10ec884ab12.png" alt="Иллюстрация к теме «Строка»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-8">Массив</h2>
+<p><img src="assets/media/d3e8826d79a5556d8b.png" alt="Иллюстрация к теме «Массив»" />
+Если элементов введено меньше чем кол-во элементов на которые задан массив пустые мечта заполняются нулями</p>
+<p>sizeof(arr) - выводит объем массива</p>
+<h2 id="section-9">static_cast, reinterpret_cast и приведение в стиле C</h2>
+<p>Это основное средство приведения типов, которое проверяется на этапе <strong>компиляции</strong>.</p>
+<ul>
+<li><strong>Что делает:</strong>
+<ul>
+<li>Преобразует связанные типы: например, <code>int</code> в <code>float</code> или <code>enum</code> в <code>int</code>.</li>
+<li>Выполняет преобразования по иерархии наследования: от производного класса к базовому (upcast) и от базового к производному (downcast).</li>
+<li><strong>Важно:</strong> При downcast (от родителя к потомку) <code>static_cast</code> не делает проверку типа во время выполнения. Если объект на самом деле не является целевым типом, возникнет неопределенное поведение.</li>
+<li>Вызывает соответствующие конструкторы или операторы преобразования.</li>
+</ul>
+</li>
+</ul>
+<p>Это низкоуровневое и потенциально опасное приведение типов.</p>
+<ul>
+<li><strong>Что делает:</strong>
+<ul>
+<li>Просто интерпретирует последовательность битов одного типа как другой тип.</li>
+<li>Обычно используется для преобразования указателя одного типа в указатель другого (например, <code>int*</code> в <code>char*</code>) или указателя в целое число и обратно.</li>
+<li><strong>Важно:</strong> Он не генерирует никакого кода для изменения данных, а лишь говорит компилятору смотреть на ту же память иначе.</li>
+<li>Не гарантирует переносимость кода между разными архитектурами.</li>
+</ul>
+</li>
+</ul>
+<p>Использование <code>(int)a</code> — это приведение типов в стиле языка C (<strong>C-style cast</strong>). В C++ оно считается плохой практикой, и вот почему:</p>
+<ol>
+<li>Скрытая логика (Все в одном)</li>
+</ol>
+<p>Когда вы пишете <code>(int)a</code>, компилятор пытается применить разные преобразования в следующем порядке, пока одно из них не сработает:</p>
+<ol>
+<li><code>const_cast</code> (убирает константность).</li>
+<li><code>static_cast</code> (логическое преобразование).</li>
+<li><code>static_cast</code> + <code>const_cast</code>.</li>
+<li><code>reinterpret_cast</code> (интерпретация битов).</li>
+</ol>
+<h2 id="section-10">Ссылки</h2>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-type">int</span> a = <span class="tok-number">1</span>;
+    <span class="tok-type">int</span> &amp;aref = a;
+    std::cout &lt;&lt; aref;
+}</code></pre></div>
+<h2 id="section-11">Двумерный массив</h2>
+<figure class="note-figure"><a href="assets/media/ddc17d172239a49b36.png" target="_blank" rel="noopener"><img src="assets/media/ddc17d172239a49b36.png" alt="Иллюстрация к теме «Двумерный массив»" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-basics.html"><small>← Назад</small>Типы, выражения, условия, циклы и функции</a><a href="cpp-random.html"><small>Дальше →</small>Генерация случайных чисел</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Адрес и псевдоним</a></li><li><a href="#section-2">Массивы и строки</a></li><li><a href="#section-3">Массивы и функции</a></li><li><a href="#section-4">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Адрес и псевдоним</a></li><li><a href="#section-2">Массивы и строки</a></li><li><a href="#section-3">Массивы и функции</a></li><li><a href="#section-4">Самопроверка</a></li><li><a href="#section-5">Указатели, массивы и строки</a></li><li><a href="#section-6">Указатели</a></li><li><a href="#section-7">Строка</a></li><li><a href="#section-8">Массив</a></li><li><a href="#section-9">static_cast, reinterpret_cast и приведение в стиле C</a></li><li><a href="#section-10">Ссылки</a></li><li><a href="#section-11">Двумерный массив</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

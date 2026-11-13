@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Теория, примеры и иллюстрации по теме.">
+<meta name="theme-color" content="#1f1f28">
+<title>Динамическая память и фрагментация · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-heap-memory.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Динамическая память и фрагментация · C++ и алгоритмы">
+<meta property="og:description" content="Теория, примеры и иллюстрации по теме.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-heap-memory.html">
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-heap-memory"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a aria-current=page href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Динамическая память и фрагментация</h1><p>Теория, примеры и иллюстрации по теме.</p></header>
+<div class="prose"><h2 id="section-1">Материалы и примеры по пунктам</h2>
+<p>При необходимости аллокатор запрашивает дополнительную память</p>
+<p>дефрагментация</p>
+<p>Объём динамической памяти ограничен ресурсами процесса</p>
+<p>После освобождения блоков между занятыми областями могут остаться свободные промежутки.</p>
+<p>(Garbage Collector) — это сборщик мусора, механизм автоматического управления памятью в программировании, который находит и освобождает ненужные объекты</p>
+<h2 id="section-2">Схемы и рукописные примеры</h2>
+<figure class="note-figure"><a href="assets/media/heap-cpp-heap-memory-1.webp" target="_blank" rel="noopener"><img src="assets/media/heap-cpp-heap-memory-1.webp" alt="Схема к теме «Динамическая память и фрагментация», часть 1" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-stack-memory.html"><small>← Назад</small>Стек вызовов</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Материалы и примеры по пунктам</a></li><li><a href="#section-2">Схемы и рукописные примеры</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

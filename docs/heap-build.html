@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Теория, примеры и иллюстрации по теме.">
+<meta name="theme-color" content="#1f1f28">
+<title>16. Построение кучи за O(n) · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/heap-build.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="16. Построение кучи за O(n) · C++ и алгоритмы">
+<meta property="og:description" content="Теория, примеры и иллюстрации по теме.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/heap-build.html">
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="heap-build"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo1">Алгоритмы · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">1–2. Оценка сложности по времени и памяти</a></li><li><a  href="sorting.html">3. Сортировка вставками</a></li><li><a  href="merge-sort.html">4. Сортировка слиянием</a></li><li><a  href="quick-sort.html">5. Быстрая сортировка</a></li><li><a  href="counting-sort.html">6. Сортировка подсчётом</a></li><li><a  href="radix-sort.html">7. Поразрядная сортировка</a></li><li><a  href="lists.html">8. Стек</a></li><li><a  href="queues.html">9. Очередь</a></li><li><a  href="singly-linked.html">10. Односвязный список</a></li><li><a  href="doubly-linked.html">11. Двусвязный список</a></li><li><a  href="circular-linked.html">12. Циклический список</a></li><li><a  href="linked-stack.html">13. Стек на списке</a></li><li><a  href="linked-queue.html">14. Очередь на списке</a></li><li><a  href="heaps.html">15. Двоичная куча и восстановление её свойств</a></li><li><a aria-current=page href="heap-build.html">16. Построение кучи за O(n)</a></li><li><a  href="heap-sort.html">17. Пирамидальная сортировка</a></li><li><a  href="heap-remove.html">18. Удаление элемента из кучи</a></li><li><a  href="priority-queue.html">19. Очередь с приоритетом</a></li><li><a  href="dp.html">20. Динамическое программирование</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a  href="coding.html">Сжатие данных и арифметическое кодирование</a></li><li><a  href="huffman.html">Кодирование Хаффмана</a></li><li><a  href="hamming.html">Код Хэмминга</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header blue"><h1>16. Построение кучи за O(n)</h1><p>Теория, примеры и иллюстрации по теме.</p></header>
+<div class="prose"><h2 id="section-1">Материалы и примеры по пунктам</h2>
+<h3>Построение пирамиды O(n)</h3>
+<figure class="note-figure"><a href="assets/media/53087b23aa784742e6.png" target="_blank" rel="noopener"><img src="assets/media/53087b23aa784742e6.png" alt="Иллюстрация к теме «16. Построение кучи за O(n)»" loading="lazy" decoding="async"></a></figure>
+<p>При просеивании спускайтесь по дереву. Когда спуск завершится, проверьте свойство кучи.</p>
+<h2 id="section-2">Схемы и рукописные примеры</h2>
+<figure class="note-figure"><a href="assets/media/algo1-heap-build-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-heap-build-1.webp" alt="Схема к теме «16. Построение кучи за O(n)», часть 1" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="heaps.html"><small>← Назад</small>15. Двоичная куча и восстановление её свойств</a><a href="heap-sort.html"><small>Дальше →</small>17. Пирамидальная сортировка</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Материалы и примеры по пунктам</a></li><li><a href="#section-2">Схемы и рукописные примеры</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Хаффман, арифметическое кодирование и исправление ошибок.">
 <meta name="theme-color" content="#1f1f28">
-<title>Сжатие и коды · C++ и алгоритмы</title>
+<title>Сжатие данных и арифметическое кодирование · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/coding.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Сжатие и коды · C++ и алгоритмы">
+<meta property="og:title" content="Сжатие данных и арифметическое кодирование · C++ и алгоритмы">
 <meta property="og:description" content="Хаффман, арифметическое кодирование и исправление ошибок.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/coding.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="coding"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,17 +33,65 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo1">Алгоритмы · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">Асимптотика и память</a></li><li><a  href="sorting.html">Сортировки</a></li><li><a  href="lists.html">Стек, очередь и списки</a></li><li><a  href="heaps.html">Двоичная куча и очередь с приоритетом</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a  href="dp.html">Динамическое программирование</a></li><li><a aria-current=page href="coding.html">Сжатие и коды</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header blue"><h1>Сжатие и коды</h1><p>Хаффман, арифметическое кодирование и исправление ошибок.</p></header>
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a  href="complexity.html">1–2. Оценка сложности по времени и памяти</a></li><li><a  href="sorting.html">3. Сортировка вставками</a></li><li><a  href="merge-sort.html">4. Сортировка слиянием</a></li><li><a  href="quick-sort.html">5. Быстрая сортировка</a></li><li><a  href="counting-sort.html">6. Сортировка подсчётом</a></li><li><a  href="radix-sort.html">7. Поразрядная сортировка</a></li><li><a  href="lists.html">8. Стек</a></li><li><a  href="queues.html">9. Очередь</a></li><li><a  href="singly-linked.html">10. Односвязный список</a></li><li><a  href="doubly-linked.html">11. Двусвязный список</a></li><li><a  href="circular-linked.html">12. Циклический список</a></li><li><a  href="linked-stack.html">13. Стек на списке</a></li><li><a  href="linked-queue.html">14. Очередь на списке</a></li><li><a  href="heaps.html">15. Двоичная куча и восстановление её свойств</a></li><li><a  href="heap-build.html">16. Построение кучи за O(n)</a></li><li><a  href="heap-sort.html">17. Пирамидальная сортировка</a></li><li><a  href="heap-remove.html">18. Удаление элемента из кучи</a></li><li><a  href="priority-queue.html">19. Очередь с приоритетом</a></li><li><a  href="dp.html">20. Динамическое программирование</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a aria-current=page href="coding.html">Сжатие данных и арифметическое кодирование</a></li><li><a  href="huffman.html">Кодирование Хаффмана</a></li><li><a  href="hamming.html">Код Хэмминга</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header blue"><h1>Сжатие данных и арифметическое кодирование</h1><p>Хаффман, арифметическое кодирование и исправление ошибок.</p></header>
 <div class="prose"><h2 id="section-1">Кодирование без потерь</h2>
 <p>Хаффман строит двоичное дерево снизу вверх: объединяет два узла с минимальными частотами, пока не останется корень. Путь от корня задаёт код символа. Ни один код листа не является префиксом другого, поэтому поток можно разбирать однозначно. Для k символов построение дерева через кучу требует O(k log k).</p>
 <p>При частотах A=5, B=2, C=1, D=1 возможен код A→1, B→00, C→010, D→011. Для декодирования нужно знать дерево или эквивалентное описание кодов.</p>
 <p>Арифметическое кодирование начинает с интервала [0, 1), а каждый символ выбирает пропорциональный вероятности подынтервал. Декодер использует ту же модель и длину сообщения или символ конца. Практические реализации используют конечную точность и нормализацию. Сжатие с потерями допускает отклонение от исходного сигнала, например при кодировании звука.</p>
 <h2 id="section-2">Код Хэмминга</h2>
-<p>Контрольные биты позволяют найти позицию одиночной ошибки по синдрому. Обычный код Хэмминга исправляет одну ошибку. Для одновременного исправления одной и надёжного обнаружения двух ошибок используют расширенный код с дополнительным битом общей чётности.</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="dp.html"><small>← Назад</small>Динамическое программирование</a></nav>
+<p>Контрольные биты позволяют найти позицию одиночной ошибки по синдрому. Обычный код Хэмминга исправляет одну ошибку. Для одновременного исправления одной и надёжного обнаружения двух ошибок используют расширенный код с дополнительным битом общей чётности.</p>
+<h2 id="section-3">Материалы и примеры по пунктам</h2>
+<h3>Кодирование</h3>
+<p>Сжатие данных — алгоритмическое (обычно обратимое)</p>
+<p>преобразование данных, производимое с целью уменьшения</p>
+<p>занимаемого ими объёма.</p>
+<p>Сжатие возможно только тогда, когда есть</p>
+<p>избыточность.</p>
+<h3>Классы сжатия</h3>
+<p>Сжатие с потерями — это такое уменьшение объёма данных, при</p>
+<p>Сжатие без потерь — это такое уменьшение объёма данных, при</p>
+<p>которых распакованный файл может отличаться от оригинала. Сжатие с</p>
+<p>котором можно восстановить их исходный вид без искажений.</p>
+<p>потерями используют при кодировании фотографий, звука и видео.</p>
+<figure class="note-figure"><a href="assets/media/0073e316746b8bbd26.png" target="_blank" rel="noopener"><img src="assets/media/0073e316746b8bbd26.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/dbb6274d3c4f84ccb6.png" target="_blank" rel="noopener"><img src="assets/media/dbb6274d3c4f84ccb6.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<p>На вход алгоритму передаются текст для кодирования и список частот</p>
+<p>встречаемости символов.</p>
+<ol>
+<li>
+<p>Рассмотрим отрезок [0; 1) на координатной прямой.</p>
+</li>
+<li>
+<p>Поставим каждому символу текста в соответствие отрезок, длина</p>
+</li>
+</ol>
+<p>которого равна частоте его появления.</p>
+<figure class="note-figure"><a href="assets/media/65bdb0cbd55d484d7d.png" target="_blank" rel="noopener"><img src="assets/media/65bdb0cbd55d484d7d.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<ol start="5">
+<li>Выберем любое число из получившегося отрезка, которое и будет</li>
+</ol>
+<p>результатом арифметического кодирования.</p>
+<figure class="note-figure"><a href="assets/media/d48844005788385821.png" target="_blank" rel="noopener"><img src="assets/media/d48844005788385821.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/7e6fc794edfb9d66be.png" target="_blank" rel="noopener"><img src="assets/media/7e6fc794edfb9d66be.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/05c7ce0f5242425479.png" target="_blank" rel="noopener"><img src="assets/media/05c7ce0f5242425479.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<h3>Недостатки:</h3>
+<p>● Нужен символ конца кодируемого/декодируемого текста ввести его с</p>
+<p>определенной частотой и по нему определять завершение алгоритма</p>
+<p>или число символов.</p>
+<p>● Знать алфавит и его частоты на стороне декодера.</p>
+<p>● Хранение вещественных чисел определенного вида 1/3 могут привести к</p>
+<p>потерям/искажениям ( из за несовершенства представления чисел с</p>
+<p>плавающей точкой в памяти компьютера).</p>
+<figure class="note-figure"><a href="assets/media/294ff99aad9255acd9.png" target="_blank" rel="noopener"><img src="assets/media/294ff99aad9255acd9.png" alt="Иллюстрация к теме «Сжатие данных и арифметическое кодирование»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-4">Схемы и рукописные примеры</h2>
+<figure class="note-figure"><a href="assets/media/algo1-coding-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-coding-1.webp" alt="Схема к теме «Сжатие данных и арифметическое кодирование», часть 1" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-coding-2.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-coding-2.webp" alt="Схема к теме «Сжатие данных и арифметическое кодирование», часть 2" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/algo1-coding-3.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-coding-3.webp" alt="Схема к теме «Сжатие данных и арифметическое кодирование», часть 3" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="bst.html"><small>← Назад</small>Двоичное дерево поиска</a><a href="huffman.html"><small>Дальше →</small>Кодирование Хаффмана</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Кодирование без потерь</a></li><li><a href="#section-2">Код Хэмминга</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Кодирование без потерь</a></li><li><a href="#section-2">Код Хэмминга</a></li><li><a href="#section-3">Материалы и примеры по пунктам</a></li><li><a href="#section-4">Схемы и рукописные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

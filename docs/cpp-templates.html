@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Обобщённые функции, классы и динамический массив.">
 <meta name="theme-color" content="#1f1f28">
-<title>Шаблоны и vector · C++ и алгоритмы</title>
+<title>Шаблоны, специализация и vector · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-templates.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Шаблоны и vector · C++ и алгоритмы">
+<meta property="og:title" content="Шаблоны, специализация и vector · C++ и алгоритмы">
 <meta property="og:description" content="Обобщённые функции, классы и динамический массив.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-templates.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-templates"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения и управление</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-storage.html">Структуры, представление и память</a></li><li><a  href="cpp-build.html">Компиляция и пространства имён</a></li><li><a  href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a aria-current=page href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Шаблоны и vector</h1><p>Обобщённые функции, классы и динамический массив.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a aria-current=page href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Шаблоны, специализация и vector</h1><p>Обобщённые функции, классы и динамический массив.</p></header>
 <div class="prose"><h2 id="section-1">Параметры шаблона</h2>
 <p><code>template &lt;typename T&gt;</code> позволяет написать одну функцию для семейства типов. <code>typename</code> и <code>class</code> взаимозаменяемы при объявлении типового параметра. Параметром может быть и значение, как размер в <code>std::array&lt;int, 4&gt;</code>. Определения шаблонов обычно видны из заголовков в точке инстанцирования.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
@@ -53,10 +55,77 @@ T <span class="tok-function">Sum</span>(<span class="tok-keyword">const</span> s
 <h2 id="section-2">Размер и ёмкость</h2>
 <p><code>size()</code> — число объектов, <code>capacity()</code> — объём выделенного места в элементах. <code>reserve(n)</code> резервирует память без добавления элементов. <code>resize(n)</code> меняет размер. Добавление в конец амортизированно O(1), вставка в середину обычно O(n), обращение по индексу O(1). При перевыделении памяти инвалидируются итераторы, ссылки и указатели на элементы.</p>
 <h2 id="section-3">Самопроверка</h2>
-<p>Выполните <code>std::vector&lt;int&gt; v; v.reserve(10);</code>. Чему равен <code>v.size()</code> и почему запись в <code>v[0]</code> пока недопустима?</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-polymorphism.html"><small>← Назад</small>Наследование и полиморфизм</a></nav>
+<p>Выполните <code>std::vector&lt;int&gt; v; v.reserve(10);</code>. Чему равен <code>v.size()</code> и почему запись в <code>v[0]</code> пока недопустима?</p>
+<h2 id="section-4">Шаблоны С++  not OOP</h2>
+<p>Избавление от перегрузки для разных типов данных</p>
+<p>Шаблоны помогают работать с разными типами данных
+Определяет целое семейство функции или классов
+&quot;Шаблонная функция&quot;</p>
+<p>class тип данных, который называется T</p>
+<figure class="note-figure"><a href="assets/media/c34fcdade2cf54c6c8.png" target="_blank" rel="noopener"><img src="assets/media/c34fcdade2cf54c6c8.png" alt="Иллюстрация к теме «Шаблоны С++  not OOP»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-5">Шаблонные могут быть</h2>
+<p>Класс, функция, метод</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">template</span> &lt;<span class="tok-keyword">typename</span> T&gt;
+<span class="tok-keyword">const</span> T&amp; <span class="tok-function">max</span>(T&amp; a, T&amp; b) {
+    <span class="tok-keyword">return</span> a &gt; b ? a : b;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-type">int</span> a = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span> b = <span class="tok-number">15</span>;
+    std::cout &lt;&lt; <span class="tok-function">max</span>(a, b);
+}</code></pre></div>
+<p><img src="assets/media/ef5a74152f82d71467.png" alt="Иллюстрация к теме «Шаблонные могут быть»" />
+Если оба параметра используют один тип T, вывод типа должен дать одинаковый результат для обоих аргументов. Тип также должен поддерживать операции из тела шаблона.</p>
+<p>Аргументом шаблона может быть вызываемый объект.</p>
+<p><img src="assets/media/0404fc42fdd2babdbd.png" alt="Иллюстрация к теме «Шаблонные могут быть»" />
+При инстанцировании компилятор подставляет аргументы шаблона и формирует конкретную специализацию.</p>
+<figure class="note-figure"><a href="assets/media/4279e9919b30ff5c53.png" target="_blank" rel="noopener"><img src="assets/media/4279e9919b30ff5c53.png" alt="Иллюстрация к теме «Шаблонные могут быть»" loading="lazy" decoding="async"></a></figure>
+<p>Инстанцирование происходит во время компиляции. Например, вызов с аргументом int может создать специализацию шаблонной функции для int.</p>
+<figure class="note-figure"><a href="assets/media/c46c479752fae04763.png" target="_blank" rel="noopener"><img src="assets/media/c46c479752fae04763.png" alt="Иллюстрация к теме «Шаблонные могут быть»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">template</span>&lt;<span class="tok-keyword">class</span> T, <span class="tok-keyword">class</span> B&gt;
+<span class="tok-type">void</span> <span class="tok-function">Swap</span>(T&amp; x, B&amp; y) {
+    std::<span class="tok-function">swap</span>(x, y);
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-type">int</span> x = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span> y = <span class="tok-number">11</span>;
+    <span class="tok-function">Swap</span>(x, y);
+    std::cout &lt;&lt; x;
+}</code></pre></div>
+<h2 id="section-6">Когда применять class и typename</h2>
+<p>В объявлении параметра типа <code>template &lt;class T&gt;</code> и <code>template &lt;typename T&gt;</code> эквивалентны.</p>
+<h2 id="section-7">Шаблон класса</h2>
+<figure class="note-figure"><a href="assets/media/b47fcc26a10f455d54.png" target="_blank" rel="noopener"><img src="assets/media/b47fcc26a10f455d54.png" alt="Иллюстрация к теме «Шаблон class»" loading="lazy" decoding="async"></a></figure>
+<p>Методы класса тоже могут быть шаблонными.</p>
+<figure class="note-figure"><a href="assets/media/42c910822139258fc4.png" target="_blank" rel="noopener"><img src="assets/media/42c910822139258fc4.png" alt="Иллюстрация к теме «Шаблон class»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/96fd67611431a8bbe0.png" target="_blank" rel="noopener"><img src="assets/media/96fd67611431a8bbe0.png" alt="Иллюстрация к теме «Шаблон class»" loading="lazy" decoding="async"></a></figure>
+<p>При выводе аргументов шаблона класса (CTAD, C++17) компилятор может вывести параметры из аргументов конструктора.</p>
+<p>Шаблоны и перегрузки поддерживают статический полиморфизм. Виртуальные методы поддерживают динамический полиморфизм.</p>
+<h2 id="section-8">Vector</h2>
+<p>Динамический массив, который сам следит за выделением памяти и может удалять добавлять</p>
+<figure class="note-figure"><a href="assets/media/b534177df3066181cb.png" target="_blank" rel="noopener"><img src="assets/media/b534177df3066181cb.png" alt="Иллюстрация к теме «Vector»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-9">Специальные шаблоны</h2>
+<p>Позволяет писать шаблонный код, но делать специальные инстанциации для конкретного типа</p>
+<p>Специализация не живёт без основного шаблона
+Полная специализация задаёт реализацию для конкретного набора аргументов шаблона.</p>
+<p>Для объявления типового параметра допустимы class и typename. Соблюдайте стиль проекта.</p>
+<p>ЧАСТИЧНАЯ СПЕЦИАЛИЗАЦИЯ</p>
+<p>Для метода класса</p>
+<p>Виды: полная полностью -  определяем все шаблонные типы
+При частичной специализации фиксируют часть параметров или задают шаблон для их формы. Например, специализация может обрабатывать все пары, первый тип которых — <code>int</code>.</p>
+<p>Умный указатель
+unique_ptr</p>
+<hr />
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-oop-principles.html"><small>← Назад</small>Четыре принципа ООП</a><a href="cpp-stack-memory.html"><small>Дальше →</small>Стек вызовов</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Параметры шаблона</a></li><li><a href="#section-2">Размер и ёмкость</a></li><li><a href="#section-3">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Параметры шаблона</a></li><li><a href="#section-2">Размер и ёмкость</a></li><li><a href="#section-3">Самопроверка</a></li><li><a href="#section-4">Шаблоны С++  not OOP</a></li><li><a href="#section-5">Шаблонные могут быть</a></li><li><a href="#section-6">Когда применять class и typename</a></li><li><a href="#section-7">Шаблон класса</a></li><li><a href="#section-8">Vector</a></li><li><a href="#section-9">Специальные шаблоны</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

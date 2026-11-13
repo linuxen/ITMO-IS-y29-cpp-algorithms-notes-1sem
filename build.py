@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Build the static handbook with Python's standard library."""
+"""Build the static C++ and algorithms handbook."""
 import argparse
 import html
 import hashlib
 import json
 import re
+import shutil
 from pathlib import Path
 from urllib.parse import urlsplit
 from xml.etree.ElementTree import Element, SubElement, tostring
+
+from markdown_it import MarkdownIt
+from markdown_it.token import Token
 
 ROOT = Path(__file__).resolve().parent
 GROUPS = [
@@ -21,6 +25,8 @@ TITLE = 'C++ и алгоритмы'
 CONFIG = json.loads((ROOT / 'site.json').read_text(encoding='utf-8'))
 REPO = CONFIG['repository']
 SITE_URL = CONFIG['url']
+AI_API_URL = CONFIG.get('ai_api_url', '').rstrip('/')
+AI_WEB = ROOT / 'ai-assistant' / 'web'
 ASSET_VERSION = ''
 DEMOS = {
     'traversal': 'BFS и DFS', 'sorting': 'Сортировки', 'linear': 'Стек и очередь',
@@ -105,60 +111,70 @@ def demo(kind, compact=False):
     </{tag}>'''
 
 
+def render_fence(tokens, index, options, env):
+    token = tokens[index]
+    lang = token.info.split()[0] if token.info.strip() else 'text'
+    source = highlight(token.content.rstrip('\n'), lang)
+    return (
+        f'<div class="code-block"><div class="code-bar">{e(lang)}'
+        '<button type="button" data-copy>Копировать</button></div>'
+        f'<pre tabindex="0"><code>{source}</code></pre></div>\n'
+    )
+
+
+def render_figure(tokens, index, options, env):
+    token = tokens[index]
+    source = e(token.attrGet('src'))
+    alt = e(token.content)
+    return (
+        f'<figure class="note-figure"><a href="{source}" target="_blank" '
+        f'rel="noopener"><img src="{source}" alt="{alt}" loading="lazy" '
+        'decoding="async"></a></figure>\n'
+    )
+
+
+MARKDOWN = MarkdownIt('commonmark', {'html': False}).enable('table')
+MARKDOWN.renderer.rules['fence'] = render_fence
+MARKDOWN.renderer.rules['note_figure'] = render_figure
+MARKDOWN.renderer.rules['interactive_demo'] = (
+    lambda tokens, index, options, env: demo(tokens[index].content)
+)
+
+
 def render(body):
-    output, headings = [], []
-    lines = iter(body.strip().splitlines())
-    for line in lines:
-        if not line.strip():
-            continue
-        if line.startswith('```'):
-            lang = line[3:].split()[0]
-            code = []
-            for row in lines:
-                if row == '```':
-                    break
-                code.append(row)
-            else:
-                raise ValueError('Unclosed code block')
-            source = highlight('\n'.join(code), lang)
-            output.append(f'<div class="code-block"><div class="code-bar">{e(lang)}<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>{source}</code></pre></div>')
-        elif line.startswith('## '):
-            heading = line[3:]
+    headings = []
+    tokens = MARKDOWN.parse(body)
+    output = []
+    index = 0
+    while index < len(tokens):
+        token = tokens[index]
+        if token.type == 'heading_open' and token.tag == 'h2':
             anchor = 'section-' + str(len(headings) + 1)
-            headings.append((anchor, heading))
-            output.append(f'<h2 id="{anchor}">{inline(heading)}</h2>')
-        elif line.startswith('!demo '):
-            output.append(demo(line[6:]))
-        elif line.startswith('| '):
-            def cells(row):
-                return [inline(cell.strip()) for cell in row.strip('|').split('|')]
-            header = ''.join(f'<th scope="col">{cell}</th>' for cell in cells(line))
-            next(lines)
-            rows = []
-            for row in lines:
-                if not row.strip():
-                    break
-                if not row.startswith('| '):
-                    raise ValueError(f'Expected table row or blank line: {row}')
-                rows.append('<tr>' + ''.join(f'<td>{cell}</td>' for cell in cells(row)) + '</tr>')
-            output.append(f'<div class="table-wrap" tabindex="0"><table><thead><tr>{header}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
-        elif line.startswith('- '):
-            items = [line[2:]]
-            for row in lines:
-                if not row.strip():
-                    break
-                if not row.startswith('- '):
-                    raise ValueError(f'Expected list item or blank line: {row}')
-                items.append(row[2:])
-            output.append('<ul>' + ''.join(f'<li>{inline(item)}</li>' for item in items) + '</ul>')
-        else:
-            output.append(f'<p>{inline(line)}</p>')
-    return '\n'.join(output), headings
+            token.attrSet('id', anchor)
+            headings.append((anchor, tokens[index + 1].content))
+        if token.type == 'paragraph_open' and tokens[index + 2].type == 'paragraph_close':
+            inline_token = tokens[index + 1]
+            if match := re.fullmatch(r'!demo ([a-z0-9-]+)', inline_token.content):
+                interactive = Token('interactive_demo', 'section', 0)
+                interactive.content = match[1]
+                output.append(interactive)
+                index += 3
+                continue
+            if len(inline_token.children or []) == 1 and inline_token.children[0].type == 'image':
+                image = inline_token.children[0]
+                image.type = 'note_figure'
+                output.append(image)
+                index += 3
+                continue
+        output.append(token)
+        index += 1
+    return MARKDOWN.renderer.render(output, MARKDOWN.options, {}), headings
 
 
 def shell(title, description, body, filename=''):
     github = f'<a class="repo" href="{e(REPO)}" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>' if REPO else ''
     url = SITE_URL + filename
+    chapter = '' if filename == 'laboratory.html' else filename.removesuffix('.html')
     return f'''<!doctype html>
 <html lang="ru">
 <head>
@@ -178,6 +194,8 @@ def shell(title, description, body, filename=''):
 <link rel="stylesheet" href="assets/site.css?v={ASSET_VERSION}">
 <script defer src="assets/site.js?v={ASSET_VERSION}" data-search-version="{ASSET_VERSION}"></script>
 <script defer src="assets/labs.js?v={ASSET_VERSION}"></script>
+<link rel="stylesheet" href="assets/assistant.css?v={ASSET_VERSION}">
+<script defer src="assets/assistant.js?v={ASSET_VERSION}" data-api-url="{e(AI_API_URL)}" data-chapter="{e(chapter)}"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -314,9 +332,12 @@ def main():
     global REPO, SITE_URL, ASSET_VERSION
     REPO = args.repo
     SITE_URL = args.site_url.rstrip('/') + '/'
-    assets = sorted((ROOT / 'assets').glob('*')) + sorted((ROOT / 'content').glob('*.md'))
+    if AI_API_URL and (urlsplit(AI_API_URL).scheme != 'https' or not urlsplit(AI_API_URL).hostname):
+        parser.error('ai_api_url must be an HTTPS URL')
+    assets = sorted((ROOT / 'assets').glob('*')) + sorted(AI_WEB.glob('*'))
+    sources = assets + sorted((ROOT / 'content').glob('*.md'))
     digest = hashlib.sha256()
-    for asset in assets:
+    for asset in sources:
         if asset.is_file():
             digest.update(asset.read_bytes())
     ASSET_VERSION = digest.hexdigest()[:12]
@@ -338,6 +359,7 @@ def main():
             write(item['slug'] + '.html', article(item, group, by_group[group[0]]))
             headings = re.findall(r'^## (.*)$', item['body'], flags=re.M)
             search = re.sub(r'```.*?```', '', item['body'], flags=re.S)
+            search = re.sub(r'!\[[^\n]*?\]\(assets/media/[^)]+\)', '', search)
             search = re.sub(r'https://[^\s)]+', '', search)
             index.append({
                 'url': item['slug'] + '.html', 'title': item['title'], 'group': group[1],
@@ -346,9 +368,12 @@ def main():
             })
     (out / 'assets').mkdir(exist_ok=True)
     write('assets/search-index.js', 'const topicIndex = ' + json.dumps(index, ensure_ascii=False) + ';\n')
-    for asset in (ROOT / 'assets').iterdir():
+    for asset in assets:
         if asset.is_file():
             (out / 'assets' / asset.name).write_bytes(asset.read_bytes())
+    media = ROOT / 'assets' / 'media'
+    if media.is_dir():
+        shutil.copytree(media, out / 'assets' / 'media', dirs_exist_ok=True)
     (out / '.nojekyll').touch()
     sitemap = Element('urlset', xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
     paths = ['', 'laboratory.html'] + [item['slug'] + '.html' for item in items]

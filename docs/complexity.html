@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Как оценивать рост времени и дополнительной памяти при увеличении входа.">
 <meta name="theme-color" content="#1f1f28">
-<title>Асимптотика и память · C++ и алгоритмы</title>
+<title>1–2. Оценка сложности по времени и памяти · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/complexity.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Асимптотика и память · C++ и алгоритмы">
+<meta property="og:title" content="1–2. Оценка сложности по времени и памяти · C++ и алгоритмы">
 <meta property="og:description" content="Как оценивать рост времени и дополнительной памяти при увеличении входа.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/complexity.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="complexity"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,18 +33,67 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#algo1">Алгоритмы · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a aria-current=page href="complexity.html">Асимптотика и память</a></li><li><a  href="sorting.html">Сортировки</a></li><li><a  href="lists.html">Стек, очередь и списки</a></li><li><a  href="heaps.html">Двоичная куча и очередь с приоритетом</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a  href="dp.html">Динамическое программирование</a></li><li><a  href="coding.html">Сжатие и коды</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header blue"><h1>Асимптотика и память</h1><p>Как оценивать рост времени и дополнительной памяти при увеличении входа.</p></header>
+<aside class="chapter-sidebar"><details open><summary>Алгоритмы · 1 семестр</summary><ul><li><a aria-current=page href="complexity.html">1–2. Оценка сложности по времени и памяти</a></li><li><a  href="sorting.html">3. Сортировка вставками</a></li><li><a  href="merge-sort.html">4. Сортировка слиянием</a></li><li><a  href="quick-sort.html">5. Быстрая сортировка</a></li><li><a  href="counting-sort.html">6. Сортировка подсчётом</a></li><li><a  href="radix-sort.html">7. Поразрядная сортировка</a></li><li><a  href="lists.html">8. Стек</a></li><li><a  href="queues.html">9. Очередь</a></li><li><a  href="singly-linked.html">10. Односвязный список</a></li><li><a  href="doubly-linked.html">11. Двусвязный список</a></li><li><a  href="circular-linked.html">12. Циклический список</a></li><li><a  href="linked-stack.html">13. Стек на списке</a></li><li><a  href="linked-queue.html">14. Очередь на списке</a></li><li><a  href="heaps.html">15. Двоичная куча и восстановление её свойств</a></li><li><a  href="heap-build.html">16. Построение кучи за O(n)</a></li><li><a  href="heap-sort.html">17. Пирамидальная сортировка</a></li><li><a  href="heap-remove.html">18. Удаление элемента из кучи</a></li><li><a  href="priority-queue.html">19. Очередь с приоритетом</a></li><li><a  href="dp.html">20. Динамическое программирование</a></li><li><a  href="bst.html">Двоичное дерево поиска</a></li><li><a  href="coding.html">Сжатие данных и арифметическое кодирование</a></li><li><a  href="huffman.html">Кодирование Хаффмана</a></li><li><a  href="hamming.html">Код Хэмминга</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header blue"><h1>1–2. Оценка сложности по времени и памяти</h1><p>Как оценивать рост времени и дополнительной памяти при увеличении входа.</p></header>
 <div class="prose"><h2 id="section-1">Порядок роста</h2>
 <p>Зафиксируйте размер входа и операцию, которую считаете. O(g(n)) ограничивает рост сверху с точностью до константы, Ω(g(n)) — снизу, Θ(g(n)) — с обеих сторон. Худший, средний и лучший случаи описывают разные функции стоимости. Оценка памяти учитывает выделенные структуры и стек вызовов. Отдельно оговаривайте, входит ли во вспомогательную память массив результата.</p>
-<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Пример</th><th scope="col">Время</th><th scope="col">Дополнительная память</th></tr></thead><tbody><tr><td>Сумма массива</td><td>Θ(n)</td><td>Θ(1)</td></tr><tr><td>Двоичный поиск в отсортированном массиве</td><td>O(log n)</td><td>O(1) в цикле</td></tr><tr><td>Просмотр всех пар</td><td>Θ(n²)</td><td>Θ(1), если пары не сохраняются</td></tr><tr><td>Сортировка слиянием</td><td>Θ(n log n)</td><td>O(n) для массива</td></tr></tbody></table></div>
+<table>
+<thead>
+<tr>
+<th>Пример</th>
+<th>Время</th>
+<th>Дополнительная память</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сумма массива</td>
+<td>Θ(n)</td>
+<td>Θ(1)</td>
+</tr>
+<tr>
+<td>Двоичный поиск в отсортированном массиве</td>
+<td>O(log n)</td>
+<td>O(1) в цикле</td>
+</tr>
+<tr>
+<td>Просмотр всех пар</td>
+<td>Θ(n²)</td>
+<td>Θ(1), если пары не сохраняются</td>
+</tr>
+<tr>
+<td>Сортировка слиянием</td>
+<td>Θ(n log n)</td>
+<td>O(n) для массива</td>
+</tr>
+</tbody>
+</table>
 <h2 id="section-2">Амортизация</h2>
 <p>Когда вектор увеличивает ёмкость в постоянное число раз, отдельная вставка может копировать или перемещать все элементы. Стоимость последовательности из n добавлений остаётся O(n) благодаря геометрической сумме. Амортизированная оценка не предполагает случайный вход.</p>
 <h2 id="section-3">Самопроверка</h2>
-<p>Внутренний цикл для каждого i от 0 до n−1 делает i шагов. Выведите сумму 0 + 1 + … + (n−1) и объясните, почему вложенные циклы здесь дают Θ(n²).</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="sorting.html"><small>Дальше →</small>Сортировки</a></nav>
+<p>Внутренний цикл для каждого i от 0 до n−1 делает i шагов. Выведите сумму 0 + 1 + … + (n−1) и объясните, почему вложенные циклы здесь дают Θ(n²).</p>
+<h2 id="section-4">Материалы и примеры по пунктам</h2>
+<h3>1. Оценка сложности по времени</h3>
+<p>Временная сложность описывает, как растёт число операций при увеличении входа. Оценка памяти описывает рост объёма выделяемых данных, включая стек рекурсии.</p>
+<h3>2. Оценка сложности по памяти</h3>
+<figure class="note-figure"><a href="assets/media/4467b1e6dd04aa00ea.png" target="_blank" rel="noopener"><img src="assets/media/4467b1e6dd04aa00ea.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/d2761e9e837912b392.png" target="_blank" rel="noopener"><img src="assets/media/d2761e9e837912b392.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/bb40c2798de2bc3f49.png" target="_blank" rel="noopener"><img src="assets/media/bb40c2798de2bc3f49.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/abbb003846f6bb0916.png" target="_blank" rel="noopener"><img src="assets/media/abbb003846f6bb0916.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/e5d9ac7c52f671006b.png" target="_blank" rel="noopener"><img src="assets/media/e5d9ac7c52f671006b.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/9d4cd61ca844319721.png" target="_blank" rel="noopener"><img src="assets/media/9d4cd61ca844319721.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/6f82b6e6f3da4df5d3.png" target="_blank" rel="noopener"><img src="assets/media/6f82b6e6f3da4df5d3.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/11c55ff4c549158ecd.png" target="_blank" rel="noopener"><img src="assets/media/11c55ff4c549158ecd.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/a3fb70847b4c494458.png" target="_blank" rel="noopener"><img src="assets/media/a3fb70847b4c494458.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/729925d14e696e17e0.png" target="_blank" rel="noopener"><img src="assets/media/729925d14e696e17e0.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/89ab0c1bdbad0477b5.png" target="_blank" rel="noopener"><img src="assets/media/89ab0c1bdbad0477b5.png" alt="Иллюстрация к теме «1–2. Оценка сложности по времени и памяти»" loading="lazy" decoding="async"></a></figure>
+<p>Алгоритм нахождения делителя</p>
+<h2 id="section-5">Схемы и рукописные примеры</h2>
+<figure class="note-figure"><a href="assets/media/algo1-complexity-1.webp" target="_blank" rel="noopener"><img src="assets/media/algo1-complexity-1.webp" alt="Схема к теме «1–2. Оценка сложности по времени и памяти», часть 1" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="sorting.html"><small>Дальше →</small>3. Сортировка вставками</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Порядок роста</a></li><li><a href="#section-2">Амортизация</a></li><li><a href="#section-3">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Порядок роста</a></li><li><a href="#section-2">Амортизация</a></li><li><a href="#section-3">Самопроверка</a></li><li><a href="#section-4">Материалы и примеры по пунктам</a></li><li><a href="#section-5">Схемы и рукописные примеры</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

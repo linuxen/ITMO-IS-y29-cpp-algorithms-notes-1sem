@@ -201,3 +201,25 @@ tbody tr:last-child td { border-bottom: 0; }
 .tok-number { color: #d27e99; }
 .tok-directive { color: #e6c384; }
 .tok-function { color: #7e9cd8; }
+
+
+.note-figure { margin: 1.15rem 0; }
+.note-figure a { display: block; width: fit-content; max-width: 100%; }
+.note-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+}
+.note-figure a:hover img { border-color: var(--blue); }
+.prose h3 { margin-top: 1.6rem; }
+.prose ol li + li, .prose ul li + li { margin-top: .35rem; }
+.prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--line);
+}
+.prose { min-width: 0; overflow-wrap: anywhere; }
+.prose table { display: block; overflow-x: auto; }

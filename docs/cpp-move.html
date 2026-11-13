@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="lvalue, prvalue, xvalue, std::move и forwarding.">
 <meta name="theme-color" content="#1f1f28">
-<title>Категории значений и перемещение · C++ и алгоритмы</title>
+<title>Категории значений и семантика перемещения · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-move.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Категории значений и перемещение · C++ и алгоритмы">
+<meta property="og:title" content="Категории значений и семантика перемещения · C++ и алгоритмы">
 <meta property="og:description" content="lvalue, prvalue, xvalue, std::move и forwarding.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-move.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-move"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a aria-current=page href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Категории значений и перемещение</h1><p>lvalue, prvalue, xvalue, std::move и forwarding.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a aria-current=page href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Категории значений и семантика перемещения</h1><p>lvalue, prvalue, xvalue, std::move и forwarding.</p></header>
 <div class="prose"><h2 id="section-1">Категории выражений</h2>
 <p><code>lvalue</code> обозначает объект с идентичностью, например именованную переменную. <code>prvalue</code> вычисляет значение, например <code>42</code> или <code>std::string{&quot;hi&quot;}</code>. <code>xvalue</code> обозначает объект, ресурсы которого можно повторно использовать, например <code>std::move(value)</code>. <code>glvalue</code> объединяет lvalue и xvalue, <code>rvalue</code> — prvalue и xvalue.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;cassert&gt;
@@ -49,10 +51,67 @@
 <p><code>std::move</code> приводит выражение к rvalue-ссылке. Решение о передаче ресурса принимает выбранный конструктор или оператор присваивания. Именованный параметр типа <code>T&amp;&amp;</code> внутри функции сам является lvalue. Стандартный объект после перемещения обычно находится в допустимом, но не уточнённом состоянии.</p>
 <p>Перемещающий конструктор часто помечают <code>noexcept</code>, если он действительно не бросает исключений. Это позволяет некоторым контейнерам перемещать элементы при росте. В идиоме copy-and-swap присваивание сначала подготавливает новый объект, затем обменивает состояния.</p>
 <h2 id="section-3">Forwarding</h2>
-<p>В контексте вывода типа параметр <code>T&amp;&amp;</code> может быть forwarding reference. <code>std::forward&lt;T&gt;(arg)</code> сохраняет исходную категорию аргумента. При свёртке ссылок сочетания с <code>&amp;</code> дают <code>&amp;</code>, а <code>&amp;&amp;</code> с <code>&amp;&amp;</code> дают <code>&amp;&amp;</code>.</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-callables.html"><small>← Назад</small>Приведения, CRTP и лямбды</a><a href="cpp-meta.html"><small>Дальше →</small>Шаблоны, concepts и variant</a></nav>
+<p>В контексте вывода типа параметр <code>T&amp;&amp;</code> может быть forwarding reference. <code>std::forward&lt;T&gt;(arg)</code> сохраняет исходную категорию аргумента. При свёртке ссылок сочетания с <code>&amp;</code> дают <code>&amp;</code>, а <code>&amp;&amp;</code> с <code>&amp;&amp;</code> дают <code>&amp;&amp;</code>.</p>
+<h2 id="section-4">Value categories &amp; Move Semantics</h2>
+<h2 id="section-5">Value categories</h2>
+<figure class="note-figure"><a href="assets/media/bf078c3ccf8c35e2f7.png" target="_blank" rel="noopener"><img src="assets/media/bf078c3ccf8c35e2f7.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
+<p><strong>Lvalue</strong> (left value, «локаторное значение») — это выражение в языках C/C++, которое ссылается на конкретную область памяти (имеет адрес) и сохраняется после завершения текущей инструкции (имеет имя). Lvalue часто находится слева от знака присваивания (<code>=</code>), что позволяет изменять хранящееся в нем значение.</p>
+<p><strong>Rvalue (right value)</strong> в C++ — это выражение, представляющее собой временное, неименованное значение, которое обычно располагается справа от оператора присваивания. В отличие от lvalue, rvalue не имеет постоянного адреса в памяти, к которому можно обратиться, и часто уничтожается сразу после использования (например, литералы <code>42</code>, временные объекты или результаты операций <code>a + b</code>).</p>
+<figure class="note-figure"><a href="assets/media/b78e0b8a1bfacd483d.png" target="_blank" rel="noopener"><img src="assets/media/b78e0b8a1bfacd483d.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/ba55ea492ccbc3f54b.png" target="_blank" rel="noopener"><img src="assets/media/ba55ea492ccbc3f54b.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/a211d0bd9fff9fd520.png" target="_blank" rel="noopener"><img src="assets/media/a211d0bd9fff9fd520.png" alt="Иллюстрация к теме «Value categories»" loading="lazy" decoding="async"></a></figure>
+<p>expression - выражения *  -  /</p>
+<p><img src="assets/media/f04011e7994ad079ba.png" alt="Иллюстрация к теме «Value categories»" />
+<img src="assets/media/6b5c70d2b3f6ebc55c.png" alt="Иллюстрация к теме «Value categories»" />
+<img src="assets/media/3d31b24dd798bc9648.png" alt="Иллюстрация к теме «Value categories»" /></p>
+<p><img src="assets/media/1b48898af764f8d934.png" alt="Иллюстрация к теме «Value categories»" />
+<img src="assets/media/182b2b329cf29ce5a8.png" alt="Иллюстрация к теме «Value categories»" />
+это объект у которого есть место в пяти но нет в нем какой-то переменной</p>
+<h2 id="section-6">Rvalue reference</h2>
+<figure class="note-figure"><a href="assets/media/bfeae17537ab4670f4.png" target="_blank" rel="noopener"><img src="assets/media/bfeae17537ab4670f4.png" alt="Иллюстрация к теме «Rvalue reference»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-comment">// Simple move constructor</span>
+<span class="tok-function">A</span>(A&amp;&amp; arg) : <span class="tok-function">member</span>(std::<span class="tok-function">move</span>(arg.member)) <span class="tok-comment">// the expression &quot;arg.member&quot; is lvalue</span>
+{}
+
+<span class="tok-comment">// Simple move assignment operator</span>
+A&amp; operator=(A&amp;&amp; other)
+{
+    member = std::<span class="tok-function">move</span>(other.member);
+    <span class="tok-keyword">return</span> *this;
+}</code></pre></div>
+<p><code>std::move</code> приводит выражение к ссылке на rvalue. Перенос ресурсов выполняет выбранный перемещающий конструктор или оператор присваивания.</p>
+<p><strong>Reference Collapsing</strong> (свертывание ссылок) в C++ — это правило, введенное в C++11, которое определяет, как компилятор обрабатывает ссылки на ссылки, возникающие в результате подстановки типов в шаблонах или использовании <code>typedef</code>/<code>using</code>.
+В C++ напрямую объявлять ссылку на ссылку (например, <code>int &amp; &amp; r;</code>) запрещено, но такие конструкции могут появляться косвенно.</p>
+<p>Возвращать rvalue-ссылку допустимо только при достаточном времени жизни объекта. Возвращение ссылки на локальный объект создаёт висячую ссылку.</p>
+<h2 id="section-7">Move constructor &amp; move assignment</h2>
+<p>std::exchenge</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-type">int</span> x = <span class="tok-number">10</span>;
+    std::<span class="tok-function">exchange</span>(x, <span class="tok-number">20</span>);
+    std::cout &lt;&lt; x;
+}</code></pre></div>
+<figure class="note-figure"><a href="assets/media/2510549788287b6b32.png" target="_blank" rel="noopener"><img src="assets/media/2510549788287b6b32.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<h3>Copy-And-Swap Idiom</h3>
+<p>В идиоме copy-and-swap оператор присваивания обменивает состояние с подготовленной копией. Для реализации обмена часто используют перемещение.</p>
+<p><img src="assets/media/00467406b990d15f9f.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" />
+<img src="assets/media/4d58410d41e15474bc.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" /></p>
+<h3>Reference collapsing</h3>
+<figure class="note-figure"><a href="assets/media/6327bf68922c21d597.png" target="_blank" rel="noopener"><img src="assets/media/6327bf68922c21d597.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<p><code>std::forward</code> — это инструмент для <strong>идеальной передачи</strong> (perfect forwarding) аргументов в шаблонах. Она позволяет передать аргумент в другую функцию, сохранив его «природу»: был ли он временным объектом (rvalue) или именованной переменной (lvalue)</p>
+<figure class="note-figure"><a href="assets/media/620dc82d1d3d8ad6cc.png" target="_blank" rel="noopener"><img src="assets/media/620dc82d1d3d8ad6cc.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-keyword">template</span> &lt;<span class="tok-keyword">typename</span> T&gt;
+<span class="tok-type">void</span> <span class="tok-function">wrapper</span>(T&amp;&amp; arg) {
+    <span class="tok-comment">// std::forward &quot;решает&quot;, вызвать move или передать как обычную ссылку</span>
+    <span class="tok-function">target_function</span>(std::forward&lt;T&gt;(arg));
+}</code></pre></div>
+<figure class="note-figure"><a href="assets/media/e441ee155a8f5eb11b.png" target="_blank" rel="noopener"><img src="assets/media/e441ee155a8f5eb11b.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/6a9186dccd4e9b56f8.png" target="_blank" rel="noopener"><img src="assets/media/6a9186dccd4e9b56f8.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/256d2e67bd6a1566b5.png" target="_blank" rel="noopener"><img src="assets/media/256d2e67bd6a1566b5.png" alt="Иллюстрация к теме «Move constructor &amp; move assignment»" loading="lazy" decoding="async"></a></figure>
+<p>Многоточие <code>...</code> обозначает пакет параметров или его раскрытие в зависимости от позиции.</p>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-lambdas.html"><small>← Назад</small>Функторы и лямбда-выражения</a><a href="cpp-variadic.html"><small>Дальше →</small>Вариативные шаблоны, variant и visit</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Категории выражений</a></li><li><a href="#section-2">Что делает std::move</a></li><li><a href="#section-3">Forwarding</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Категории выражений</a></li><li><a href="#section-2">Что делает std::move</a></li><li><a href="#section-3">Forwarding</a></li><li><a href="#section-4">Value categories &amp; Move Semantics</a></li><li><a href="#section-5">Value categories</a></li><li><a href="#section-6">Rvalue reference</a></li><li><a href="#section-7">Move constructor &amp; move assignment</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

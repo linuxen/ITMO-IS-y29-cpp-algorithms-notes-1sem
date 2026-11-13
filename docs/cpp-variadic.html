@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Теория, примеры и иллюстрации по теме.">
+<meta name="theme-color" content="#1f1f28">
+<title>Вариативные шаблоны, variant и visit · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-variadic.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Вариативные шаблоны, variant и visit · C++ и алгоритмы">
+<meta property="og:description" content="Теория, примеры и иллюстрации по теме.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-variadic.html">
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-variadic"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a  href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a aria-current=page href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Вариативные шаблоны, variant и visit</h1><p>Теория, примеры и иллюстрации по теме.</p></header>
+<div class="prose"><h2 id="section-1">Variadic template</h2>
+<p>Пакет шаблонных параметров позволяет принимать переменное число типов или значений.</p>
+<figure class="note-figure"><a href="assets/media/0da4ec2bdf7a188ffc.png" target="_blank" rel="noopener"><img src="assets/media/0da4ec2bdf7a188ffc.png" alt="Иллюстрация к теме «Variadic template»" loading="lazy" decoding="async"></a></figure>
+<p>В рекурсивном варианте отдельно обрабатывается первый аргумент, а оставшийся пакет передаётся следующему вызову.</p>
+<p>sizeof...</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-keyword">template</span>&lt;<span class="tok-keyword">typename</span>... Args&gt;
+<span class="tok-type">void</span> <span class="tok-function">printCount</span>(Args... args) {
+    <span class="tok-comment">// Возвращает количество аргументов, переданных в функцию</span>
+    std::cout &lt;&lt; sizeof...(args) &lt;&lt; std::endl;
+}</code></pre></div>
+<p><img src="assets/media/5816abc7c0c0b8df88.png" alt="Иллюстрация к теме «Variadic template»" />
+параметр пак - несколько аргументов
+sizeof... -  работает на этапе компиляции
+Выражение свёртки (fold expression) применяет бинарный оператор к элементам пакета параметров.</p>
+<figure class="note-figure"><a href="assets/media/e302054ca93b499e23.png" target="_blank" rel="noopener"><img src="assets/media/e302054ca93b499e23.png" alt="Иллюстрация к теме «Variadic template»" loading="lazy" decoding="async"></a></figure>
+<p><img src="assets/media/8f1bf93af08978914a.png" alt="Иллюстрация к теме «Variadic template»" />
+Fold expression
+Есть левый fold есть правый fold
+Бинарный и унарный</p>
+<p><a href="https://www.google.com/search?q=Comma+fold+pattern+%28%D1%81%D0%B2%D1%91%D1%80%D1%82%D0%BA%D0%B0+%D1%81+%D0%B7%D0%B0%D0%BF%D1%8F%D1%82%D0%BE%D0%B9%29&amp;oq=Comma+fold+pattern+%D0%B2+%D1%81%2B%2B&amp;gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTM2ODlqMGoxNagCCLACAQ&amp;sourceid=chrome&amp;ie=UTF-8&amp;mstk=AUtExfB1gmvbMefh-VFTHkGNcuR4hVRDQ7Nxcyg0_a0VQPzQIifsk6EvHfb7u6KRaUHk976Nn3S7QUdM-DtNycI7fFKvu_auWSD3Wx0GDthzsNpgWwtW_X54X9Moq4Konlw0vu7dNiNeRUt4N_-FTaQkHT5eCr_1TZ72o_70unjqWqqgkug&amp;csui=3&amp;ved=2ahUKEwi90ueS6ISUAxUEhf0HHdHDPdgQgK4QegQIARAB">Comma fold pattern (свёртка с запятой)</a> — это синтаксис C++17, использующий Fold Expressions (свёртку пакетов параметров). Он позволяет применять действие к каждому элементу variadic-шаблона, используя оператор запятая (<code>,</code>) для последовательного выполнения операций. Формат <code>(..., действие(аргументы))</code> выполняет все действия по порядку</p>
+<p>Правила ввода типов -&gt; компилятор сам умеет выводить типы</p>
+<h2 id="section-2">std::variant</h2>
+<figure class="note-figure"><a href="assets/media/d4c82ccfe25c5f2b8d.png" target="_blank" rel="noopener"><img src="assets/media/d4c82ccfe25c5f2b8d.png" alt="Иллюстрация к теме «std::variant»" loading="lazy" decoding="async"></a></figure>
+<p><strong><a href="https://www.google.com/search?q=std%3A%3Avariant&amp;sca_esv=1cd8785de84224e8&amp;biw=1536&amp;bih=695&amp;sxsrf=ANbL-n7GA_vv6jBpLz0wlzz1S2EX5QdFhw%3A1776976256580&amp;ei=gIHqaeaKI_iP9u8P8sbOuAk&amp;ved=2ahUKEwihteu36ISUAxX3_7sIHfPOLUkQgK4QegQIARAB&amp;uact=5&amp;oq=std%3A%3Avariant+%D1%81%2B%2B+%D1%87%D1%82%D0%BE+%D1%8D%D1%82%D0%BE+&amp;gs_lp=Egxnd3Mtd2l6LXNlcnAiIHN0ZDo6dmFyaWFudCDRgSsrINGH0YLQviDRjdGC0L4gSIkjUF9YmyFwAXgBkAEBmAGVBKAB5QqqAQkwLjQuMS41LTG4AQPIAQD4AQGYAgGgAgzCAgoQABiwAxjWBBhHmAMAiAYBkAYIkgcBMaAHjgKyBwC4BwDCBwMzLTHIBwqACAA&amp;sclient=gws-wiz-serp&amp;mstk=AUtExfCY_CUzprJasBmz48vZtfdd2CeY1ljz2F6cP-rAVvBVfjSU_zmvJ3z9wzNzkQ1VCWv4pD96v_RjbxKJdTt0MyuUdRTMd5FaWOByyQG_HFALMpbmXg_6Z82RZXxWpwA3rp8N0qwlnXDMGe_2lUb1VX0QLuP0Ls83_vWb13lwR9UWXZbAuq8O9M5OAE15crZ9fpgI&amp;csui=3">std::variant</a></strong> — это типобезопасный аналог объединения (<code>union</code>) из C, представленный в <strong>C++17</strong>. Он хранит в одной переменной значение одного типа из заданного набора. Variant знает, какой тип данных в нем хранится, обеспечивая безопасный доступ и предотвращая ошибки, связанные с неправильной интерпретацией данных, типичные для <code>union</code>.</p>
+<p><code>std::variant</code> — это переменная “один из этих типов”.</p>
+<p>Строго типизированный юнион</p>
+<h2 id="section-3"><code>std::visit</code></h2>
+<p>— это способ безопасно обработать значение, которое лежит внутри std::variant</p>
+<p>То есть <code>visit</code> как будто говорит:   <strong>“посмотри, какой тип сейчас внутри variant, и передай его в эту функцию”</strong></p>
+<p><img src="assets/media/8c0c00fd27b5a814d6.png" alt="Иллюстрация к теме «std::visit»" />
+Пример CRTP Это enebled_shared from this</p>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-move.html"><small>← Назад</small>Категории значений и семантика перемещения</a><a href="cpp-meta.html"><small>Дальше →</small>Метапрограммирование и концепты</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Variadic template</a></li><li><a href="#section-2">std::variant</a></li><li><a href="#section-3">`std::visit`</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

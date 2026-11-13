@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="От первой программы до функций, областей видимости и ввода данных.">
 <meta name="theme-color" content="#1f1f28">
-<title>Типы, выражения и управление · C++ и алгоритмы</title>
+<title>Типы, выражения, условия, циклы и функции · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-basics.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Типы, выражения и управление · C++ и алгоритмы">
+<meta property="og:title" content="Типы, выражения, условия, циклы и функции · C++ и алгоритмы">
 <meta property="og:description" content="От первой программы до функций, областей видимости и ввода данных.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-basics.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-basics"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a aria-current=page href="cpp-basics.html">Типы, выражения и управление</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-storage.html">Структуры, представление и память</a></li><li><a  href="cpp-build.html">Компиляция и пространства имён</a></li><li><a  href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Типы, выражения и управление</h1><p>От первой программы до функций, областей видимости и ввода данных.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a aria-current=page href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Типы, выражения, условия, циклы и функции</h1><p>От первой программы до функций, областей видимости и ввода данных.</p></header>
 <div class="prose"><h2 id="section-1">Первая программа</h2>
 <p>Функция <code>main</code> — точка входа. Оператор <code>&gt;&gt;</code> читает значение из потока, а <code>&lt;&lt;</code> отправляет его в поток вывода. Проверка <code>std::cin</code> позволяет заметить неверный ввод или конец файла.</p>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
@@ -45,15 +47,271 @@
     std::cout &lt;&lt; (score &gt;= <span class="tok-number">60</span> ? <span class="tok-string">&quot;pass&quot;</span> : <span class="tok-string">&quot;retry&quot;</span>) &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
 }</code></pre></div>
 <h2 id="section-2">Как выбрать тип</h2>
-<ul><li><code>bool</code> хранит логическое значение, <code>char</code> — символ или небольшое целое, <code>int</code> — целое, <code>double</code> — число с плавающей точкой. Размер <code>int</code> зависит от платформы. Для точной разрядности есть типы вроде <code>std::int32_t</code> из <code>&lt;cstdint&gt;</code>, когда реализация их предоставляет.</li><li><code>unsigned</code> считает по модулю 2ⁿ. Переполнение знакового целого при вычислении — неопределённое поведение. Смешение знаковых и беззнаковых значений может изменить результат сравнения.</li><li><code>42</code>, <code>052</code>, <code>0x2A</code> и <code>0b101010</code> задают одно число в десятичной, восьмеричной, шестнадцатеричной и двоичной системах. <code>&#x27;A&#x27;</code> — символ, <code>&quot;A&quot;</code> — массив символов с завершающим нулём, <code>&#x27;\n&#x27;</code> — перевод строки.</li><li>Деление <code>5 / 2</code> даёт <code>2</code>. Дробный результат можно получить через <code>static_cast&lt;double&gt;(5) / 2</code>. Инициализация фигурными скобками выявляет сужающие преобразования вроде <code>int n{3.5}</code> на этапе компиляции.</li></ul>
+<ul>
+<li><code>bool</code> хранит логическое значение, <code>char</code> — символ или небольшое целое, <code>int</code> — целое, <code>double</code> — число с плавающей точкой. Размер <code>int</code> зависит от платформы. Для точной разрядности есть типы вроде <code>std::int32_t</code> из <code>&lt;cstdint&gt;</code>, когда реализация их предоставляет.</li>
+<li><code>unsigned</code> считает по модулю 2ⁿ. Переполнение знакового целого при вычислении — неопределённое поведение. Смешение знаковых и беззнаковых значений может изменить результат сравнения.</li>
+<li><code>42</code>, <code>052</code>, <code>0x2A</code> и <code>0b101010</code> задают одно число в десятичной, восьмеричной, шестнадцатеричной и двоичной системах. <code>'A'</code> — символ, <code>&quot;A&quot;</code> — массив символов с завершающим нулём, <code>'\n'</code> — перевод строки.</li>
+<li>Деление <code>5 / 2</code> даёт <code>2</code>. Дробный результат можно получить через <code>static_cast&lt;double&gt;(5) / 2</code>. Инициализация фигурными скобками выявляет сужающие преобразования вроде <code>int n{3.5}</code> на этапе компиляции.</li>
+</ul>
 <h2 id="section-3">Условия, циклы, функции</h2>
 <p><code>if</code> выбирает ветку по условию. <code>switch</code> сравнивает целое или перечисление с константами, <code>break</code> завершает ветку. <code>for</code> удобен для диапазона с понятными границами, <code>while</code> — когда следующая итерация зависит от состояния.</p>
 <p>Объявление <code>int Square(int x);</code> сообщает компилятору сигнатуру, определение содержит тело. Перегрузки различаются параметрами. Имена видны в своей области видимости, а локальная переменная с тем же именем скрывает внешнюю.</p>
 <h2 id="section-4">Самопроверка</h2>
-<p>Что выведет <code>5 / 2</code> и почему? Сколько раз отработает тело <code>for (int i = 0; i &lt; 3; ++i)</code>? Что изменится при <code>i &lt;= 3</code>?</p></div>
+<p>Что выведет <code>5 / 2</code> и почему? Сколько раз отработает тело <code>for (int i = 0; i &lt; 3; ++i)</code>? Что изменится при <code>i &lt;= 3</code>?</p>
+<h2 id="section-5">Типы данных, идентификаторы, операторы, операторы ветвления, циклы, функции</h2>
+<h2 id="section-6">Code Style</h2>
+<p><a href="https://github.com/is-itmo-c-25/cpp-coding-guidelines">https://github.com/is-itmo-c-25/cpp-coding-guidelines</a></p>
+<h2 id="section-7">Встроенные типы данных</h2>
+<figure class="note-figure"><a href="assets/media/cc40caa5ce3714e17d.png" target="_blank" rel="noopener"><img src="assets/media/cc40caa5ce3714e17d.png" alt="Иллюстрация к теме «Встроенные типы данных»" loading="lazy" decoding="async"></a></figure>
+<p>nullptr_t</p>
+<p>На распространённых 32- и 64-разрядных платформах <code>int</code> занимает 4 байта. Стандарт допускает другие размеры. На конкретной платформе используйте <code>sizeof(int)</code>.</p>
+<h2 id="section-8">Модификаторы</h2>
+<ul>
+<li>signed</li>
+<li>unsigned</li>
+</ul>
+<p><code>signed</code> допускает отрицательные значения.
+<code>unsigned</code> хранит неотрицательные значения.</p>
+<p>Заголовок <code>&lt;cstdint&gt;</code> предоставляет целые типы фиксированной ширины, если платформа их поддерживает.
+<code>std::int8_t</code> — знаковый 8-битный тип, <code>std::uint8_t</code> — беззнаковый 8-битный тип.</p>
+<figure class="note-figure"><a href="assets/media/fe05dde6b2895bba35.png" target="_blank" rel="noopener"><img src="assets/media/fe05dde6b2895bba35.png" alt="Иллюстрация к теме «Модификаторы»" loading="lazy" decoding="async"></a></figure>
+<p><code>int b = 0242;</code> — восьмеричный литерал.
+<code>int c = 0x16;</code> — шестнадцатеричный литерал.
+<code>int z = 0b101;</code> — двоичный литерал.</p>
+<p>В дополнительном коде старший бит отрицательного значения равен 1. Чтобы получить запись числа −x в фиксированной разрядности, инвертируйте биты x и прибавьте 1.</p>
+<p>Сложение и вычитание обычно имеют сопоставимую стоимость. Выбирайте операцию по смыслу и проверяйте производительность измерениями.</p>
+<p><strong>Соглашение о стиле.</strong> Объявляйте каждую переменную на своей строке.</p>
+<h2 id="section-9">Целочисленные литералы</h2>
+<figure class="note-figure"><a href="assets/media/5173126c232d695463.png" target="_blank" rel="noopener"><img src="assets/media/5173126c232d695463.png" alt="Иллюстрация к теме «Целочисленные литералы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-10">Вещественные литералы</h2>
+<figure class="note-figure"><a href="assets/media/3765980c5b4abbce70.png" target="_blank" rel="noopener"><img src="assets/media/3765980c5b4abbce70.png" alt="Иллюстрация к теме «Вещественные литералы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-11">Представление чисел в памяти</h2>
+<figure class="note-figure"><a href="assets/media/9a08e43a1f23476d43.png" target="_blank" rel="noopener"><img src="assets/media/9a08e43a1f23476d43.png" alt="Иллюстрация к теме «Представление чисел в памяти»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-12">Управляющие последовательности и символьные литералы</h2>
+<figure class="note-figure"><a href="assets/media/b27156344eec18c3a1.png" target="_blank" rel="noopener"><img src="assets/media/b27156344eec18c3a1.png" alt="Иллюстрация к теме «Управляющие последовательности и символьные литералы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-13">Строковые литералы</h2>
+<figure class="note-figure"><a href="assets/media/95a7216bc47e46150b.png" target="_blank" rel="noopener"><img src="assets/media/95a7216bc47e46150b.png" alt="Иллюстрация к теме «Строковые литералы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-14">Enum (перечислимый тип)</h2>
+<ul>
+<li>Перечисляемый тип</li>
+</ul>
+<h3>Перечисление и структура</h3>
+<p><code>Enum</code> (перечисление) — это пользовательский тип данных, который представляет собой набор именованных констант, тогда как <code>struct</code> (структура) — это пользовательский тип данных, который может содержать несколько полей разных типов данных одновременно. Ключевое отличие заключается в назначении: <code>enum</code> используется для выбора из фиксированного набора взаимоисключающих вариантов, а <code>struct</code> — для группировки нескольких связанных полей в одну сущность</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+enum hello {
+	OFF = <span class="tok-number">0</span>,
+	ON = <span class="tok-number">1</span>,
+	SLEEP = -<span class="tok-number">1</span>
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+std::cout &lt;&lt; hello::OFF;
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+enum helloPC {
+НОРМ,
+ГРЕЮСЬ,
+ГОРЮ
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+std::cout &lt;&lt; helloPC::ГРЕЮСЬ;
+}</code></pre></div>
+<p><strong>Пример ошибки компиляции.</strong> В перечислении каждый элемент должен иметь имя. Для явного значения используйте запись вида <code>ГОРЮ = 15</code>.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+enum helloPC {
+НОРМ,
+ГРЕЮСЬ,
+<span class="tok-number">15</span>  <span class="tok-comment">// WARNING!!!!!</span>
+};
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+std::cout &lt;&lt; helloPC::ГРЕЮСЬ;
+}</code></pre></div>
+<h2 id="section-15">Объявления и определения функций</h2>
+<figure class="note-figure"><a href="assets/media/083ca7595e8eafe134.png" target="_blank" rel="noopener"><img src="assets/media/083ca7595e8eafe134.png" alt="Иллюстрация к теме «Функции. declarations &amp; deﬁnitions»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-16">Преобразования типов</h2>
+<p>Неявные преобразования
+▫ Если какой-либо из операндов принадлежит типу long double, то и другой
+приводится к long double.
+▫ В противном случае, если какой-либо из операндов принадлежит типу
+double, то и другой приводится к double.
+▫ В противном случае, если какой-либо из операндов принадлежит типу float,
+то и другой приводится к float.
+▫ В противном случае операнды типов char и short приводятся к int.
+▫ И наконец, если один из операндов типа long, то и другой приводится к long.
+• Явное преобразование
+(c-style cast) (тип) переменная</p>
+<h2 id="section-17">sizeof</h2>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+std::cout &lt;&lt; <span class="tok-function">sizeof</span>(<span class="tok-type">int</span>);
+}
+
+<span class="tok-comment">// output 4</span></code></pre></div>
+<h2 id="section-18">Символы в с++ и что они значат</h2>
+<p><img src="assets/media/117f692dd3347ca61f.png" alt="Иллюстрация к теме «Символы в с++ и что они значат»" />
+<img src="assets/media/0c8eb75d10fc28c357.png" alt="Иллюстрация к теме «Символы в с++ и что они значат»" /></p>
+<h2 id="section-19">Функции</h2>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">foo</span>(){
+    std::cout &lt;&lt; <span class="tok-string">&quot;Hello foo&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}
+<span class="tok-type">int</span> <span class="tok-function">Sum</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b){
+    <span class="tok-type">int</span> result = a+b;
+    <span class="tok-keyword">return</span> result;
+}
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+
+    <span class="tok-function">foo</span>();
+    <span class="tok-type">int</span> c = <span class="tok-function">Sum</span>(<span class="tok-number">1</span>, <span class="tok-number">1</span>);
+    std::cout &lt;&lt; c;
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">foo</span>(){
+    std::cout &lt;&lt; <span class="tok-string">&quot;Hello foo&quot;</span> &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">Sum</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b){
+    <span class="tok-keyword">return</span> a+b;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-function">foo</span>();
+    std:: cout &lt;&lt; <span class="tok-function">Sum</span>(<span class="tok-number">1</span>, <span class="tok-number">1</span>);
+}</code></pre></div>
+<h3>Передача массива в функцию</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+ <span class="tok-type">void</span> <span class="tok-function">Array</span>(<span class="tok-type">int</span> arr[], <span class="tok-keyword">const</span> <span class="tok-type">int</span> size){
+    <span class="tok-function">srand</span>(<span class="tok-function">time</span>(NULL));
+    <span class="tok-type">int</span> random = <span class="tok-function">rand</span>()%<span class="tok-number">10</span>;
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++) {
+        arr[i] = random;
+    }
+}
+
+<span class="tok-type">void</span> <span class="tok-function">PrintArr</span>(<span class="tok-type">int</span> arr[], <span class="tok-keyword">const</span> <span class="tok-type">int</span> size) {
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++){
+        std::cout &lt;&lt; arr[i];
+    }
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-keyword">const</span> <span class="tok-type">int</span> size = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span> arr[size];
+    <span class="tok-function">Array</span>(arr, size);
+    <span class="tok-function">PrintArr</span>(arr, size);
+}</code></pre></div>
+<h3>Предварительное объявление функции</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">void</span> <span class="tok-function">Array</span>(<span class="tok-type">int</span> arr[], <span class="tok-keyword">const</span> <span class="tok-type">int</span> size);
+<span class="tok-type">void</span> <span class="tok-function">PrintArr</span>(<span class="tok-type">int</span> arr[], <span class="tok-keyword">const</span> <span class="tok-type">int</span> size);
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-keyword">const</span> <span class="tok-type">int</span> size = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span> arr[size];
+    <span class="tok-function">Array</span>(arr, size);
+    <span class="tok-function">PrintArr</span>(arr, size);
+}
+
+<span class="tok-type">void</span> <span class="tok-function">Array</span>(<span class="tok-type">int</span> arr[], <span class="tok-keyword">const</span> <span class="tok-type">int</span> size){
+    <span class="tok-function">srand</span>(<span class="tok-function">time</span>(NULL));
+    <span class="tok-type">int</span> random = <span class="tok-function">rand</span>();
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++) {
+        arr[i] = random;
+    }
+}
+
+<span class="tok-type">void</span> <span class="tok-function">PrintArr</span>(<span class="tok-type">int</span> arr[], <span class="tok-keyword">const</span> <span class="tok-type">int</span> size) {
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = <span class="tok-number">0</span>; i &lt; size; i++){
+        std::cout &lt;&lt; arr[i];
+    }
+}</code></pre></div>
+<h2 id="section-20">Сокрытие имён внешней области видимости</h2>
+<p>Затенение внешних переменных (или переменная-затенение) — это ситуация в программировании, когда переменная во внутренней области видимости объявляется с тем же именем, что и переменная во внешней, глобальной области видимости</p>
+<h2 id="section-21">Тернарный оператор</h2>
+<p>b_5 = (x &gt; 10) ? (10) : (5);</p>
+<p>1 условие 2 и 3 да или нет</p>
+<h2 id="section-22">Примеры управляющих конструкций</h2>
+<p>sizeof(int) - размер инта</p>
+<p>enum можно засунуть в switch</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    enum Color {
+        Red,
+        Green,
+        Blue
+    };
+    Color color = Color::Red;
+    <span class="tok-function">switch</span> (color)
+    {
+    case Color::Red:
+        std::cout &lt;&lt; <span class="tok-string">&quot;Ok&quot;</span>&lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+        break;
+    default:
+        break;
+    }
+	}</code></pre></div>
+<p>Функция</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">blala</span>(u_int64_t a) {
+    <span class="tok-type">int</span> result;
+    result = a * a;
+    <span class="tok-keyword">return</span> result;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span> () {
+    std::cout &lt;&lt; <span class="tok-function">blala</span>(<span class="tok-number">7</span>) &lt;&lt; <span class="tok-string">&quot;\n&quot;</span>;
+}</code></pre></div>
+<p>Рекурсия факториала</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">factorial</span>(u_int64_t n) {
+    <span class="tok-keyword">if</span> (n == <span class="tok-number">0</span>){
+        <span class="tok-keyword">return</span> <span class="tok-number">1</span>;
+    }
+    <span class="tok-keyword">return</span> n * <span class="tok-function">factorial</span>(n - <span class="tok-number">1</span>);
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span> () {
+    std::cout &lt;&lt; <span class="tok-function">factorial</span>(<span class="tok-number">3</span>) &lt;&lt; <span class="tok-string">&quot;\n&quot;</span>;
+}</code></pre></div>
+<p>Указатели и место в памяти</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span> () {
+    <span class="tok-type">int</span> x = <span class="tok-number">10</span>;
+    <span class="tok-type">int</span>* x_ptr = &amp;x;
+    std::cout &lt;&lt; *x_ptr &lt;&lt; <span class="tok-string">&quot; &quot;</span> &lt;&lt; &amp;x &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}</code></pre></div>
+<p>&amp;x - место в памяти для переменной x
+*x_ptr - указатель на x который выодит число на экран</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span> () {
+    <span class="tok-type">int</span> arr[<span class="tok-number">10</span>];
+
+    std::cout &lt;&lt; &amp;arr &lt;&lt; <span class="tok-string">&#x27;\n&#x27;</span>;
+}</code></pre></div>
+<p>указатель на массив хранит адрес его первого символа</p>
+<p><strong>Каков размер указателя?</strong> На многих 64-разрядных платформах он равен 8 байтам. Размер зависит от платформы и типа указателя.</p>
+<h2 id="section-23">Вложенные циклы</h2>
+<p><img src="assets/media/ae423d64f3378b64a4.png" alt="Иллюстрация к теме «Вложенные циклы»" />
+<img src="assets/media/3b5d8cf08e6a68315f.png" alt="Иллюстрация к теме «Вложенные циклы»" /></p>
+</div>
 <nav class="adjacent" aria-label="Соседние главы"><a href="cpp-addresses.html"><small>Дальше →</small>Указатели, ссылки, массивы и строки</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Первая программа</a></li><li><a href="#section-2">Как выбрать тип</a></li><li><a href="#section-3">Условия, циклы, функции</a></li><li><a href="#section-4">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Первая программа</a></li><li><a href="#section-2">Как выбрать тип</a></li><li><a href="#section-3">Условия, циклы, функции</a></li><li><a href="#section-4">Самопроверка</a></li><li><a href="#section-5">Типы данных, идентификаторы, операторы, операторы ветвления, циклы, функции</a></li><li><a href="#section-6">Code Style</a></li><li><a href="#section-7">Встроенные типы данных</a></li><li><a href="#section-8">Модификаторы</a></li><li><a href="#section-9">Целочисленные литералы</a></li><li><a href="#section-10">Вещественные литералы</a></li><li><a href="#section-11">Представление чисел в памяти</a></li><li><a href="#section-12">Управляющие последовательности и символьные литералы</a></li><li><a href="#section-13">Строковые литералы</a></li><li><a href="#section-14">Enum (перечислимый тип)</a></li><li><a href="#section-15">Объявления и определения функций</a></li><li><a href="#section-16">Преобразования типов</a></li><li><a href="#section-17">sizeof</a></li><li><a href="#section-18">Символы в с++ и что они значат</a></li><li><a href="#section-19">Функции</a></li><li><a href="#section-20">Сокрытие имён внешней области видимости</a></li><li><a href="#section-21">Тернарный оператор</a></li><li><a href="#section-22">Примеры управляющих конструкций</a></li><li><a href="#section-23">Вложенные циклы</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

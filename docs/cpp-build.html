@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Как из нескольких файлов получается одна программа.">
 <meta name="theme-color" content="#1f1f28">
-<title>Компиляция и пространства имён · C++ и алгоритмы</title>
+<title>Компиляция и компоновка · C++ и алгоритмы</title>
 <link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-build.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Первый курс · ИТМО ИС">
-<meta property="og:title" content="Компиляция и пространства имён · C++ и алгоритмы">
+<meta property="og:title" content="Компиляция и компоновка · C++ и алгоритмы">
 <meta property="og:description" content="Как из нескольких файлов получается одна программа.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-build.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-build"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,8 +33,8 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения и управление</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-storage.html">Структуры, представление и память</a></li><li><a aria-current=page href="cpp-build.html">Компиляция и пространства имён</a></li><li><a  href="cpp-oop.html">Классы, инварианты и RAII</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-templates.html">Шаблоны и vector</a></li></ul></details></aside>
-<article class="reading"><header class="chapter-header green"><h1>Компиляция и пространства имён</h1><p>Как из нескольких файлов получается одна программа.</p></header>
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a  href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a aria-current=page href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Компиляция и компоновка</h1><p>Как из нескольких файлов получается одна программа.</p></header>
 <div class="prose"><h2 id="section-1">Этапы сборки</h2>
 <p>Препроцессор обрабатывает <code>#include</code> и условные директивы. Компилятор переводит каждую единицу трансляции в объектный код, а компоновщик объединяет объектные файлы и библиотеки. Сообщение об отсутствии объявления обычно появляется при компиляции, <code>undefined reference</code> — при компоновке.</p>
 <div class="code-block"><div class="code-bar">sh<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code>c++ -std=c++20 -Wall -Wextra -c main.cpp -o main.o
@@ -50,10 +52,82 @@ c++ main.o calculator.o -o calculator</code></pre></div>
 <span class="tok-directive">#endif</span></code></pre></div>
 <p>Пространство имён позволяет обратиться к функции как <code>calc::Add</code>. Для функций и переменных на уровне пространства имён <code>static</code> даёт внутреннюю линковку. <code>extern int counter;</code> без инициализатора объявляет переменную, определение которой может быть в другом файле. У локальной переменной <code>static</code> меняет время хранения. <code>mutable</code> позволяет изменять конкретное поле через <code>const</code>-объект, например счётчик попаданий в кеш.</p>
 <h2 id="section-3">Самопроверка</h2>
-<p>Один заголовок с обычным определением функции включили в два <code>.cpp</code>. Какой инструмент заметит конфликт определений? Что изменится, если в заголовке оставить только объявление?</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-storage.html"><small>← Назад</small>Структуры, представление и память</a><a href="cpp-oop.html"><small>Дальше →</small>Классы, инварианты и RAII</a></nav>
+<p>Один заголовок с обычным определением функции включили в два <code>.cpp</code>. Какой инструмент заметит конфликт определений? Что изменится, если в заголовке оставить только объявление?</p>
+<h2 id="section-4">Компиляция</h2>
+<p><code>time g++ main.cpp</code> измеряет время компиляции и компоновки. Чтобы измерить запуск программы, примените <code>time</code> к исполняемому файлу.
+Много файлов хорошо</p>
+<figure class="note-figure"><a href="assets/media/027a8331c057202a71.png" target="_blank" rel="noopener"><img src="assets/media/027a8331c057202a71.png" alt="Иллюстрация к теме «Компиляция»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-5">Этапы трансляции</h2>
+<figure class="note-figure"><a href="assets/media/640115ab2c40867007.png" target="_blank" rel="noopener"><img src="assets/media/640115ab2c40867007.png" alt="Иллюстрация к теме «Этапы трансляции»" loading="lazy" decoding="async"></a></figure>
+<p>Препроцессор - собирает все a.h b.h относящиеся к файлу a.cpp  и собирает их в столбики
+Компилятор- собирает все столбики в а.о
+Линковщик - линкует в а.ехе</p>
+<p>Можно вызывать этапы отдельно</p>
+<figure class="note-figure"><a href="assets/media/70b265b47044a088bd.png" target="_blank" rel="noopener"><img src="assets/media/70b265b47044a088bd.png" alt="Иллюстрация к теме «Этапы трансляции»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-6">Объявление и определение</h2>
+<p>Declaration - объявление int add(&amp;a);
+Definition - логика описание</p>
+<figure class="note-figure"><a href="assets/media/29a14899ebd6be8d0e.png" target="_blank" rel="noopener"><img src="assets/media/29a14899ebd6be8d0e.png" alt="Иллюстрация к теме «Объявление и определение»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-7">Заголовочный файл</h2>
+<p>Может содержать declaration definition объявление переменных структур и const</p>
+<p>должен содержать pragma once -  это директива препроцессора в C++, которая гарантирует, что заголовочный файл будет включен только один раз во время компиляции</p>
+<h2 id="section-8">Препроцессор</h2>
+<p>Язык препроцессора - специальный ЯП встроенный в с++</p>
+<p>У него есть директивы
+Обозначаются #
+include &lt;&gt; или &quot;&quot;</p>
+<figure class="note-figure"><a href="assets/media/351cef5ee65290ca34.png" target="_blank" rel="noopener"><img src="assets/media/351cef5ee65290ca34.png" alt="Иллюстрация к теме «Препроцессор»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/97eb97e3838bd9fc59.png" target="_blank" rel="noopener"><img src="assets/media/97eb97e3838bd9fc59.png" alt="Иллюстрация к теме «Препроцессор»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-9">Макросы</h2>
+<figure class="note-figure"><a href="assets/media/9288526d15a5d8121c.png" target="_blank" rel="noopener"><img src="assets/media/9288526d15a5d8121c.png" alt="Иллюстрация к теме «Макросы»" loading="lazy" decoding="async"></a></figure>
+<p>Это инструкции препроцессора
+Препроцессор работает с произвольными строками не знает про синтаксис C++</p>
+<p>difine - лучше не использовать</p>
+<figure class="note-figure"><a href="assets/media/8d79bb0b6e8fae0d9c.png" target="_blank" rel="noopener"><img src="assets/media/8d79bb0b6e8fae0d9c.png" alt="Иллюстрация к теме «Макросы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-10">Стражи</h2>
+<figure class="note-figure"><a href="assets/media/b608092db643ca1670.png" target="_blank" rel="noopener"><img src="assets/media/b608092db643ca1670.png" alt="Иллюстрация к теме «Стражи»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-11">Компилятор</h2>
+<figure class="note-figure"><a href="assets/media/e125b75bc24db14ee5.png" target="_blank" rel="noopener"><img src="assets/media/e125b75bc24db14ee5.png" alt="Иллюстрация к теме «Компилятор»" loading="lazy" decoding="async"></a></figure>
+<ol>
+<li>компилятор превращает в лекссхему</li>
+<li>проверка правильности лекссхемы</li>
+<li>оптимизации</li>
+<li>код на ассемблере</li>
+<li>ассемблер в машинный код</li>
+<li>получаем отдельный объектный файл под каждую единицу трансляции- это столбики в препроцессоре</li>
+<li>Компоновщик объединяет объектные файлы и библиотеки, связывая обращения к функциям и переменным с их определениями.</li>
+</ol>
+<h2 id="section-12">Компоновщик(линкер)</h2>
+<figure class="note-figure"><a href="assets/media/a0b8d7d9a2905e5045.png" target="_blank" rel="noopener"><img src="assets/media/a0b8d7d9a2905e5045.png" alt="Иллюстрация к теме «Компоновщик(линкер)»" loading="lazy" decoding="async"></a></figure>
+<p>External linkage - из всех единиц трансляции
+Internal linkage - только из текущей ед. трансляции
+No linkage - только текущий скоуп</p>
+<figure class="note-figure"><a href="assets/media/2171c816d21fa184ba.png" target="_blank" rel="noopener"><img src="assets/media/2171c816d21fa184ba.png" alt="Иллюстрация к теме «Компоновщик(линкер)»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/d1d6c72e47be21df1a.png" target="_blank" rel="noopener"><img src="assets/media/d1d6c72e47be21df1a.png" alt="Иллюстрация к теме «Компоновщик(линкер)»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-13">Спецификатор класса хранилища</h2>
+<h3>1. static — статическое время жизни + внутренняя линковка</h3>
+<ul>
+<li>Переменная существует <strong>все время работы программы</strong>.</li>
+<li>Если объявлена <strong>внутри функции</strong>, то значение <strong>сохраняется между вызовами</strong>.</li>
+<li>Если объявлена <strong>в глобальной области</strong>, то она <strong>доступна только в этом файле</strong> (internal linkage).</li>
+</ul>
+<h3>2. extern — статическое время жизни + внешняя линковка</h3>
+<ul>
+<li>Переменная существует всегда (как и <code>static</code> глобальный).</li>
+<li>Но <code>extern</code> говорит: <em>переменная определена где-то в другом файле</em>.</li>
+</ul>
+<h3>3. threadlocal — хранение на уровне потока</h3>
+<p>У каждой нити (thread_) будет своя копия переменной.
+Не общая, как у глобальных, а индивидуальная.</p>
+<h3>4. mutable — разрешает изменять поле объекта даже в const методах</h3>
+<ul>
+<li>Помеченное поле <strong>можно менять</strong>, даже если объект объявлен <code>const</code>.</li>
+<li>Используется для скрытого состояния (кэш, счётчики).</li>
+</ul>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-functions.html"><small>← Назад</small>Ссылки, инициализация, перегрузка и пространства имён</a><a href="cpp-oop.html"><small>Дальше →</small>Классы, инварианты и конструкторы</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Этапы сборки</a></li><li><a href="#section-2">Заголовки и имена</a></li><li><a href="#section-3">Самопроверка</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Этапы сборки</a></li><li><a href="#section-2">Заголовки и имена</a></li><li><a href="#section-3">Самопроверка</a></li><li><a href="#section-4">Компиляция</a></li><li><a href="#section-5">Этапы трансляции</a></li><li><a href="#section-6">Объявление и определение</a></li><li><a href="#section-7">Заголовочный файл</a></li><li><a href="#section-8">Препроцессор</a></li><li><a href="#section-9">Макросы</a></li><li><a href="#section-10">Стражи</a></li><li><a href="#section-11">Компилятор</a></li><li><a href="#section-12">Компоновщик(линкер)</a></li><li><a href="#section-13">Спецификатор класса хранилища</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>

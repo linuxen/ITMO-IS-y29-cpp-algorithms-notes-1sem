@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Теория, примеры и иллюстрации по теме.">
+<meta name="theme-color" content="#1f1f28">
+<title>Ссылки, инициализация, перегрузка и пространства имён · C++ и алгоритмы</title>
+<link rel="canonical" href="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-functions.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Первый курс · ИТМО ИС">
+<meta property="og:title" content="Ссылки, инициализация, перегрузка и пространства имён · C++ и алгоритмы">
+<meta property="og:description" content="Теория, примеры и иллюстрации по теме.">
+<meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-functions.html">
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-functions"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="top-inner">
+  <a class="brand" href="./" aria-label="Первый курс — главная"><span class="mark" aria-hidden="true">&lt;/&gt;</span> Первый курс</a>
+  <nav class="top-nav" aria-label="Навигация">
+    <a href="./#semester-1">Конспект</a>
+    <a href="laboratory.html">Тренажёры</a>
+    <a class="repo" href="https://github.com/linuxen/ITMO-IS-y29-cpp-algorithms-notes-1sem" aria-label="Репозиторий на GitHub">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main class="page chapter" id="main">
+<nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp1">C++ · 1 семестр</a></nav>
+<div class="chapter-grid">
+<aside class="chapter-sidebar"><details open><summary>C++ · 1 семестр</summary><ul><li><a  href="cpp-basics.html">Типы, выражения, условия, циклы и функции</a></li><li><a  href="cpp-addresses.html">Указатели, ссылки, массивы и строки</a></li><li><a  href="cpp-random.html">Генерация случайных чисел</a></li><li><a  href="cpp-structs.html">Структуры, объединения и измерение производительности</a></li><li><a  href="cpp-storage.html">Представление чисел и работа с памятью</a></li><li><a aria-current=page href="cpp-functions.html">Ссылки, инициализация, перегрузка и пространства имён</a></li><li><a  href="cpp-build.html">Компиляция и компоновка</a></li><li><a  href="cpp-oop.html">Классы, инварианты и конструкторы</a></li><li><a  href="cpp-operators.html">Перегрузка операторов</a></li><li><a  href="cpp-raii.html">RAII и реализация учебного класса строки</a></li><li><a  href="cpp-polymorphism.html">Наследование и полиморфизм</a></li><li><a  href="cpp-oop-principles.html">Четыре принципа ООП</a></li><li><a  href="cpp-templates.html">Шаблоны, специализация и vector</a></li><li><a  href="cpp-stack-memory.html">Стек вызовов</a></li><li><a  href="cpp-heap-memory.html">Динамическая память и фрагментация</a></li></ul></details></aside>
+<article class="reading"><header class="chapter-header green"><h1>Ссылки, инициализация, перегрузка и пространства имён</h1><p>Теория, примеры и иллюстрации по теме.</p></header>
+<div class="prose"><h2 id="section-1">Reference, initialization, function overloading namespaces</h2>
+<h2 id="section-2">Ссылки (reference)</h2>
+<p>Для передачи аргументов лучше чем указатель</p>
+<p>это тип данных
+Псевданим для уже существующих объектов</p>
+<p>int I = 10
+int&amp; j = i</p>
+<p>При попытке создать пустую ссылку будет ошибка declared</p>
+<p>const ссылка - запрещает менять объект и не использует доп память</p>
+<p>Ссылка может указывать на локальный объект, пока объект жив. После выхода из его области видимости использование такой ссылки недопустимо.</p>
+<figure class="note-figure"><a href="assets/media/14261a165416ce3db5.png" target="_blank" rel="noopener"><img src="assets/media/14261a165416ce3db5.png" alt="Иллюстрация к теме «Ссылки (reference)»" loading="lazy" decoding="async"></a></figure>
+<p>Передача аргументов в функцию</p>
+<ul>
+<li>By reference в общем случае наиболее “дешевый” и простой способ</li>
+<li>By pointer *</li>
+<li>By value  для встроенных и небольших типов</li>
+</ul>
+<figure class="note-figure"><a href="assets/media/15e628a3ac352d1106.png" target="_blank" rel="noopener"><img src="assets/media/15e628a3ac352d1106.png" alt="Иллюстрация к теме «Ссылки (reference)»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-3">Перегрузка функций</h2>
+<p>Это когда передается много функций одного имени</p>
+<figure class="note-figure"><a href="assets/media/6a00998b7fa521df86.png" target="_blank" rel="noopener"><img src="assets/media/6a00998b7fa521df86.png" alt="Иллюстрация к теме «Перегрузка функций»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-4">Инициализация</h2>
+<p>Рекомендует использовать int {} value optimization</p>
+<figure class="note-figure"><a href="assets/media/401817b1e97630f616.png" target="_blank" rel="noopener"><img src="assets/media/401817b1e97630f616.png" alt="Иллюстрация к теме «Инициализация»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-5">namespace</h2>
+<p>Предотвращают конфликт имён
+Можно использовать одинаковые функции, но только с namespace</p>
+<figure class="note-figure"><a href="assets/media/db50893906e7579cea.png" target="_blank" rel="noopener"><img src="assets/media/db50893906e7579cea.png" alt="Иллюстрация к теме «namespace»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-keyword">namespace</span> Foo{
+    <span class="tok-type">void</span> <span class="tok-function">f</span>();
+}
+
+<span class="tok-keyword">namespace</span> Boo{
+    <span class="tok-type">void</span> <span class="tok-function">f</span>();
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+   Foo::<span class="tok-function">f</span>();
+   Boo::<span class="tok-function">f</span>();
+}</code></pre></div>
+<h2 id="section-6">using</h2>
+<p>using &lt;пространство имен&gt; std : : element&gt;</p>
+<p>если в файле предпологается постоянное использование например cout</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;iostream&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>(){
+    <span class="tok-keyword">using</span> std::cout;
+    cout &lt;&lt; <span class="tok-string">&quot;using&quot;</span>;
+}</code></pre></div>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-storage.html"><small>← Назад</small>Представление чисел и работа с памятью</a><a href="cpp-build.html"><small>Дальше →</small>Компиляция и компоновка</a></nav>
+</article>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Reference, initialization, function overloading namespaces</a></li><li><a href="#section-2">Ссылки (reference)</a></li><li><a href="#section-3">Перегрузка функций</a></li><li><a href="#section-4">Инициализация</a></li><li><a href="#section-5">namespace</a></li><li><a href="#section-6">using</a></li></ul></aside>
+</div></main>
+<footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+</body>
+</html>

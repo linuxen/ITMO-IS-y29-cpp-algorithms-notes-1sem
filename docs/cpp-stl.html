@@ -13,10 +13,12 @@
 <meta property="og:title" content="STL, итераторы и алгоритмы · C++ и алгоритмы">
 <meta property="og:description" content="Контейнеры, полуоткрытые диапазоны и выбор операций.">
 <meta property="og:url" content="https://linuxen.github.io/ITMO-IS-y29-cpp-algorithms-notes-1sem/cpp-stl.html">
-<link rel="icon" href="assets/favicon.svg?v=5f9417585c0f" type="image/svg+xml">
-<link rel="stylesheet" href="assets/site.css?v=5f9417585c0f">
-<script defer src="assets/site.js?v=5f9417585c0f" data-search-version="5f9417585c0f"></script>
-<script defer src="assets/labs.js?v=5f9417585c0f"></script>
+<link rel="icon" href="assets/favicon.svg?v=505c6f7c0e58" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css?v=505c6f7c0e58">
+<script defer src="assets/site.js?v=505c6f7c0e58" data-search-version="505c6f7c0e58"></script>
+<script defer src="assets/labs.js?v=505c6f7c0e58"></script>
+<link rel="stylesheet" href="assets/assistant.css?v=505c6f7c0e58">
+<script defer src="assets/assistant.js?v=505c6f7c0e58" data-api-url="" data-chapter="cpp-stl"></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
@@ -31,11 +33,44 @@
 <main class="page chapter" id="main">
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="./">Конспект</a><span>/</span><a href="./#cpp2">C++ · 2 семестр</a></nav>
 <div class="chapter-grid">
-<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a aria-current=page href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-errors.html">Ошибки и исключения</a></li><li><a  href="cpp-callables.html">Приведения, CRTP и лямбды</a></li><li><a  href="cpp-move.html">Категории значений и перемещение</a></li><li><a  href="cpp-meta.html">Шаблоны, concepts и variant</a></li><li><a  href="cpp-threads.html">Потоки и синхронизация</a></li></ul></details></aside>
+<aside class="chapter-sidebar"><details open><summary>C++ · 2 семестр</summary><ul><li><a  href="cpp-ownership.html">Умные указатели</a></li><li><a aria-current=page href="cpp-stl.html">STL, итераторы и алгоритмы</a></li><li><a  href="cpp-containers.html">Контейнеры, аллокаторы и адаптеры</a></li><li><a  href="cpp-errors.html">Обработка ошибок и исключения</a></li><li><a  href="cpp-callables.html">Приведения типов и CRTP</a></li><li><a  href="cpp-lambdas.html">Функторы и лямбда-выражения</a></li><li><a  href="cpp-move.html">Категории значений и семантика перемещения</a></li><li><a  href="cpp-variadic.html">Вариативные шаблоны, variant и visit</a></li><li><a  href="cpp-meta.html">Метапрограммирование и концепты</a></li><li><a  href="cpp-threads.html">Асинхронность и многопоточность</a></li></ul></details></aside>
 <article class="reading"><header class="chapter-header green"><h1>STL, итераторы и алгоритмы</h1><p>Контейнеры, полуоткрытые диапазоны и выбор операций.</p></header>
 <div class="prose"><h2 id="section-1">Как читать диапазон</h2>
 <p><code>[first, last)</code> включает начало и исключает конец. <code>end()</code> — позиция за последним элементом. Категория итератора определяет разрешённые операции. Итератор списка двунаправленный, итератор вектора поддерживает произвольный доступ и непрерывен, а потоковый итератор может быть однопроходным. <code>std::iterator_traits</code> предоставляет свойства итератора, <code>std::advance</code> выбирает подходящую механику перемещения.</p>
-<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Задача</th><th scope="col">Инструменты</th></tr></thead><tbody><tr><td>Найти или посчитать</td><td><code>find</code>, <code>find_if</code>, <code>count_if</code>, <code>search</code></td></tr><tr><td>Сравнить диапазоны</td><td><code>equal</code>, <code>mismatch</code></td></tr><tr><td>Заполнить или преобразовать</td><td><code>fill</code>, <code>generate</code>, <code>copy</code>, <code>transform</code></td></tr><tr><td>Переставить элементы</td><td><code>partition</code>, <code>rotate</code>, <code>shuffle</code>, <code>sort</code></td></tr><tr><td>Работать с отсортированными множествами</td><td><code>set_union</code>, <code>set_intersection</code>, <code>set_difference</code></td></tr><tr><td>Выполнить вычисление</td><td><code>accumulate</code>, <code>iota</code>, <code>inner_product</code></td></tr></tbody></table></div>
+<table>
+<thead>
+<tr>
+<th>Задача</th>
+<th>Инструменты</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Найти или посчитать</td>
+<td><code>find</code>, <code>find_if</code>, <code>count_if</code>, <code>search</code></td>
+</tr>
+<tr>
+<td>Сравнить диапазоны</td>
+<td><code>equal</code>, <code>mismatch</code></td>
+</tr>
+<tr>
+<td>Заполнить или преобразовать</td>
+<td><code>fill</code>, <code>generate</code>, <code>copy</code>, <code>transform</code></td>
+</tr>
+<tr>
+<td>Переставить элементы</td>
+<td><code>partition</code>, <code>rotate</code>, <code>shuffle</code>, <code>sort</code></td>
+</tr>
+<tr>
+<td>Работать с отсортированными множествами</td>
+<td><code>set_union</code>, <code>set_intersection</code>, <code>set_difference</code></td>
+</tr>
+<tr>
+<td>Выполнить вычисление</td>
+<td><code>accumulate</code>, <code>iota</code>, <code>inner_product</code></td>
+</tr>
+</tbody>
+</table>
 <div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;algorithm&gt;
 <span class="tok-directive">#include</span> &lt;cassert&gt;
 <span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
@@ -49,10 +84,307 @@
 <p><code>unique</code> сдвигает соседние повторы в логический хвост и возвращает новую границу. <code>erase</code> удаляет хвост из вектора. Для вставки при копировании удобен <code>std::back_inserter</code>. Вместо удалённого в C++17 <code>random_shuffle</code> используйте <code>std::shuffle</code> с генератором.</p>
 <h2 id="section-2">Контейнеры и инвалидирование</h2>
 <p><code>vector</code> удобен для индексов и обхода, <code>deque</code> — для добавлений с обоих концов, <code>list</code> — для операций с уже найденным узлом. <code>map</code> и <code>set</code> хранят ключи в порядке сравнения и дают логарифмический поиск. <code>unordered_map</code> обычно даёт среднее O(1) при хорошем распределении хешей, худший поиск — O(n).</p>
-<p>Правила инвалидирования зависят от контейнера и операции. Перевыделение <code>vector</code> инвалидирует все итераторы, вставка в <code>map</code> сохраняет их, rehash у <code>unordered_map</code> инвалидирует итераторы. <code>stack</code>, <code>queue</code> и <code>priority_queue</code> — адаптеры контейнеров. Аллокатор определяет интерфейс выделения памяти, а tag dispatch позволяет выбрать реализацию по категории итератора.</p></div>
-<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-ownership.html"><small>← Назад</small>Умные указатели</a><a href="cpp-errors.html"><small>Дальше →</small>Ошибки и исключения</a></nav>
+<p>Правила инвалидирования зависят от контейнера и операции. Перевыделение <code>vector</code> инвалидирует все итераторы, вставка в <code>map</code> сохраняет их, rehash у <code>unordered_map</code> инвалидирует итераторы. <code>stack</code>, <code>queue</code> и <code>priority_queue</code> — адаптеры контейнеров. Аллокатор определяет интерфейс выделения памяти, а tag dispatch позволяет выбрать реализацию по категории итератора.</p>
+<h2 id="section-3">STL итераторы и основные алгоритмы</h2>
+<figure class="note-figure"><a href="assets/media/db3c479b164fb64173.png" target="_blank" rel="noopener"><img src="assets/media/db3c479b164fb64173.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<p>Контейнер <a href="https://www.google.com/search?q=std%3A%3Aarray&amp;oq=%D1%87%D1%82%D0%BE+%D1%82%D0%B0%D0%BA%D0%BE%D0%B5+%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D0%B5%D1%80+array&amp;gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCjEwNzk4ajBqMTWoAgiwAgE&amp;sourceid=chrome&amp;ie=UTF-8&amp;ved=2ahUKEwiSmobJxdSSAxXeDRAIHf2xL_EQgK4QegQIARAB">std::array</a> в C++ (STL) — это безопасная и удобная обёртка над обычными статическими массивами, предоставляющая фиксированный размер, известный на этапе компиляции. Он хранит элементы одного типа в непрерывной области памяти, обычно на стеке, обеспечивая быстрый доступ по индексу, но не позволяя изменять свой размер (добавлять или удалять элементы) в ходе работы.</p>
+<p>В контексте контейнера map (например, в C++) слово <strong>«упорядоченный»</strong> означает, что элементы внутри него всегда выстроены в строгом <strong>порядке возрастания ключей</strong>.</p>
+<p>Обычно упорядоченный <code>map</code> реализован в виде <strong>красно-черного дерева</strong> (сбалансированного бинарного дерева поиска). Именно структура дерева поддерживает этот порядок при каждой вставке.</p>
+<p>порядок возрастания ключей</p>
+<figure class="note-figure"><a href="assets/media/c50c80f9fc9b5373bb.png" target="_blank" rel="noopener"><img src="assets/media/c50c80f9fc9b5373bb.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; vec = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>, <span class="tok-number">6</span>};
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">auto</span> i = vec.<span class="tok-function">begin</span>(); i &lt; vec.<span class="tok-function">end</span>(); i++) {
+        std::cout &lt;&lt; *i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::map&lt;std::<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; map = {{<span class="tok-string">&quot;Alice&quot;</span>, <span class="tok-number">18</span>}, {<span class="tok-string">&quot;Bob&quot;</span>, <span class="tok-number">200</span>}};
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">auto</span> it = map.<span class="tok-function">cbegin</span>(); it != map.<span class="tok-function">cend</span>(); it++) {
+        std::cout &lt;&lt; it-&gt;first &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}
+
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">string</span> a = <span class="tok-string">&quot;этот день был этот день когда мы ждали мы ждали&quot;</span>;
+    std::map&lt;std::<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; t;
+    std::stringstream <span class="tok-function">ss</span>(a);
+    std::<span class="tok-type">string</span> temp;
+    <span class="tok-type">int</span> count = <span class="tok-number">1</span>;
+    <span class="tok-keyword">while</span> (ss &gt;&gt; temp) {
+        t[temp]++;
+    }
+}</code></pre></div>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-directive">#include</span> &lt;algorithm&gt;
+<span class="tok-directive">#include</span> &lt;iostream&gt;
+<span class="tok-directive">#include</span> &lt;<span class="tok-type">vector</span>&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; vec = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+    std::<span class="tok-function">reverse</span>(vec.<span class="tok-function">begin</span>(), vec.<span class="tok-function">end</span>());
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">auto</span> i = vec.<span class="tok-function">cbegin</span>(); i &lt; vec.<span class="tok-function">cend</span>(); i++) {
+        std::cout &lt;&lt; *i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<figure class="note-figure"><a href="assets/media/11a40c037c324d6a7e.png" target="_blank" rel="noopener"><img src="assets/media/11a40c037c324d6a7e.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<p><img src="assets/media/3ac8605b520ea04cd4.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" />
+<img src="assets/media/3fffd1aa0c508a5276.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" /></p>
+<p><img src="assets/media/b8a443962f2b248685.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" />
+<img src="assets/media/5c419d4bcc94dd84a6.png" alt="Иллюстрация к теме «STL итераторы и основные алгоритмы»" /></p>
+<h2 id="section-4">Итераторы с произвольным доступом</h2>
+<p>Итератор с произвольным доступом поддерживает смещение на заданное число позиций за O(1).</p>
+<figure class="note-figure"><a href="assets/media/a7543a88a872f6fbea.png" target="_blank" rel="noopener"><img src="assets/media/a7543a88a872f6fbea.png" alt="Иллюстрация к теме «Итераторы с произвольным доступом»" loading="lazy" decoding="async"></a></figure>
+<p>это операции с ними</p>
+<h2 id="section-5">Непрерывный итератор</h2>
+<figure class="note-figure"><a href="assets/media/18dd00b2eb6aac6163.png" target="_blank" rel="noopener"><img src="assets/media/18dd00b2eb6aac6163.png" alt="Иллюстрация к теме «Непрерывный итератор»" loading="lazy" decoding="async"></a></figure>
+<p><code>std::addressof</code> — это шаблонная функция в C++ (определена в заголовке <code>&lt;memory&gt;</code>), которая возвращает точный адрес объекта, даже если для его класса перегружен оператор взятия адреса <code>operator&amp;</code>. Она гарантирует получение указателя на объект , избегая перегруженных операторов, что критично для безопасной работы обобщенного кода.</p>
+<figure class="note-figure"><a href="assets/media/109dbc23d9846d7ea4.png" target="_blank" rel="noopener"><img src="assets/media/109dbc23d9846d7ea4.png" alt="Иллюстрация к теме «Непрерывный итератор»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-6">iterator / const_iterator</h2>
+<p>cbegin cend</p>
+<h2 id="section-7">Итератор</h2>
+<p><img src="assets/media/f6e57c592d7c1e0a89.png" alt="Иллюстрация к теме «Итератор»" />
+<img src="assets/media/ae8c11d77ff6f94a57.png" alt="Иллюстрация к теме «Итератор»" />
+<img src="assets/media/e878ec661f0d5f6070.png" alt="Иллюстрация к теме «Итератор»" />
+<img src="assets/media/164ec2acc381bd0d6d.png" alt="Иллюстрация к теме «Итератор»" /></p>
+<h2 id="section-8">NB</h2>
+<p>std::find
+std::greater&lt;&gt;</p>
+<h2 id="section-9">Обобщенные числовые алгоритмы</h2>
+<figure class="note-figure"><a href="assets/media/ff8d6753e341a4d62e.png" target="_blank" rel="noopener"><img src="assets/media/ff8d6753e341a4d62e.png" alt="Иллюстрация к теме «Обобщенные числовые алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<h2 id="section-10">Алгоритмы с предикатами</h2>
+<p><code>std::sort( v1.begin(), v1.end(), greater());</code>
+выполняет сравнение двух элементов на «больше» (<code>x &gt; y</code>).</p>
+<p><code>std::sort( v1.begin(), v1.end(), std::less());</code>
+выполняет операцию «меньше» (<code>&lt;</code>) над двумя аргументами.</p>
+<h2 id="section-11">Неизменяющие алгоритмы</h2>
+<figure class="note-figure"><a href="assets/media/1c8e51433e893bae0c.png" target="_blank" rel="noopener"><img src="assets/media/1c8e51433e893bae0c.png" alt="Иллюстрация к теме «Неизменяющие алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<h3>find и find_if</h3>
+<p><code>std::find_if</code> — это алгоритм стандартной библиотеки C++ (STL), предназначенный для поиска первого элемента в диапазоне, удовлетворяющего заданному условию (предикату).</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; v = {<span class="tok-number">1</span>, <span class="tok-number">3</span>, <span class="tok-number">5</span>, <span class="tok-number">8</span>, <span class="tok-number">10</span>};
+    <span class="tok-comment">// Поиск первого четного числа</span>
+    <span class="tok-keyword">auto</span> it = std::<span class="tok-function">find_if</span>(v.<span class="tok-function">begin</span>(), v.<span class="tok-function">end</span>(), [](<span class="tok-type">int</span> i) { <span class="tok-keyword">return</span> i % <span class="tok-number">2</span> == <span class="tok-number">0</span>; });
+
+    <span class="tok-keyword">if</span> (it != v.<span class="tok-function">end</span>()) {
+        std::cout &lt;&lt; <span class="tok-string">&quot;Найдено: &quot;</span> &lt;&lt; *it &lt;&lt; std::endl; <span class="tok-comment">// Выведет 8</span>
+    }
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}</code></pre></div>
+<h3>count и count_if</h3>
+<figure class="note-figure"><a href="assets/media/b40d880b3a140e33b7.png" target="_blank" rel="noopener"><img src="assets/media/b40d880b3a140e33b7.png" alt="Иллюстрация к теме «Неизменяющие алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">predicat</span>(<span class="tok-type">int</span>&amp; x) {
+    <span class="tok-keyword">return</span> x % <span class="tok-number">2</span> == <span class="tok-number">0</span>;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">3</span> , <span class="tok-number">4</span>};
+    <span class="tok-keyword">auto</span> i = std::<span class="tok-function">count_if</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), predicat);
+    std::cout &lt;&lt; i;
+}</code></pre></div>
+<h3>std::for_each</h3>
+<p><code>std::for_each</code> в C++ — это алгоритм из библиотеки <code>&lt;algorithm&gt;</code>, применяющий заданную функцию (или лямбду) к каждому элементу в диапазоне (контейнере).</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">void</span> <span class="tok-function">predicat</span>(<span class="tok-type">int</span>&amp; x) {
+    x += <span class="tok-number">10</span>;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span> , <span class="tok-number">4</span>};
+    std::<span class="tok-function">for_each</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), predicat);
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h3><code>std::mismatch</code></h3>
+<p><code>std::mismatch</code> в C++ — это алгоритм из стандартной библиотеки (<code>&lt;algorithm&gt;</code>), предназначенный для сравнения двух диапазонов данных и поиска первого места, где элементы различаются.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; b = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">5</span>};
+    <span class="tok-keyword">auto</span> i = std::<span class="tok-function">mismatch</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), b.<span class="tok-function">begin</span>());
+    std::cout &lt;&lt; *(i.first) &lt;&lt; <span class="tok-string">&#x27; &#x27;</span> &lt;&lt; *(i.second);
+}</code></pre></div>
+<h3>std::equal</h3>
+<p><code>std::equal</code> в C++ — это алгоритм из стандартной библиотеки (заголовочный файл <code>&lt;algorithm&gt;</code>), который используется для проверки того, равны ли элементы в двух диапазонах.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; b = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">5</span>};
+    <span class="tok-keyword">if</span> (std::<span class="tok-function">equal</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), b.<span class="tok-function">begin</span>())) std::cout &lt;&lt; <span class="tok-keyword">true</span>;
+    <span class="tok-keyword">else</span> std::cout &lt;&lt; <span class="tok-keyword">false</span>;
+}</code></pre></div>
+<h3>search</h3>
+<p><code>std::search</code> в C++ — это алгоритм из стандартной библиотеки (<code>&lt;algorithm&gt;</code>), предназначенный для поиска первого вхождения одной последовательности элементов (подпоследовательности) внутри другой.</p>
+<p>std::distance — это функция из <code>&lt;iterator&gt;</code>, которая вычисляет **расстояние между двумя итераторами.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; b = {<span class="tok-number">1</span>, <span class="tok-number">3</span>};
+
+<span class="tok-keyword">auto</span> it = std::<span class="tok-function">search</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(),
+b.<span class="tok-function">begin</span>(), b.<span class="tok-function">end</span>());
+
+<span class="tok-keyword">if</span> (it != a.<span class="tok-function">end</span>()) {
+	<span class="tok-type">int</span> index = std::<span class="tok-function">distance</span>(a.<span class="tok-function">begin</span>(), it);
+	std::cout &lt;&lt; <span class="tok-string">&quot;Found at index: &quot;</span> &lt;&lt; index &lt;&lt; <span class="tok-string">&quot;\n&quot;</span>;
+} <span class="tok-keyword">else</span> {
+	std::cout &lt;&lt; <span class="tok-string">&quot;Not found\n&quot;</span>;
+}
+}</code></pre></div>
+<h2 id="section-12">Изменяющие алгоритмы</h2>
+<figure class="note-figure"><a href="assets/media/31625156f0e8305733.png" target="_blank" rel="noopener"><img src="assets/media/31625156f0e8305733.png" alt="Иллюстрация к теме «Изменяющие алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<h3>copy</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">b</span>(a.<span class="tok-function">size</span>()); <span class="tok-comment">// создаём нужный размер</span>
+
+std::<span class="tok-function">copy</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), b.<span class="tok-function">begin</span>());
+
+<span class="tok-keyword">for</span> (<span class="tok-type">int</span> i : b) {
+	std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&quot; &quot;</span>;
+}
+}</code></pre></div>
+<h3>copy_backward</h3>
+<p><strong><code>std::copy_backward</code></strong> в C++ — это алгоритм из стандартной библиотеки (заголовочный файл <code>&lt;algorithm&gt;</code>), предназначенный для копирования элементов из одного диапазона в другой, начиная с конца исходного диапазона и двигаясь к началу.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">b</span>(a.<span class="tok-function">size</span>() + <span class="tok-number">5</span>);
+    std::<span class="tok-function">copy_backward</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), b.<span class="tok-function">end</span>());
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i : b) {
+        std::cout &lt;&lt; i;
+    }
+}</code></pre></div>
+<h3>fill \ fill_n</h3>
+<p>заполняет значения
+<img src="assets/media/3934890069d19fde25.png" alt="Иллюстрация к теме «Изменяющие алгоритмы»" /></p>
+<p>Главное отличие заключается в <strong>способе указания диапазона заполнения</strong>: <code>std::fill</code> использует пару итераторов (начало и конец), а <code>std::fill_n</code> использует начальный итератор и счетчик элементов.</p>
+<h3>generate</h3>
+<figure class="note-figure"><a href="assets/media/3844ffd08e4db4f41c.png" target="_blank" rel="noopener"><img src="assets/media/3844ffd08e4db4f41c.png" alt="Иллюстрация к теме «Изменяющие алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">predicat</span>() {
+    <span class="tok-keyword">return</span> <span class="tok-function">rand</span>();
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">a</span>(<span class="tok-number">10</span>);
+    std::<span class="tok-function">generate</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), predicat);
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h3>partition</h3>
+<p>В C++ <a href="https://www.google.com/search?q=std%3A%3Apartition&amp;sca_esv=ad335200c38ab265&amp;biw=1536&amp;bih=695&amp;sxsrf=ANbL-n6dM_7rtPjZgI6i4z1xG_iFLo4c8g%3A1771851833516&amp;ei=OVCcafybH621wPAPp42XiA8&amp;ved=2ahUKEwjl8PKn2e-SAxUWMRAIHaEaMvwQgK4QegQIARAB&amp;uact=5&amp;oq=partition+%D1%87%D1%82%D0%BE+%D1%82%D0%B0%D0%BA%D0%BE%D0%B5+%D1%81%2B%2B&amp;gs_lp=Egxnd3Mtd2l6LXNlcnAiIHBhcnRpdGlvbiDRh9GC0L4g0YLQsNC60L7QtSDRgSsrMgUQIRifBUiPQFAAWIA-cAB4AZABAJgBuwGgAdwYqgEEMC4yM7gBA8gBAPgBAZgCF6AC0BnCAgsQABiABBixAxiDAcICBRAAGIAEwgIOEC4YgAQYsQMYxwEYrwHCAg4QLhiABBixAxjRAxjHAcICCBAAGIAEGLEDwgIREC4YgAQYsQMY0QMYgwEYxwHCAgQQLhgDwgIOEC4YgAQYsQMYgwEYigXCAgQQABgDwgIOEAAYgAQYsQMYgwEYigXCAgsQLhiABBixAxiDAcICCxAuGIAEGMcBGK8BwgIFEC4YgATCAgYQABgWGB7CAggQABiABBiiBMICBRAAGO8FwgIFECEYoAHCAgQQIRgVmAMAkgcEMC4yM6AHhbcBsgcEMC4yM7gH0BnCBwYwLjUuMTjIB1SACAA&amp;sclient=gws-wiz-serp&amp;mstk=AUtExfAJSwEyk7k6W_LE-5B9SKPHzug1RlRbm7H2Rlhmg2VfWBytKAaM8GOBXiO27-DLb3pLcdHIvjsn9Qdv5-97FVFjgGi969BJ_rR2qadw8OHMBJn5Dybv2e_Iq6jBmqCmNNKYcCZdEGbuIq8VTAO5zjVaJZhADQAQ0deteWU09Q_LtjM&amp;csui=3">std::partition</a> — это алгоритм из библиотеки <code>&lt;algorithm&gt;</code>, который переупорядочивает элементы в диапазоне так, что элементы, удовлетворяющие условию (предикату), перемещаются в начало, а остальные — в конец.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">predicat</span>(<span class="tok-type">int</span>&amp; i) {
+    <span class="tok-keyword">return</span> i % <span class="tok-number">2</span> == <span class="tok-number">0</span>;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>, <span class="tok-number">6</span>};
+    std::<span class="tok-function">partition</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), predicat);
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h3>std::random_shuffle</h3>
+<p><code>std::random_shuffle</code> в C++ — это алгоритм из стандартной библиотеки (<code>&lt;algorithm&gt;</code>), предназначенный для случайного переупорядочивания элементов в контейнере</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>, <span class="tok-number">6</span>};
+    std::<span class="tok-function">random_shuffle</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>());
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<p>erase\remove</p>
+<figure class="note-figure"><a href="assets/media/cd84f36277d7467cd5.png" target="_blank" rel="noopener"><img src="assets/media/cd84f36277d7467cd5.png" alt="Иллюстрация к теме «Изменяющие алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<p>remove переносит элементы в конец а erase уже удаляет диапазон от..до</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">0</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">0</span>, <span class="tok-number">5</span>, <span class="tok-number">6</span>, <span class="tok-number">0</span>, <span class="tok-number">0</span>};
+    std::<span class="tok-function">remove</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), <span class="tok-number">0</span>);
+    a.<span class="tok-function">erase</span>(a.<span class="tok-function">end</span>());
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}
+
+<span class="tok-number">2</span> <span class="tok-number">3</span> <span class="tok-number">5</span> <span class="tok-number">6</span> <span class="tok-number">5</span> <span class="tok-number">6</span> <span class="tok-number">0</span></code></pre></div>
+<h3>replace</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;std::<span class="tok-type">string</span>&gt; a = {<span class="tok-string">&quot;cat&quot;</span>, <span class="tok-string">&quot;dog&quot;</span>};
+    std::<span class="tok-function">replace</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), <span class="tok-string">&quot;cat&quot;</span>, <span class="tok-string">&quot;dog&quot;</span>);
+    <span class="tok-keyword">for</span> (std::<span class="tok-type">string</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h3>rotate</h3>
+<p><code>std::rotate</code> в C++ — это алгоритм из стандартной библиотеки (<code>&lt;algorithm&gt;</code>), который переставляет элементы в диапазоне <code>[first, last)</code> так, что элемент, указанный итератором <code>middle</code>, становится первым, а элементы до него переносятся в конец.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+    std::<span class="tok-function">rotate</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>() - <span class="tok-number">2</span>, a.<span class="tok-function">end</span>());
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h3>swap_ranges</h3>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+    std::<span class="tok-function">swap_ranges</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">begin</span>() + <span class="tok-number">2</span>, a.<span class="tok-function">end</span>() - <span class="tok-number">2</span>);
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span>&amp; i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h3>transform</h3>
+<p><code>std::transform</code> в C++ — это алгоритм из стандартной библиотеки (<code>&lt;algorithm&gt;</code>), который применяет заданную функцию (унарную или бинарную) к элементам одного или двух диапазонов и записывает результат в выходной итератор.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">predicat</span>(<span class="tok-type">int</span> i) {
+<span class="tok-keyword">return</span> i * i;
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>};
+std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-function">b</span>(a.<span class="tok-function">size</span>());
+
+std::<span class="tok-function">transform</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>(), b.<span class="tok-function">begin</span>(), predicat);
+
+<span class="tok-keyword">for</span> (<span class="tok-type">int</span> i : b) {
+std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+}
+}</code></pre></div>
+<h3>unique</h3>
+<p><code>std::unique</code> для удаления дубликатов в контейнерах</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; a = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">2</span>, <span class="tok-number">2</span>, <span class="tok-number">5</span>};
+
+
+
+    std::<span class="tok-function">unique</span>(a.<span class="tok-function">begin</span>(), a.<span class="tok-function">end</span>());
+
+
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i : a) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="tok-string">&#x27; &#x27;</span>;
+    }
+}</code></pre></div>
+<h2 id="section-13">Теоретико-множественные операции</h2>
+<figure class="note-figure"><a href="assets/media/c99eef614251e37492.png" target="_blank" rel="noopener"><img src="assets/media/c99eef614251e37492.png" alt="Иллюстрация к теме «Теоретико-множественные операции»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/7395d210410a3caca7.png" target="_blank" rel="noopener"><img src="assets/media/7395d210410a3caca7.png" alt="Иллюстрация к теме «Теоретико-множественные операции»" loading="lazy" decoding="async"></a></figure>
+<figure class="note-figure"><a href="assets/media/4c25d19393923fbdb9.png" target="_blank" rel="noopener"><img src="assets/media/4c25d19393923fbdb9.png" alt="Иллюстрация к теме «Теоретико-множественные операции»" loading="lazy" decoding="async"></a></figure>
+<p><code>std::set_union</code> в C++ — это алгоритм из библиотеки <code>&lt;algorithm&gt;</code>, который создает отсортированное объединение двух упорядоченных диапазонов.</p>
+<div class="code-block"><div class="code-bar">cpp<button type="button" data-copy>Копировать</button></div><pre tabindex="0"><code><span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; v1 = {<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>};
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; v2 = {<span class="tok-number">3</span>, <span class="tok-number">4</span>, <span class="tok-number">5</span>, <span class="tok-number">6</span>};
+    std::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; dest;
+
+    std::<span class="tok-function">set_union</span>(v1.<span class="tok-function">begin</span>(), v1.<span class="tok-function">end</span>(),
+                   v2.<span class="tok-function">begin</span>(), v2.<span class="tok-function">end</span>(),
+                   std::<span class="tok-function">back_inserter</span>(dest));
+    <span class="tok-comment">// Результат dest: {1, 2, 3, 4, 5, 6}</span>
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}</code></pre></div>
+<h2 id="section-14">Обобщенные числовые алгоритмы</h2>
+<figure class="note-figure"><a href="assets/media/cdc8cc255a549d49dc.png" target="_blank" rel="noopener"><img src="assets/media/cdc8cc255a549d49dc.png" alt="Иллюстрация к теме «Обобщенные числовые алгоритмы»" loading="lazy" decoding="async"></a></figure>
+<p><img src="assets/media/cf11972f1cc5481405.png" alt="Иллюстрация к теме «Обобщенные числовые алгоритмы»" />
+<code>std::accumulate</code> (из заголовка <code>&lt;numeric&gt;</code>) — это алгоритм C++, который вычисляет сумму или накапливает другой результат, последовательно применяя операцию (по умолчанию сложение) к элементам диапазона, начиная с заданного начального значения.
+1 + 2 + 3 + 4 и т.д.</p>
+<figure class="note-figure"><a href="assets/media/849f711177550d39bf.png" target="_blank" rel="noopener"><img src="assets/media/849f711177550d39bf.png" alt="Иллюстрация к теме «Обобщенные числовые алгоритмы»" loading="lazy" decoding="async"></a></figure>
+</div>
+<nav class="adjacent" aria-label="Соседние главы"><a href="cpp-ownership.html"><small>← Назад</small>Умные указатели</a><a href="cpp-containers.html"><small>Дальше →</small>Контейнеры, аллокаторы и адаптеры</a></nav>
 </article>
-<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Как читать диапазон</a></li><li><a href="#section-2">Контейнеры и инвалидирование</a></li></ul></aside>
+<aside class="toc"><p>На этой странице</p><ul><li><a href="#section-1">Как читать диапазон</a></li><li><a href="#section-2">Контейнеры и инвалидирование</a></li><li><a href="#section-3">STL итераторы и основные алгоритмы</a></li><li><a href="#section-4">Итераторы с произвольным доступом</a></li><li><a href="#section-5">Непрерывный итератор</a></li><li><a href="#section-6">iterator / const_iterator</a></li><li><a href="#section-7">Итератор</a></li><li><a href="#section-8">NB</a></li><li><a href="#section-9">Обобщенные числовые алгоритмы</a></li><li><a href="#section-10">Алгоритмы с предикатами</a></li><li><a href="#section-11">Неизменяющие алгоритмы</a></li><li><a href="#section-12">Изменяющие алгоритмы</a></li><li><a href="#section-13">Теоретико-множественные операции</a></li><li><a href="#section-14">Обобщенные числовые алгоритмы</a></li></ul></aside>
 </div></main>
 <footer class="site-footer"><div><span>C++ и алгоритмы · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
 </body>
