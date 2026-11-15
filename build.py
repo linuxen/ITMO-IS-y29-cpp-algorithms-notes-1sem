@@ -185,7 +185,7 @@ def shell(title, description, body, filename=''):
         '<span class="repo-label">Поставить звезду</span></a>'
     ) if REPO else ''
     url = SITE_URL + filename
-    chapter = '' if filename == 'laboratory.html' else filename.removesuffix('.html')
+    chapter = '' if filename == 'laboratory.html' or filename.startswith('board-') else filename.removesuffix('.html')
     return f'''<!doctype html>
 <html lang="ru">
 <head>
@@ -234,11 +234,15 @@ def card(group_info, items):
     group, label, title, subtitle, symbol, color = group_info
     with_demos = sum(len(item['demos']) for item in items)
     demo_text = f'<span class="card-meta"><i></i> {with_demos} {noun(with_demos, "схема", "схемы", "схем")}</span>' if with_demos else ''
+    board_link = ''
+    if group.startswith('algo'):
+        semester = group[-1]
+        board_link = f'<li><a class="course-board" href="board-{semester}.html">Доска по алгоритмам<span aria-hidden="true">↗</span></a></li>'
     return f'''<section class="course {color}" id="{group}">
     <div class="course-intro">
       <div class="course-top"><span class="course-icon" aria-hidden="true">{e(symbol)}</span>{demo_text}</div>
       <h3>{e(title)}</h3><p>{e(subtitle)}</p>
-    </div><ul>{topic_links(items)}</ul>
+    </div><ul>{board_link}{topic_links(items)}</ul>
     </section>'''
 
 
@@ -332,6 +336,51 @@ def laboratory(items):
     return shell(f'Тренажёры · {TITLE}', 'Интерактивные алгоритмы с пошаговым выполнением.', body, 'laboratory.html')
 
 
+def algorithm_board(semester, items, layout):
+    group = f'algo{semester}'
+    tabs = []
+    for n in (1, 2):
+        current = ' aria-current="page"' if n == semester else ''
+        tabs.append(f'<a href="board-{n}.html"{current}>{n} семестр</a>')
+    options = []
+    images = []
+    for item in items:
+        slug = item['slug']
+        if slug not in layout:
+            continue
+        x, y, width, height = layout[slug]
+        options.append(f'<option value="{e(slug)}">{e(item["title"])}</option>')
+        images.append(
+            f'<image id="{e(slug)}" x="{x}" y="{y}" width="{width}" height="{height}" '
+            f'data-src="assets/media/{group}-{e(slug)}.svg?v={ASSET_VERSION}"/>'
+        )
+    title = f'Алгоритмы · {semester} семестр'
+    pdf = '<a href="assets/media/21ba70ec4183f98972.pdf">PDF по графам</a>' if semester == 2 else ''
+    body = f'''<main id="main" class="board-page">
+  <div class="board-heading">
+    <h1>{e(title)}</h1>
+    <nav class="board-tabs" aria-label="Доски по семестрам">{''.join(tabs)}</nav>
+  </div>
+  <div class="board-tools">
+    <select data-board-topic aria-label="Перейти к теме">
+      <option value="">Перейти к теме</option>{''.join(options)}
+    </select>
+    <div class="board-zoom">
+      <button type="button" data-board-action="out" aria-label="Уменьшить">−</button>
+      <button type="button" data-board-action="in" aria-label="Увеличить">+</button>
+      <button type="button" data-board-action="all">Вся доска</button>{pdf}
+    </div>
+  </div>
+  <svg class="board-canvas" data-board tabindex="0" aria-label="Схемы из конспекта" aria-describedby="board-help">
+    {''.join(images)}
+  </svg>
+  <p id="board-help">Перетаскивайте доску мышью или пальцем. Для масштаба используйте кнопки + и −.</p>
+  <noscript><p>Для просмотра доски включите JavaScript. <a href="./#{group}">Открыть главы</a></p></noscript>
+</main>
+<script defer src="assets/board.js?v={ASSET_VERSION}"></script>'''
+    return shell(f'{title} · Доска', 'Схемы и рукописные примеры из конспекта по алгоритмам.', body, f'board-{semester}.html')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', default=CONFIG['repository'], help='Public GitHub repository URL for the header link')
@@ -367,6 +416,10 @@ def main():
 
     write('index.html', catalogue(by_group))
     write('laboratory.html', laboratory(items))
+    board_layout = json.loads((ROOT / 'content' / 'boards.json').read_text(encoding='utf-8'))
+    for semester in (1, 2):
+        group = f'algo{semester}'
+        write(f'board-{semester}.html', algorithm_board(semester, by_group[group], board_layout[group]))
     index = []
     for group in GROUPS:
         for item in by_group[group[0]]:
@@ -396,7 +449,7 @@ def main():
         shutil.copytree(media, out / 'assets' / 'media', dirs_exist_ok=True)
     (out / '.nojekyll').touch()
     sitemap = Element('urlset', xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
-    paths = ['', 'laboratory.html'] + [item['slug'] + '.html' for item in items]
+    paths = ['', 'laboratory.html', 'board-1.html', 'board-2.html'] + [item['slug'] + '.html' for item in items]
     for path in paths:
         entry = SubElement(sitemap, 'url')
         SubElement(entry, 'loc').text = SITE_URL + path

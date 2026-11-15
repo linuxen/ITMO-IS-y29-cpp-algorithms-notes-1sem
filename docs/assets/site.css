@@ -93,6 +93,7 @@ button:disabled { cursor: default; opacity: .43; }
 .course li a { padding: 9px 0; display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
 .course li a span { color: var(--subtle); }
 .course li a:hover, .course li a:hover span { color: var(--accent); }
+.course li .course-board { color: var(--blue); font-weight: 700; }
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); }
 .site-footer > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 70px; font-size: 13px; }
 .crumbs { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin: 25px 0 19px; }
@@ -272,3 +273,39 @@ body:has(.image-viewer[open]) { overflow: hidden; }
 }
 .prose { min-width: 0; overflow-wrap: anywhere; }
 .prose table { display: block; overflow-x: auto; }
+
+.board-page { width: min(1600px, calc(100% - 32px)); margin: 20px auto; }
+.board-heading, .board-tools, .board-tabs, .board-zoom { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.board-heading, .board-tools { justify-content: space-between; margin-bottom: 10px; }
+.board-heading h1 { margin: 0; font-size: clamp(23px, 3.2vw, 34px); }
+.board-tabs a, .board-zoom button, .board-zoom a, .board-tools select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 6px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 14px;
+}
+.board-tools select { max-width: min(100%, 360px); }
+.board-tabs a[aria-current="page"] { border-color: var(--blue); color: var(--blue); }
+.board-tabs a:hover, .board-zoom button:hover:not(:disabled), .board-zoom a:hover { border-color: var(--blue); }
+.board-canvas {
+  display: block;
+  width: 100%;
+  height: max(380px, calc(100dvh - 198px));
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.board-canvas.dragging { cursor: grabbing; }
+#board-help { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+@media (max-width: 640px) {
+  .board-canvas { height: max(320px, calc(100dvh - 245px)); }
+}
