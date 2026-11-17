@@ -95,7 +95,9 @@ button:disabled { cursor: default; opacity: .43; }
 .course li a:hover, .course li a:hover span { color: var(--accent); }
 .course li .course-board { color: var(--blue); font-weight: 700; }
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); }
-.site-footer > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 70px; font-size: 13px; }
+.site-footer > div { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; min-height: 70px; padding-block: 14px; font-size: 13px; }
+.site-feedback { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.site-feedback a { color: var(--blue); }
 .crumbs { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin: 25px 0 19px; }
 .crumbs span { color: var(--subtle); }
 .chapter-grid { display: grid; grid-template-columns: 198px minmax(0, 1fr) 162px; align-items: start; gap: 23px; }

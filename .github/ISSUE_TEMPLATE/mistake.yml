@@ -1,0 +1,22 @@
+name: Ошибка в конспекте или на сайте
+description: Сообщить о неточности, опечатке, ошибке в коде, схеме или работе сайта.
+title: "[Ошибка] "
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Страница или тема
+      description: Ссылка на страницу конспекта, название главы или тема на доске.
+      placeholder: Укажите страницу и нужный фрагмент
+  - type: textarea
+    id: description
+    attributes:
+      label: Что нужно исправить
+      description: Опишите ошибку и, если известно, как должно быть правильно.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Источник или скриншот
+      description: Можно приложить скриншот, ссылку на документацию или пример, на котором проявляется ошибка.

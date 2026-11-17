@@ -8,7 +8,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urlencode, urlsplit
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 from markdown_it import MarkdownIt
@@ -177,7 +177,7 @@ def render(body):
     return MARKDOWN.renderer.render(output, MARKDOWN.options, {}), headings
 
 
-def shell(title, description, body, filename=''):
+def shell(title, description, body, filename='', *, source_path=''):
     github = (
         f'<a class="repo" href="{e(REPO)}" target="_blank" rel="noopener" '
         'aria-label="Поставить звезду на GitHub" title="Поставить звезду на GitHub">'
@@ -185,6 +185,17 @@ def shell(title, description, body, filename=''):
         '<span class="repo-label">Поставить звезду</span></a>'
     ) if REPO else ''
     url = SITE_URL + filename
+    issue_query = urlencode({'template': 'mistake.yml', 'page': url})
+    correction_url = (
+        f'{REPO}/edit/main/{source_path}' if source_path
+        else f'{REPO}/blob/main/CONTRIBUTING.md'
+    )
+    feedback = (
+        '<nav class="site-feedback" aria-label="Обратная связь">'
+        f'<a href="{e(REPO)}/issues/new?{e(issue_query)}" target="_blank" rel="noopener">Сообщить об ошибке</a>'
+        f'<a href="{e(correction_url)}" target="_blank" rel="noopener">Предложить правку</a>'
+        '</nav>'
+    ) if REPO else ''
     chapter = '' if filename == 'laboratory.html' or filename.startswith('board-') else filename.removesuffix('.html')
     return f'''<!doctype html>
 <html lang="ru">
@@ -221,7 +232,7 @@ def shell(title, description, body, filename=''):
   </nav>
 </div></header>
 {body}
-<footer class="site-footer"><div><span>{TITLE} · 1 курс</span><a href="./#main">К конспекту ↑</a></div></footer>
+<footer class="site-footer"><div><span>{TITLE} · 1 курс</span>{feedback}<a href="./#main">К конспекту ↑</a></div></footer>
 </body>
 </html>'''
 
@@ -316,7 +327,10 @@ def article(item, group, group_items):
 </article>
 {toc_markup}
 </div></main>'''
-    return shell(f'{title} · {TITLE}', item['description'], body, slug + '.html')
+    return shell(
+        f'{title} · {TITLE}', item['description'], body, slug + '.html',
+        source_path=f'content/{item["group"]}.md',
+    )
 
 
 def laboratory(items):
